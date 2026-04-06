@@ -1,0 +1,67 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Лікарі{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Список лікарів</h1>
+
+    <form method="get" class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label for="q" class="form-label">Пошук за ПІБ</label>
+            <input type="text" name="q" id="q" value="{{ query }}" class="form-control">
+        </div>
+
+        <div class="col-md-4">
+            <label for="position" class="form-label">Фільтр за посадою</label>
+            <select name="position" id="position" class="form-select">
+                <option value="">Усі посади</option>
+                {% for item in positions %}
+                    <option value="{{ item }}" {% if item == selected_position %}selected{% endif %}>
+                        {{ item }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary w-100">Шукати</button>
+        </div>
+    </form>
+
+    <div class="row g-4">
+        {% for doctor in doctors %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100">
+                    {% if doctor.photo %}
+                        <img src="{{ doctor.photo.url }}" class="card-img-top" alt="{{ doctor.full_name }}">
+                    {% else %}
+                        <div class="card-img-top bg-light text-center py-5">
+                            Фото відсутнє
+                        </div>
+                    {% endif %}
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ doctor.full_name }}</h5>
+                        <p class="mb-1"><strong>Посада:</strong> {{ doctor.position }}</p>
+                        <p class="mb-1"><strong>Спеціальність:</strong> {{ doctor.specialty_name }}</p>
+                        <p class="mb-1"><strong>Категорія:</strong> {{ doctor.qualification_category }}</p>
+                        <p class="mb-2"><strong>Стаж:</strong> {{ doctor.experience_years }} років</p>
+
+                        <p class="mb-2">
+                            <strong>Напрями:</strong>
+                            {% for direction in doctor.directions.all %}
+                                {{ direction.name }}{% if not forloop.last %}, {% endif %}
+                            {% endfor %}
+                        </p>
+
+                        <a href="{% url 'doctors:doctor_detail' doctor.id %}" class="btn btn-outline-primary">
+                            Детальніше
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Лікарів не знайдено.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

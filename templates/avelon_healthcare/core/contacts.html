@@ -1,0 +1,44 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Контакти{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Контакти</h1>
+
+    {% if contacts %}
+        <p><strong>Адреса:</strong> {{ contacts.address }}</p>
+        <p><strong>Графік роботи:</strong> {{ contacts.work_schedule }}</p>
+        <p><strong>Телефон 1:</strong> {{ contacts.phone_1 }}</p>
+
+        {% if contacts.phone_2 %}
+            <p><strong>Телефон 2:</strong> {{ contacts.phone_2 }}</p>
+        {% endif %}
+
+        <p><strong>Email:</strong> {{ contacts.email }}</p>
+
+        {% if contacts.google_map_url %}
+            <p>
+                <a href="{{ contacts.google_map_url }}" target="_blank" class="btn btn-outline-primary">
+                    Відкрити карту
+                </a>
+            </p>
+        {% endif %}
+
+        <div class="mt-4">
+            <h3>Соціальні мережі</h3>
+            <ul>
+                {% if contacts.facebook_url %}
+                    <li><a href="{{ contacts.facebook_url }}" target="_blank">Facebook</a></li>
+                {% endif %}
+                {% if contacts.instagram_url %}
+                    <li><a href="{{ contacts.instagram_url }}" target="_blank">Instagram</a></li>
+                {% endif %}
+                {% if contacts.youtube_url %}
+                    <li><a href="{{ contacts.youtube_url }}" target="_blank">YouTube</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% else %}
+        <p>Контактна інформація поки не заповнена.</p>
+    {% endif %}
+{% endblock %}

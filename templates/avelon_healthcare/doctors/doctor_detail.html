@@ -1,0 +1,52 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}{{ doctor.full_name }}{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">{{ doctor.full_name }}</h1>
+
+    <div class="row g-4">
+        <div class="col-md-4">
+            {% if doctor.photo %}
+                <img src="{{ doctor.photo.url }}" class="img-fluid rounded" alt="{{ doctor.full_name }}">
+            {% else %}
+                <div class="bg-light text-center py-5 rounded">Фото відсутнє</div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <p><strong>Посада:</strong> {{ doctor.position }}</p>
+            <p><strong>Спеціальність:</strong> {{ doctor.specialty_name }}</p>
+            <p><strong>Кваліфікаційна категорія:</strong> {{ doctor.qualification_category }}</p>
+            <p><strong>Стаж:</strong> {{ doctor.experience_years }} років</p>
+            <p><strong>Ціновий діапазон:</strong> від {{ doctor.price_from }} грн до {{ doctor.price_to }} грн</p>
+
+            <p>
+                <strong>Напрями:</strong>
+                {% for direction in doctor.directions.all %}
+                    <a href="{% url 'doctors:direction_detail' direction.id %}">
+                        {{ direction.name }}
+                    </a>{% if not forloop.last %}, {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <h3>Досвід роботи</h3>
+    <p>{{ doctor.work_experience_description|default:"Інформація відсутня." }}</p>
+
+    <h3>У яких випадках звертатись</h3>
+    <p>{{ doctor.when_to_contact|default:"Інформація відсутня." }}</p>
+
+    <h3>Освіта</h3>
+    <p>{{ doctor.education|default:"Інформація відсутня." }}</p>
+
+    <h3>Ліцензії</h3>
+    {% if doctor.licenses %}
+        <img src="{{ doctor.licenses.url }}" class="img-fluid rounded" alt="Ліцензії">
+    {% else %}
+        <p>Інформація відсутня.</p>
+    {% endif %}
+{% endblock %}

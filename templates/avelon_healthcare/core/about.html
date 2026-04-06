@@ -1,0 +1,33 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Про клініку{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Про клініку</h1>
+
+    {% if clinic_info %}
+        {% if clinic_info.image %}
+            <img src="{{ clinic_info.image.url }}" class="img-fluid rounded mb-4" alt="{{ clinic_info.title }}">
+        {% endif %}
+
+        <h2>{{ clinic_info.title }}</h2>
+        <p>{{ clinic_info.description }}</p>
+
+        {% if clinic_info.goals %}
+            <h3 class="mt-4">Цілі</h3>
+            <p>{{ clinic_info.goals }}</p>
+        {% endif %}
+
+        {% if clinic_info.values %}
+            <h3 class="mt-4">Цінності</h3>
+            <p>{{ clinic_info.values }}</p>
+        {% endif %}
+
+        {% if clinic_info.achievements %}
+            <h3 class="mt-4">Досягнення</h3>
+            <p>{{ clinic_info.achievements }}</p>
+        {% endif %}
+    {% else %}
+        <p>Інформація про клініку поки не заповнена.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Редагування профілю{% endblock %}
+
+{% block content %}
+    <div style="max-width: 700px;">
+        <h1 class="mb-4">Редагування профілю</h1>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <p><strong>Логін:</strong> {{ request.user.username }}</p>
+                <p><strong>Телефон:</strong> {{ request.user.phone }}</p>
+                <p class="text-muted mb-0">
+                    Номер телефону змінюється лише через звернення на гарячу лінію.
+                </p>
+            </div>
+        </div>
+
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.birth_date.label_tag }}
+                {{ form.birth_date }}
+                {{ form.birth_date.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.preferred_contact_channel.label_tag }}
+                {{ form.preferred_contact_channel }}
+                {{ form.preferred_contact_channel.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зберегти зміни</button>
+            <a href="{% url 'accounts:profile' %}" class="btn btn-outline-secondary">Скасувати</a>
+        </form>
+    </div>
+{% endblock %}

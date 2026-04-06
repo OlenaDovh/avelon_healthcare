@@ -1,0 +1,26 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Акції{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Акції</h1>
+
+    <div class="row g-4">
+        {% for promotion in promotions %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    {% if promotion.image %}
+                        <img src="{{ promotion.image.url }}" class="card-img-top" alt="{{ promotion.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ promotion.title }}</h5>
+                        <p class="card-text">{{ promotion.description }}</p>
+                        <p class="text-muted mb-0">Діє до: {{ promotion.end_date }}</p>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Акцій поки немає.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

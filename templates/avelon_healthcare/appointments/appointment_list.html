@@ -1,0 +1,47 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Мої записи{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Мої записи до лікаря</h1>
+
+    {% if appointments %}
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>Напрям</th>
+                        <th>Лікар</th>
+                        <th>Дата</th>
+                        <th>Час</th>
+                        <th>Статус</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for appointment in appointments %}
+                        <tr>
+                            <td>{{ appointment.direction.name }}</td>
+                            <td>{{ appointment.doctor.full_name }}</td>
+                            <td>{{ appointment.appointment_date }}</td>
+                            <td>{{ appointment.appointment_time|time:"H:i" }}</td>
+                            <td>{{ appointment.get_status_display }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn-sm btn-outline-primary">
+                                    Деталі
+                                </a>
+                                {% if appointment.status == "planned" %}
+                                    <a href="{% url 'appointments:appointment_cancel' appointment.id %}" class="btn btn-sm btn-outline-danger">
+                                        Відхилити
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>У вас поки немає записів до лікаря.</p>
+    {% endif %}
+{% endblock %}

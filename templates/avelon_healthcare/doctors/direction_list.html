@@ -1,0 +1,25 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Напрями{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Список напрямів</h1>
+
+    <div class="row g-4">
+        {% for direction in directions %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ direction.name }}</h5>
+                        <p class="card-text">{{ direction.description|truncatewords:30 }}</p>
+                        <a href="{% url 'doctors:direction_detail' direction.id %}" class="btn btn-outline-primary">
+                            Детальніше
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Напрями відсутні.</p>
+        {% endfor %}
+    </div>
+{% endblock %}

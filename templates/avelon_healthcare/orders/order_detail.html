@@ -1,0 +1,53 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Деталі замовлення{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Деталі замовлення #{{ order.id }}</h1>
+
+    <p><strong>Дата оформлення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+    <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
+
+    <h3 class="mt-4">Список аналізів</h3>
+
+    {% if order.items.all %}
+        <div class="table-responsive">
+            <table class="table table-bordered align-middle">
+                <thead>
+                    <tr>
+                        <th>Назва аналізу</th>
+                        <th>Термін виконання</th>
+                        <th>Ціна</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order.items.all %}
+                        <tr>
+                            <td>{{ item.analysis.name }}</td>
+                            <td>{{ item.analysis.duration_days }} дн.</td>
+                            <td>{{ item.price }} грн</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    {% if order.result_file %}
+        <div class="mt-4">
+            <h3>Результати аналізів</h3>
+            <a href="{{ order.result_file.url }}" target="_blank" class="btn btn-outline-primary">
+                Переглянути PDF
+            </a>
+        </div>
+    {% endif %}
+
+    {% if order.status == "new" %}
+        <div class="mt-4">
+            <a href="{% url 'orders:order_cancel' order.id %}" class="btn btn-outline-danger">
+                Відхилити замовлення
+            </a>
+        </div>
+    {% endif %}
+{% endblock %}

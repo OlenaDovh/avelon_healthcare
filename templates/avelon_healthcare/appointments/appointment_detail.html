@@ -1,0 +1,40 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Деталі запису{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Деталі запису</h1>
+
+    <p><strong>Напрям:</strong> {{ appointment.direction.name }}</p>
+    <p><strong>Лікар:</strong> {{ appointment.doctor.full_name }}</p>
+    <p><strong>Спеціальність:</strong> {{ appointment.doctor.specialty_name }}</p>
+    <p><strong>Кваліфікаційна категорія:</strong> {{ appointment.doctor.qualification_category }}</p>
+    <p><strong>Стаж:</strong> {{ appointment.doctor.experience_years }} років</p>
+    <p><strong>Ціновий діапазон:</strong> від {{ appointment.doctor.price_from }} грн
+        до {{ appointment.doctor.price_to }} грн</p>
+    <p><strong>Дата:</strong> {{ appointment.appointment_date }}</p>
+    <p><strong>Час:</strong> {{ appointment.appointment_time|time:"H:i" }}</p>
+    <p><strong>Статус:</strong> {{ appointment.get_status_display }}</p>
+    <p><strong>Опис:</strong> {{ appointment.description|default:"Не вказано" }}</p>
+
+    {% if appointment.final_conclusion %}
+        <p>
+            <strong>Висновок лікаря:</strong>
+            <a href="{{ appointment.final_conclusion.url }}" target="_blank">Переглянути PDF</a>
+        </p>
+    {% endif %}
+
+    {% if appointment.status == "completed" and not appointment.review %}
+        <div class="mt-3">
+            <a href="{% url 'reviews:review_create' appointment.id %}" class="btn btn-outline-primary">
+                Залишити відгук про прийом
+            </a>
+        </div>
+    {% endif %}
+
+    {% if appointment.status == "planned" %}
+        <a href="{% url 'appointments:appointment_cancel' appointment.id %}" class="btn btn-outline-danger">
+            Відхилити запис
+        </a>
+    {% endif %}
+{% endblock %}

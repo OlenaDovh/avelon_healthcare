@@ -1,0 +1,48 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Реєстрація{% endblock %}
+
+{% block content %}
+<div style="max-width: 620px;">
+    <h1 class="mb-4">Реєстрація</h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {{ form.username.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            <div class="form-text">{{ form.phone.help_text }}</div>
+            {{ form.phone.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+            {{ form.password1.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+            {{ form.password2.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-success">Зареєструватися</button>
+        <a href="{% url 'accounts:login' %}" class="btn btn-link">Вже маю акаунт</a>
+    </form>
+</div>
+{% endblock %}

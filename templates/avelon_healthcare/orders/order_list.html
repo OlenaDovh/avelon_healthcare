@@ -1,0 +1,47 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Мої замовлення{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Мої замовлення аналізів</h1>
+
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th>№ замовлення</th>
+                        <th>Кількість аналізів</th>
+                        <th>Загальна ціна</th>
+                        <th>Статус</th>
+                        <th>Дата створення</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.id }}</td>
+                            <td>{{ order.analyses_count }}</td>
+                            <td>{{ order.total_price }} грн</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
+                                    Деталі
+                                </a>
+                                {% if order.status == "new" %}
+                                    <a href="{% url 'orders:order_cancel' order.id %}" class="btn btn-sm btn-outline-danger">
+                                        Відхилити
+                                    </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>У вас поки немає оформлених замовлень.</p>
+    {% endif %}
+{% endblock %}
