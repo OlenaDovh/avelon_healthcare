@@ -43,8 +43,109 @@
                 {{ form.description }}
                 {{ form.description.errors }}
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    const directionEl = document.getElementById("id_direction");
+                    const doctorEl = document.getElementById("id_doctor");
+                    const dateEl = document.getElementById("id_appointment_date");
+                    const timeEl = document.getElementById("id_appointment_time");
 
+                    let datePicker = null;
+
+                    if (dateEl && typeof flatpickr !== "undefined") {
+                        datePicker = flatpickr(dateEl, {
+                            dateFormat: "Y-m-d",
+                            minDate: "today",
+                            enable: [],
+                            disableMobile: true,
+                            onChange: function () {
+                                loadSlots();
+                            }
+                        });
+                    }
+
+                    directionEl.addEventListener("change", loadDoctors);
+                    doctorEl.addEventListener("change", loadAvailableDates);
+
+                    async function loadDoctors() {
+                        const directionId = directionEl.value;
+
+                        doctorEl.innerHTML = '<option value="">Оберіть лікаря</option>';
+                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
+
+                        if (datePicker) {
+                            datePicker.clear();
+                            datePicker.set("enable", []);
+                        } else {
+                            dateEl.value = "";
+                        }
+
+                        if (!directionId) return;
+
+                        const res = await fetch(`/appointments/doctors/?direction_id=${directionId}`);
+                        const data = await res.json();
+                        const doctors = data.doctors || [];
+
+                        doctors.forEach((doctor) => {
+                            const opt = document.createElement("option");
+                            opt.value = doctor.id;
+                            opt.textContent = doctor.full_name;
+                            doctorEl.appendChild(opt);
+                        });
+                    }
+
+                    async function loadAvailableDates() {
+                        const doctorId = doctorEl.value;
+                        const directionId = directionEl.value;
+
+                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
+
+                        if (datePicker) {
+                            datePicker.clear();
+                            datePicker.set("enable", []);
+                        } else {
+                            dateEl.value = "";
+                        }
+
+                        if (!doctorId || !directionId) return;
+
+                        const res = await fetch(`/appointments/dates/?doctor_id=${doctorId}&direction_id=${directionId}`);
+                        const data = await res.json();
+                        const dates = data.dates || [];
+
+                        if (!dates.length) return;
+
+                        if (datePicker) {
+                            datePicker.set("enable", dates);
+                        }
+                    }
+
+                    async function loadSlots() {
+                        const doctorId = doctorEl.value;
+                        const directionId = directionEl.value;
+                        const dateValue = dateEl.value;
+
+                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
+
+                        if (!doctorId || !directionId || !dateValue) return;
+
+                        const res = await fetch(`/appointments/slots/?doctor_id=${doctorId}&direction_id=${directionId}&date=${dateValue}`);
+                        const data = await res.json();
+                        const slots = data.slots || [];
+
+                        slots.forEach((slot) => {
+                            const opt = document.createElement("option");
+                            opt.value = slot.value;
+                            opt.textContent = slot.label;
+                            timeEl.appendChild(opt);
+                        });
+                    }
+                })
+                ;
+            </script>
             <button type="submit" class="btn btn-primary">Створити запис</button>
         </form>
     </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 {% endblock %}

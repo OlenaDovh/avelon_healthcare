@@ -7,7 +7,7 @@
 
     <p><strong>Напрям:</strong> {{ appointment.direction.name }}</p>
     <p><strong>Лікар:</strong> {{ appointment.doctor.full_name }}</p>
-    <p><strong>Спеціальність:</strong> {{ appointment.doctor.specialty_name }}</p>
+    <p><strong>Спеціальність:</strong> {{ appointment.doctor.specialty_direction.name }}</p>
     <p><strong>Кваліфікаційна категорія:</strong> {{ appointment.doctor.qualification_category }}</p>
     <p><strong>Стаж:</strong> {{ appointment.doctor.experience_years }} років</p>
     <p><strong>Ціновий діапазон:</strong> від {{ appointment.doctor.price_from }} грн
