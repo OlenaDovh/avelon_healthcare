@@ -4,11 +4,21 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+
+from django.db.models import Count
+from doctors.models import Direction
+
+from django.db.models import Q
+
+from datetime import datetime
 
 from .forms import AppointmentCreateForm
 from .models import Appointment, AppointmentStatus
+
+from doctors.models import Doctor
+from .utils import get_available_slots_for_doctor_on_date
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +62,12 @@ def appointment_create_view(request: HttpRequest) -> HttpResponse:
     return render(
         request,
         "avelon_healthcare/appointments/appointment_form.html",
-        {"form": form},
+        {
+            "form": form,
+            "directions": Direction.objects.annotate(
+                doctors_count=Count("doctors")
+            ).filter(doctors_count__gt=0).order_by("name"),
+        },
     )
 
 
@@ -154,3 +169,82 @@ def appointment_cancel_view(request: HttpRequest, appointment_id: int) -> HttpRe
         )
 
     return redirect("appointments:appointment_list")
+
+
+def available_slots(request):
+    doctor_id = request.GET.get("doctor_id")
+    direction_id = request.GET.get("direction_id")
+    appointment_date = request.GET.get("date")
+
+    if not doctor_id or not direction_id or not appointment_date:
+        return JsonResponse({"slots": []})
+
+    try:
+        doctor = Doctor.objects.get(id=doctor_id)
+        direction = Direction.objects.get(id=direction_id)
+    except (Doctor.DoesNotExist, Direction.DoesNotExist):
+        return JsonResponse({"slots": []})
+
+    try:
+        selected_date = datetime.strptime(appointment_date, "%Y-%m-%d").date()
+    except ValueError:
+        return JsonResponse({"slots": []})
+
+    slots = get_available_slots_for_doctor_on_date(doctor, direction, selected_date)
+    return JsonResponse({"slots": slots})
+
+
+def available_doctors(request):
+    direction_id = request.GET.get("direction_id")
+
+    if not direction_id:
+        return JsonResponse({"doctors": []})
+
+    doctors = Doctor.objects.filter(
+        directions__id=direction_id
+    ).distinct().order_by("full_name")
+
+    return JsonResponse(
+        {
+            "doctors": [
+                {
+                    "id": doctor.id,
+                    "full_name": doctor.full_name,
+                }
+                for doctor in doctors
+            ]
+        }
+    )
+
+
+def available_dates(request):
+    doctor_id = request.GET.get("doctor_id")
+    direction_id = request.GET.get("direction_id")
+
+    if not doctor_id or not direction_id:
+        return JsonResponse({"dates": []})
+
+    try:
+        doctor = Doctor.objects.get(id=doctor_id)
+        direction = Direction.objects.get(id=direction_id)
+    except (Doctor.DoesNotExist, Direction.DoesNotExist):
+        return JsonResponse({"dates": []})
+
+    today = timezone.localdate()
+    workdays = doctor.workdays.filter(
+        direction=direction,
+        work_date__gte=today,
+    ).prefetch_related("periods").order_by("work_date")
+
+    result = []
+
+    for workday in workdays:
+        slots = get_available_slots_for_doctor_on_date(
+            doctor,
+            direction,
+            workday.work_date,
+        )
+        if slots:
+            result.append(workday.work_date.strftime("%Y-%m-%d"))
+
+    return JsonResponse({"dates": result})
