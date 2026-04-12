@@ -48,7 +48,7 @@ class RegisterForm(UserCreationForm):
         """
 
         model = User
-        fields = ("username", "email", "phone", "password1", "password2")
+        fields = ("username", "email", "phone", "first_name", "last_name", "middle_name", "password1", "password2")
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """
@@ -169,7 +169,7 @@ class ProfileUpdateForm(forms.ModelForm):
         """
 
         model = User
-        fields = ("email", "birth_date", "preferred_contact_channel")
+        fields = ("email", "first_name", "last_name", "middle_name", "birth_date", "preferred_contact_channel")
         widgets = {
             "email": forms.EmailInput(
                 attrs={

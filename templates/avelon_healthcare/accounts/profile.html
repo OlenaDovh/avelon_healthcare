@@ -22,6 +22,10 @@
             </p>
 
             <p>
+    <strong>ПІБ:</strong>
+    {{ request.user.last_name }} {{ request.user.first_name }} {{ request.user.middle_name }}
+</p>
+            <p>
                 <strong>Телефон:</strong>
                 {{ request.user.phone|default:"Не вказано" }}
             </p>

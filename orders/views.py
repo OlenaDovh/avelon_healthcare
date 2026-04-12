@@ -9,10 +9,20 @@ from django.db import transaction
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
 from analysis.models import Analysis
 
-from .models import Order, OrderItem, OrderStatus
+from .forms import AuthenticatedOrderForm, GuestOrderForm
+from .models import Order, OrderItem, OrderStatus, PaymentMethod
+from .utils import (
+    build_order_invoice_response,
+    get_bank_transfer_auto_pay_after_minutes,
+    get_order_form,
+    send_order_email,
+    update_bank_transfer_order_status,
+    update_bank_transfer_orders_status,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -44,7 +54,6 @@ def _clear_cart(request: HttpRequest) -> None:
     request.session.modified = True
 
 
-@login_required
 @transaction.atomic
 def order_create_view(request: HttpRequest) -> HttpResponse:
     """
@@ -54,34 +63,55 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
         request (HttpRequest): HTTP-запит користувача.
 
     Returns:
-        HttpResponse: Редірект на список замовлень або сторінку кошика.
+        HttpResponse: Редірект на сторінку деталей замовлення або кошика.
     """
+    if request.method != "POST":
+        messages.warning(request, "Некоректний спосіб запиту.")
+        return redirect("analysis:cart_detail")
+
     cart: dict[str, int] = _get_cart(request)
 
     if not cart:
-        logger.warning(
-            "Спроба оформити порожній кошик. user=%s",
-            request.user.username,
-        )
+        logger.warning("Спроба оформити порожній кошик.")
         messages.warning(request, "Кошик порожній.")
+        return redirect("analysis:cart_detail")
+
+    form: GuestOrderForm | AuthenticatedOrderForm = get_order_form(request)
+
+    if not form.is_valid():
+        messages.warning(request, "Перевірте правильність заповнення форми.")
         return redirect("analysis:cart_detail")
 
     analysis_ids: list[int] = [int(item_id) for item_id in cart.keys()]
     analyses: QuerySet[Analysis] = Analysis.objects.filter(id__in=analysis_ids, is_active=True)
 
     if not analyses.exists():
-        logger.warning(
-            "Спроба оформити замовлення без валідних аналізів. user=%s",
-            request.user.username,
-        )
+        logger.warning("Спроба оформити замовлення без валідних аналізів.")
         messages.warning(request, "Не вдалося оформити замовлення.")
         return redirect("analysis:cart_detail")
 
+    payment_method: str = form.cleaned_data["payment_method"]
     total_price: Decimal = sum((analysis.price for analysis in analyses), Decimal("0.00"))
 
+    if request.user.is_authenticated:
+        full_name: str = request.user.get_full_name() or request.user.username
+        phone: str = getattr(request.user, "phone", "") or ""
+        email: str = request.user.email or ""
+        user = request.user
+    else:
+        full_name = form.cleaned_data["full_name"]
+        phone = form.cleaned_data["phone"]
+        email = form.cleaned_data["email"]
+        user = None
+
     order: Order = Order.objects.create(
-        user=request.user,
+        user=user,
+        full_name=full_name,
+        phone=phone,
+        email=email,
         total_price=total_price,
+        payment_method=payment_method,
+        status=OrderStatus.NEW,
     )
 
     order_items: list[OrderItem] = [
@@ -94,17 +124,15 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     ]
     OrderItem.objects.bulk_create(order_items)
 
+    send_order_email(order)
     _clear_cart(request)
 
-    logger.info(
-        "Створено замовлення аналізів. user=%s order_id=%s total=%s",
-        request.user.username,
-        order.id,
-        order.total_price,
-    )
-
     messages.success(request, "Замовлення аналізів успішно оформлено.")
-    return redirect("orders:order_list")
+
+    if request.user.is_authenticated:
+        return redirect("orders:order_detail", order_id=order.id)
+
+    return redirect("core:home")
 
 
 @login_required
@@ -119,6 +147,7 @@ def order_list_view(request: HttpRequest) -> HttpResponse:
         HttpResponse: HTML-відповідь зі списком замовлень.
     """
     orders: QuerySet[Order] = Order.objects.filter(user=request.user).order_by("-created_at")
+    update_bank_transfer_orders_status(orders)
 
     logger.info("Відкрито список замовлень. user=%s", request.user.username)
 
@@ -147,17 +176,74 @@ def order_detail_view(request: HttpRequest, order_id: int) -> HttpResponse:
         user=request.user,
     )
 
-    logger.info(
-        "Відкрито деталі замовлення. user=%s order_id=%s",
-        request.user.username,
-        order.id,
-    )
+    update_bank_transfer_order_status(order)
 
     return render(
         request,
         "avelon_healthcare/orders/order_detail.html",
-        {"order": order},
+        {
+            "order": order,
+            "bank_transfer_auto_pay_after_minutes": get_bank_transfer_auto_pay_after_minutes(),
+        },
     )
+
+
+@login_required
+@transaction.atomic
+def order_pay_view(request: HttpRequest, order_id: int) -> HttpResponse:
+    """
+    Проводить мок-оплату онлайн для замовлення.
+
+    Args:
+        request (HttpRequest): HTTP-запит користувача.
+        order_id (int): Ідентифікатор замовлення.
+
+    Returns:
+        HttpResponse: Редірект на сторінку деталей замовлення.
+    """
+    order: Order = get_object_or_404(
+        Order,
+        id=order_id,
+        user=request.user,
+    )
+
+    if request.method != "POST":
+        messages.warning(request, "Некоректний спосіб запиту.")
+        return redirect("orders:order_detail", order_id=order.id)
+
+    if order.status != OrderStatus.NEW:
+        messages.warning(request, "Оплата доступна лише для нового замовлення.")
+        return redirect("orders:order_detail", order_id=order.id)
+
+    if order.payment_method != PaymentMethod.ONLINE:
+        messages.warning(request, "Для цього замовлення онлайн-оплата недоступна.")
+        return redirect("orders:order_detail", order_id=order.id)
+
+    payment_provider: str = request.POST.get("payment_provider", "").strip()
+
+    valid_payment_providers: set[str] = {
+        "portmone",
+        "easypay",
+        "ipay",
+        "masterpass",
+    }
+    if payment_provider not in valid_payment_providers:
+        messages.warning(request, "Оберіть платіжну систему.")
+        return redirect("orders:order_detail", order_id=order.id)
+
+    order.status = OrderStatus.PAID
+    order.paid_at = timezone.now()
+    order.save(update_fields=["status", "paid_at"])
+
+    logger.info(
+        "Виконано онлайн-оплату замовлення. user=%s order_id=%s provider=%s",
+        request.user.username,
+        order.id,
+        payment_provider,
+    )
+
+    messages.success(request, "Оплату успішно проведено.")
+    return redirect("orders:order_detail", order_id=order.id)
 
 
 @login_required
@@ -200,3 +286,28 @@ def order_cancel_view(request: HttpRequest, order_id: int) -> HttpResponse:
         )
 
     return redirect("orders:order_list")
+
+
+@login_required
+def order_invoice_view(request: HttpRequest, order_id: int) -> HttpResponse:
+    """
+    Генерує PDF-рахунок для замовлення.
+
+    Args:
+        request (HttpRequest): HTTP-запит користувача.
+        order_id (int): Ідентифікатор замовлення.
+
+    Returns:
+        HttpResponse: PDF-файл із рахунком.
+    """
+    order: Order = get_object_or_404(
+        Order.objects.prefetch_related("items__analysis"),
+        id=order_id,
+        user=request.user,
+    )
+
+    if order.payment_method != PaymentMethod.BANK_TRANSFER:
+        messages.warning(request, "Рахунок доступний лише для оплати на рахунок.")
+        return redirect("orders:order_detail", order_id=order.id)
+
+    return build_order_invoice_response(order)

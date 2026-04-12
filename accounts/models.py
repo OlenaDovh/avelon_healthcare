@@ -21,12 +21,16 @@ class User(AbstractUser):
     - пріоритетний канал зв’язку
     """
 
-    email: models.EmailField = models.EmailField(
+    first_name = models.CharField(max_length=150, verbose_name="Ім'я")
+    last_name = models.CharField(max_length=150, verbose_name="Прізвище")
+    middle_name = models.CharField(max_length=150, blank=True, verbose_name="По батькові")
+
+    email = models.EmailField(
         unique=True,
         verbose_name='Електронна пошта'
     )
 
-    phone: models.CharField = models.CharField(
+    phone = models.CharField(
         max_length=13,
         unique=True,
         validators=[phone_validator],

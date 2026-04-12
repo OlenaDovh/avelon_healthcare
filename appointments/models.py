@@ -20,9 +20,6 @@ class AppointmentStatus(models.TextChoices):
 class Appointment(models.Model):
     """
     Модель запису пацієнта до лікаря.
-
-    Зберігає дані про вибраний напрям, лікаря, дату й час прийому,
-    опис причини звернення, статус запису та файл висновку лікаря.
     """
 
     user: models.ForeignKey = models.ForeignKey(
@@ -30,6 +27,25 @@ class Appointment(models.Model):
         on_delete=models.CASCADE,
         related_name="appointments",
         verbose_name="Користувач",
+        blank=True,
+        null=True,
+    )
+    full_name: models.CharField = models.CharField(
+        max_length=255,
+        verbose_name="ПІБ",
+        blank=True,
+        default="",
+    )
+    phone: models.CharField = models.CharField(
+        max_length=30,
+        verbose_name="Телефон",
+        blank=True,
+        default="",
+    )
+    email: models.EmailField = models.EmailField(
+        verbose_name="Email",
+        blank=True,
+        default="",
     )
     direction: models.ForeignKey = models.ForeignKey(
         Direction,
@@ -98,6 +114,22 @@ class Appointment(models.Model):
                     {"doctor": "Обраний лікар не працює в цьому напрямі."}
                 )
 
+    @property
+    def customer_name(self) -> str:
+        """
+        Повертає ім'я пацієнта.
+
+        Returns:
+            str: Ім'я пацієнта.
+        """
+        if self.full_name:
+            return self.full_name
+
+        if self.user:
+            return self.user.get_full_name() or self.user.username
+
+        return ""
+
     def __str__(self) -> str:
         """
         Повертає строкове представлення запису.
@@ -106,6 +138,6 @@ class Appointment(models.Model):
             str: Інформація про запис.
         """
         return (
-            f"{self.user} — {self.doctor.full_name} — "
+            f"{self.customer_name} — {self.doctor.full_name} — "
             f"{self.appointment_date} {self.appointment_time}"
         )

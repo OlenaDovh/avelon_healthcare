@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Замовлення #{{ order.id }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; font-size: 14px; color: #212529;">
+<h2>Avelon Healthcare</h2>
+
+<p>Ваше замовлення успішно оформлено.</p>
+
+<p><strong>№ замовлення:</strong> #{{ order.id }}</p>
+<p><strong>ПІБ:</strong> {{ order.full_name }}</p>
+<p><strong>Телефон:</strong> {{ order.phone }}</p>
+<p><strong>Email:</strong> {{ order.email }}</p>
+<p><strong>Сума:</strong> {{ order.total_price }} грн</p>
+<p><strong>Спосіб оплати:</strong> {{ order.get_payment_method_display }}</p>
+
+<h3>Аналізи:</h3>
+<ul>
+    {% for item in order.items.all %}
+        <li>{{ item.analysis.name }} — {{ item.price }} грн</li>
+    {% endfor %}
+</ul>
+
+{{% if order.payment_method == "online" %}
+    <h3>Оплата онлайн</h3>
+    <p>Перейдіть за посиланнями:</p>
+    <ul>
+        {% for name, url in online_payment_links.items %}
+            <li><a href="{{ url }}">{{ name }}</a></li>
+        {% endfor %}
+    </ul>
+    <p>До листа також додано PDF з платіжними реквізитами.</p>
+{% endif %}
+
+{% if order.payment_method == "bank_transfer" %}
+    <h3>Оплата на рахунок</h3>
+    <p>До листа додано рахунок у PDF.</p>
+{% endif %}
+
+{% if order.payment_method == "cash" %}
+    <h3>Оплата на касі</h3>
+    <p>Оплата здійснюється у клініці.</p>
+{% endif %}
+</body>
+</html>

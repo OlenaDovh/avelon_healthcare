@@ -1,29 +1,24 @@
 from __future__ import annotations
 
 import logging
+from datetime import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
 
-from django.db.models import Count
-from doctors.models import Direction
+from doctors.models import Direction, Doctor
 
-from django.db.models import Q
-
-from datetime import datetime
-
-from .forms import AppointmentCreateForm
+from .forms import AppointmentCreateForm, GuestAppointmentCreateForm
 from .models import Appointment, AppointmentStatus
-
-from doctors.models import Doctor
-from .utils import get_available_slots_for_doctor_on_date
+from .utils import get_available_slots_for_doctor_on_date, send_appointment_email
 
 logger = logging.getLogger(__name__)
 
 
-@login_required
 def appointment_create_view(request: HttpRequest) -> HttpResponse:
     """
     Відображає та обробляє форму запису до лікаря.
@@ -34,30 +29,46 @@ def appointment_create_view(request: HttpRequest) -> HttpResponse:
     Returns:
         HttpResponse: HTML-відповідь або редірект.
     """
+    form_class = AppointmentCreateForm if request.user.is_authenticated else GuestAppointmentCreateForm
+
     if request.method == "POST":
-        form = AppointmentCreateForm(request.POST)
+        form = form_class(request.POST)
 
         if form.is_valid():
             appointment: Appointment = form.save(commit=False)
-            appointment.user = request.user
+
+            if request.user.is_authenticated:
+                appointment.user = request.user
+                appointment.full_name = request.user.get_full_name() or request.user.username
+                appointment.phone = getattr(request.user, "phone", "") or ""
+                appointment.email = request.user.email or ""
+            else:
+                appointment.user = None
+                appointment.full_name = form.cleaned_data["full_name"]
+                appointment.phone = form.cleaned_data["phone"]
+                appointment.email = form.cleaned_data["email"]
+
             appointment.save()
+            send_appointment_email(appointment)
 
             logger.info(
-                "Створено запис до лікаря. user=%s doctor=%s date=%s time=%s",
-                request.user.username,
+                "Створено запис до лікаря. patient=%s doctor=%s date=%s time=%s",
+                appointment.customer_name,
                 appointment.doctor.full_name,
                 appointment.appointment_date,
                 appointment.appointment_time,
             )
 
             messages.success(request, "Запис до лікаря успішно створено.")
-            return redirect("appointments:appointment_list")
-        logger.warning(
-            "Неуспішна спроба створення запису до лікаря. user=%s",
-            request.user.username,
-        )
+
+            if request.user.is_authenticated:
+                return redirect("appointments:appointment_list")
+
+            return redirect("core:home")
+
+        logger.warning("Неуспішна спроба створення запису до лікаря.")
     else:
-        form = AppointmentCreateForm()
+        form = form_class()
 
     return render(
         request,
@@ -171,7 +182,16 @@ def appointment_cancel_view(request: HttpRequest, appointment_id: int) -> HttpRe
     return redirect("appointments:appointment_list")
 
 
-def available_slots(request):
+def available_slots(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає доступні часові слоти.
+
+    Args:
+        request (HttpRequest): HTTP-запит користувача.
+
+    Returns:
+        JsonResponse: JSON зі слотами.
+    """
     doctor_id = request.GET.get("doctor_id")
     direction_id = request.GET.get("direction_id")
     appointment_date = request.GET.get("date")
@@ -194,7 +214,16 @@ def available_slots(request):
     return JsonResponse({"slots": slots})
 
 
-def available_doctors(request):
+def available_doctors(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає список лікарів за напрямом.
+
+    Args:
+        request (HttpRequest): HTTP-запит користувача.
+
+    Returns:
+        JsonResponse: JSON зі списком лікарів.
+    """
     direction_id = request.GET.get("direction_id")
 
     if not direction_id:
@@ -217,7 +246,16 @@ def available_doctors(request):
     )
 
 
-def available_dates(request):
+def available_dates(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає доступні дати для лікаря.
+
+    Args:
+        request (HttpRequest): HTTP-запит користувача.
+
+    Returns:
+        JsonResponse: JSON зі списком дат.
+    """
     doctor_id = request.GET.get("doctor_id")
     direction_id = request.GET.get("direction_id")
 
@@ -236,7 +274,7 @@ def available_dates(request):
         work_date__gte=today,
     ).prefetch_related("periods").order_by("work_date")
 
-    result = []
+    result: list[str] = []
 
     for workday in workdays:
         slots = get_available_slots_for_doctor_on_date(

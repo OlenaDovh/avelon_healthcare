@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Запис до лікаря #{{ appointment.id }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; font-size: 14px; color: #212529;">
+    <h2>Avelon Healthcare</h2>
+
+    <p>Ваш запис до лікаря успішно створено.</p>
+
+    <p><strong>№ запису:</strong> #{{ appointment.id }}</p>
+    <p><strong>ПІБ:</strong> {{ appointment.full_name|default:appointment.customer_name }}</p>
+    <p><strong>Телефон:</strong> {{ appointment.phone }}</p>
+    <p><strong>Email:</strong> {{ appointment.email }}</p>
+    <p><strong>Напрям:</strong> {{ appointment.direction.name }}</p>
+    <p><strong>Лікар:</strong> {{ appointment.doctor.full_name }}</p>
+    <p><strong>Дата:</strong> {{ appointment.appointment_date|date:"d.m.Y" }}</p>
+    <p><strong>Час:</strong> {{ appointment.appointment_time|time:"H:i" }}</p>
+    <p><strong>Статус:</strong> {{ appointment.get_status_display }}</p>
+
+    {% if appointment.description %}
+        <p><strong>Опис:</strong> {{ appointment.description }}</p>
+    {% endif %}
+</body>
+</html>

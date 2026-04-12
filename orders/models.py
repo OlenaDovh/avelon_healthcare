@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 from analysis.models import Analysis
 
@@ -14,16 +15,24 @@ class OrderStatus(models.TextChoices):
     """
 
     NEW = "new", "Нове"
+    PAID = "paid", "Сплачено"
     COMPLETED = "completed", "Завершено"
     REJECTED = "rejected", "Відхилено"
+
+
+class PaymentMethod(models.TextChoices):
+    """
+    Перелік способів оплати.
+    """
+
+    ONLINE = "online", "Онлайн"
+    BANK_TRANSFER = "bank_transfer", "На рахунок"
+    CASH = "cash", "На касі"
 
 
 class Order(models.Model):
     """
     Модель замовлення аналізів.
-
-    Зберігає основну інформацію про замовлення користувача:
-    дату створення, статус, загальну суму та файл із результатами.
     """
 
     user: models.ForeignKey = models.ForeignKey(
@@ -31,12 +40,42 @@ class Order(models.Model):
         on_delete=models.CASCADE,
         related_name="orders",
         verbose_name="Користувач",
+        blank=True,
+        null=True,
+    )
+    full_name: models.CharField = models.CharField(
+        max_length=255,
+        verbose_name="ПІБ",
+        blank=True,
+        default="",
+    )
+    phone: models.CharField = models.CharField(
+        max_length=30,
+        verbose_name="Телефон",
+        blank=True,
+        default="",
+    )
+    email: models.EmailField = models.EmailField(
+        verbose_name="Email",
+        blank=True,
+        default="",
     )
     status: models.CharField = models.CharField(
         max_length=20,
         choices=OrderStatus.choices,
         default=OrderStatus.NEW,
         verbose_name="Статус",
+    )
+    payment_method: models.CharField = models.CharField(
+        max_length=30,
+        choices=PaymentMethod.choices,
+        default=PaymentMethod.CASH,
+        verbose_name="Спосіб оплати",
+    )
+    paid_at: models.DateTimeField = models.DateTimeField(
+        blank=True,
+        null=True,
+        verbose_name="Дата оплати",
     )
     total_price: models.DecimalField = models.DecimalField(
         max_digits=10,
@@ -83,13 +122,37 @@ class Order(models.Model):
         """
         return self.items.count()
 
+    @property
+    def customer_name(self) -> str:
+        """
+        Повертає ім'я замовника.
+
+        Returns:
+            str: Ім'я замовника.
+        """
+        if self.full_name:
+            return self.full_name
+
+        if self.user:
+            return self.user.get_full_name() or self.user.username
+
+        return ""
+
+    def mark_as_paid(self) -> None:
+        """
+        Позначає замовлення як сплачене.
+
+        Returns:
+            None
+        """
+        self.status = OrderStatus.PAID
+        self.paid_at = timezone.now()
+        self.save(update_fields=["status", "paid_at"])
+
 
 class OrderItem(models.Model):
     """
     Модель елемента замовлення.
-
-    Зберігає конкретний аналіз, його ціну на момент оформлення
-    та зв'язок із замовленням.
     """
 
     order: models.ForeignKey = models.ForeignKey(

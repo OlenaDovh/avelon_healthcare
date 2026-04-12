@@ -14,6 +14,7 @@
                         <th>Кількість аналізів</th>
                         <th>Загальна ціна</th>
                         <th>Статус</th>
+                        <th>Оплата</th>
                         <th>Дата створення</th>
                         <th></th>
                     </tr>
@@ -25,11 +26,24 @@
                             <td>{{ order.analyses_count }}</td>
                             <td>{{ order.total_price }} грн</td>
                             <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.get_payment_method_display }}</td>
                             <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
                             <td class="text-end">
                                 <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">
                                     Деталі
                                 </a>
+
+                                {% if order.status == "new" and order.payment_method == "online" %}
+                                    <button
+                                        type="button"
+                                        class="btn btn-sm btn-success"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#payModal{{ order.id }}"
+                                    >
+                                        Оплатити
+                                    </button>
+                                {% endif %}
+
                                 {% if order.status == "new" %}
                                     <a href="{% url 'orders:order_cancel' order.id %}" class="btn btn-sm btn-outline-danger">
                                         Відхилити
@@ -37,6 +51,45 @@
                                 {% endif %}
                             </td>
                         </tr>
+
+                        {% if order.status == "new" and order.payment_method == "online" %}
+                            <div class="modal fade" id="payModal{{ order.id }}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Вибір платіжної системи</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <form method="post" action="{% url 'orders:order_pay' order.id %}">
+                                            {% csrf_token %}
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="payment_provider_{{ order.id }}" class="form-label">Платіжна система</label>
+                                                    <select
+                                                        name="payment_provider"
+                                                        id="payment_provider_{{ order.id }}"
+                                                        class="form-select"
+                                                    >
+                                                        <option value="portmone">Portmone</option>
+                                                        <option value="easypay">EasyPay</option>
+                                                        <option value="ipay">iPay</option>
+                                                        <option value="masterpass">Masterpass</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                                    Скасувати
+                                                </button>
+                                                <button type="submit" class="btn btn-success">
+                                                    Перейти до оплати
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </tbody>
             </table>
