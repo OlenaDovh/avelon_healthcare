@@ -5,16 +5,19 @@ from typing import Any
 
 from django import forms
 from django.core.exceptions import ValidationError
+from django.db.models import Count
 
 from doctors.models import Direction, Doctor
 
 from .models import Appointment
 from .utils import get_available_slots_for_doctor_on_date
 
-from django.db.models import Count, Q
-
 
 class AppointmentCreateForm(forms.ModelForm):
+    """
+    Базова форма створення запису до лікаря.
+    """
+
     appointment_time = forms.ChoiceField(
         required=True,
         label="Час прийому",
@@ -53,6 +56,12 @@ class AppointmentCreateForm(forms.ModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Ініціалізує форму.
+
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["direction"].queryset = Direction.objects.annotate(
@@ -84,6 +93,12 @@ class AppointmentCreateForm(forms.ModelForm):
                 pass
 
     def clean(self) -> dict[str, Any]:
+        """
+        Виконує загальну валідацію форми.
+
+        Returns:
+            dict[str, Any]: Очищені дані форми.
+        """
         cleaned_data = super().clean()
 
         direction = cleaned_data.get("direction")
@@ -107,3 +122,51 @@ class AppointmentCreateForm(forms.ModelForm):
             ).time()
 
         return cleaned_data
+
+
+class GuestAppointmentCreateForm(AppointmentCreateForm):
+    """
+    Форма створення запису для неавторизованого користувача.
+    """
+
+    full_name = forms.CharField(
+        label="ПІБ",
+        max_length=255,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введіть ПІБ",
+            }
+        ),
+    )
+    phone = forms.CharField(
+        label="Телефон",
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введіть телефон",
+            }
+        ),
+    )
+    email = forms.EmailField(
+        label="Email",
+        widget=forms.EmailInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Введіть email",
+            }
+        ),
+    )
+
+    class Meta(AppointmentCreateForm.Meta):
+        fields = (
+            "full_name",
+            "phone",
+            "email",
+            "direction",
+            "doctor",
+            "appointment_date",
+            "appointment_time",
+            "description",
+        )

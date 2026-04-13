@@ -7,6 +7,7 @@
 
     <p><strong>Дата оформлення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
     <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    <p><strong>Спосіб оплати:</strong> {{ order.get_payment_method_display }}</p>
     <p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
 
     <h3 class="mt-4">Список аналізів</h3>
@@ -31,6 +32,77 @@
                     {% endfor %}
                 </tbody>
             </table>
+        </div>
+    {% endif %}
+
+    {% if order.status == "new" and order.payment_method == "online" %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="mb-3">Оплата онлайн</h3>
+
+                <button
+                    type="button"
+                    class="btn btn-success"
+                    data-bs-toggle="modal"
+                    data-bs-target="#payModal"
+                >
+                    Оплатити
+                </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="payModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Вибір платіжної системи</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form method="post" action="{% url 'orders:order_pay' order.id %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="payment_provider" class="form-label">Платіжна система</label>
+                                <select name="payment_provider" id="payment_provider" class="form-select">
+                                    <option value="portmone">Portmone</option>
+                                    <option value="easypay">EasyPay</option>
+                                    <option value="ipay">iPay</option>
+                                    <option value="masterpass">Masterpass</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Скасувати
+                            </button>
+                            <button type="submit" class="btn btn-success">
+                                Перейти до оплати
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if order.status == "new" and order.payment_method == "bank_transfer" %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="mb-3">Оплата на рахунок</h3>
+
+                <a href="{% url 'orders:order_invoice' order.id %}" class="btn btn-outline-primary" target="_blank">
+                    Завантажити рахунок PDF
+                </a>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if order.status == "new" and order.payment_method == "cash" %}
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="mb-3">Оплата</h3>
+                <p class="mb-0">Оплата здійснюється на касі під час відвідування клініки.</p>
+            </div>
         </div>
     {% endif %}
 

@@ -36,12 +36,12 @@ class CustomUserAdmin(UserAdmin):
 
     list_display = (
         'username',
-        'email',
+        'first_name',
+        'last_name',
+        'middle_name',
         'phone',
-        'email_verified',
-        'discount',
+        'email',
         'is_staff',
-        'is_active',
     )
 
     search_fields = ('username', 'email', 'phone')

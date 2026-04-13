@@ -6,6 +6,7 @@ from decimal import Decimal
 from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from orders.forms import AuthenticatedOrderForm, GuestOrderForm
 
 from .models import Analysis
 
@@ -181,6 +182,12 @@ def cart_detail_view(request: HttpRequest) -> HttpResponse:
 
     logger.info("Відкрито сторінку кошика.")
 
+    order_form: GuestOrderForm | AuthenticatedOrderForm
+    if request.user.is_authenticated:
+        order_form = AuthenticatedOrderForm()
+    else:
+        order_form = GuestOrderForm()
+
     return render(
         request,
         "avelon_healthcare/analysis/cart_detail.html",
@@ -188,5 +195,6 @@ def cart_detail_view(request: HttpRequest) -> HttpResponse:
             "analyses": analyses,
             "total_price": total_price,
             "recommended_analyses": recommended_analyses,
+            "order_form": order_form,
         },
     )

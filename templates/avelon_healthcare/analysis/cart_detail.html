@@ -11,9 +11,48 @@
                 <div class="card p-3">
                     <h4>Підсумок</h4>
                     <p><strong>Загальна сума:</strong> {{ total_price }} грн</p>
-                    <a href="{% url 'orders:order_create' %}" class="btn btn-success">
-                        Оформити замовлення
-                    </a>
+
+                    <form method="post" action="{% url 'orders:order_create' %}">
+                        {% csrf_token %}
+
+                        {% if not request.user.is_authenticated %}
+                            <div class="mb-3">
+                                {{ order_form.full_name.label_tag }}
+                                {{ order_form.full_name }}
+                                {% if order_form.full_name.errors %}
+                                    <div class="text-danger small mt-1">{{ order_form.full_name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ order_form.phone.label_tag }}
+                                {{ order_form.phone }}
+                                {% if order_form.phone.errors %}
+                                    <div class="text-danger small mt-1">{{ order_form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                {{ order_form.email.label_tag }}
+                                {{ order_form.email }}
+                                {% if order_form.email.errors %}
+                                    <div class="text-danger small mt-1">{{ order_form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {{ order_form.payment_method.label_tag }}
+                            {{ order_form.payment_method }}
+                            {% if order_form.payment_method.errors %}
+                                <div class="text-danger small mt-1">{{ order_form.payment_method.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <button type="submit" class="btn btn-success w-100">
+                            Оформити замовлення
+                        </button>
+                    </form>
                 </div>
             </div>
 
