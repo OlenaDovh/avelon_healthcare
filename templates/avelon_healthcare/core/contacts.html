@@ -16,12 +16,18 @@
 
         <p><strong>Email:</strong> {{ contacts.email }}</p>
 
-        {% if contacts.google_map_url %}
-            <p>
-                <a href="{{ contacts.google_map_url }}" target="_blank" class="btn btn-outline-primary">
-                    Відкрити карту
-                </a>
-            </p>
+        {% if contacts.google_map_embed_url %}
+            <div class="mt-4">
+                <iframe
+                        src="{{ contacts.google_map_embed_url }}"
+                        width="100%"
+                        height="400"
+                        style="border:0;"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                </iframe>
+            </div>
         {% endif %}
 
         <div class="mt-4">
