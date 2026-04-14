@@ -79,9 +79,9 @@ class ContactInfo(models.Model):
     email: models.EmailField = models.EmailField(
         verbose_name="Email",
     )
-    google_map_url: models.URLField = models.URLField(
+    google_map_embed_url = models.TextField(
         blank=True,
-        verbose_name="Посилання на Google Maps",
+        verbose_name="Google Maps Embed URL",
     )
     facebook_url: models.URLField = models.URLField(
         blank=True,
