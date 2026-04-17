@@ -71,7 +71,7 @@
                     <div class="card-body">
                         <p class="mb-2">
                             <strong>Користувач:</strong>
-                            {{ order.user.get_full_name|default:order.user.username }}
+                            {{ order.user.full_name|default:order.user.username }}
                         </p>
                         <p class="mb-2"><strong>Замовлення:</strong> #{{ order.id }}</p>
                         <p class="mb-2"><strong>Спосіб оплати:</strong> {{ order.get_payment_method_display }}</p>

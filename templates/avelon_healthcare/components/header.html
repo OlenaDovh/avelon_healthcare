@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+<header class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
     <div class="container">
         <a class="navbar-brand fw-bold" href="{% url 'core:home' %}">
             Avelon Healthcare
@@ -13,58 +13,73 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'core:home' %}">Головна</a>
                 </li>
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="sectionsDropdown" role="button"
-                       data-bs-toggle="dropdown">
-                        Розділи
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'core:about' %}">Про клініку</a></li>
-                        <li><a class="dropdown-item" href="{% url 'doctors:doctor_list' %}">Список лікарів</a></li>
-                        <li><a class="dropdown-item" href="{% url 'doctors:direction_list' %}">Список напрямів</a></li>
-                        <li><a class="dropdown-item" href="{% url 'reviews:review_list' %}">Відгуки</a></li>
-                        <li><a class="dropdown-item" href="{% url 'core:contacts' %}">Контакти</a></li>
-                        <li><a class="dropdown-item" href="{% url 'core:promotions' %}">Акції</a></li>
-                        <li><a class="dropdown-item" href="{% url 'analysis:analysis_list' %}">Аналізи</a></li>
-                    </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'doctors:doctor_list' %}">Лікарі</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'analysis:analysis_list' %}">Аналізи</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:promotions' %}">Акції</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'reviews:review_list' %}">Відгуки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'core:contacts' %}">Контакти</a>
                 </li>
             </ul>
 
             <div class="d-flex align-items-center gap-2">
-
                 <a href="{% url 'analysis:cart_detail' %}" class="btn btn-outline-secondary">
                     Кошик ({{ cart_items_count|default:0 }})
                 </a>
 
-                <a href="{% url 'appointments:appointment_create' %}" class="btn btn-outline-primary">
-                    Запис на прийом
-                </a>
+                {% if request.user.is_authenticated %}
+                    {% if is_staff_role %}
+                        <a href="{% url 'accounts:staff_dashboard' %}" class="btn btn-outline-primary">
+                            Робочий кабінет
+                        </a>
 
-                <a href="{% url 'analysis:analysis_list' %}" class="btn btn-primary">
-                    Замовити аналізи
-                </a>
+                        <a href="{% url 'accounts:staff_dashboard' %}" class="btn btn-outline-dark">
+                            Кабінет
+                        </a>
+                    {% else %}
+                        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-outline-primary">
+                            Запис на прийом
+                        </a>
 
-            </div>
+                        <a href="{% url 'analysis:analysis_list' %}" class="btn btn-primary">
+                            Замовити аналізи
+                        </a>
 
-            {% if request.user.is_authenticated %}
-                <a href="{% url 'accounts:profile' %}" class="btn btn-outline-dark">
-                    Кабінет: {% if request.user.last_name and request.user.first_name %}
-                    {{ request.user.last_name }} {{ request.user.first_name|slice:":1" }}.
-                    {% if request.user.middle_name %}{{ request.user.middle_name|slice:":1" }}.{% endif %}
+                        <a href="{% url 'accounts:profile' %}" class="btn btn-outline-dark">
+                            Кабінет:
+                            {% if request.user.last_name and request.user.first_name %}
+                                {{ request.user.last_name }} {{ request.user.first_name|first }}.{% if request.user.middle_name %}{{ request.user.middle_name|first }}.{% endif %}
+                            {% else %}
+                                {{ request.user.username }}
+                            {% endif %}
+                        </a>
+                    {% endif %}
+
+                    <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger">
+                        Вийти
+                    </a>
                 {% else %}
-                    {{ request.user.username }}
+                    <a href="{% url 'appointments:appointment_create' %}" class="btn btn-outline-primary">
+                        Запис на прийом
+                    </a>
+
+                    <a href="{% url 'analysis:analysis_list' %}" class="btn btn-primary">
+                        Замовити аналізи
+                    </a>
+
+                    <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">
+                        Увійти
+                    </a>
                 {% endif %}
-                </a>
-                <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger">
-                    Вийти
-                </a>
-            {% else %}
-                <a href="{% url 'accounts:login' %}" class="btn btn-outline-dark">
-                    Особистий кабінет
-                </a>
-            {% endif %}
+            </div>
         </div>
     </div>
-    </div>
-</nav>
+</header>

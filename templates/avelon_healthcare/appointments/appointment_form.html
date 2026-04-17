@@ -16,9 +16,21 @@
 
             {% if not request.user.is_authenticated %}
                 <div class="mb-3">
-                    {{ form.full_name.label_tag }}
-                    {{ form.full_name }}
-                    {{ form.full_name.errors }}
+                    {{ form.last_name.label_tag }}
+                    {{ form.last_name }}
+                    {{ form.last_name.errors }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.first_name.label_tag }}
+                    {{ form.first_name }}
+                    {{ form.first_name.errors }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.middle_name.label_tag }}
+                    {{ form.middle_name }}
+                    {{ form.middle_name.errors }}
                 </div>
 
                 <div class="mb-3">
@@ -64,110 +76,137 @@
                 {{ form.description.errors }}
             </div>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    const directionEl = document.getElementById("id_direction");
-                    const doctorEl = document.getElementById("id_doctor");
-                    const dateEl = document.getElementById("id_appointment_date");
-                    const timeEl = document.getElementById("id_appointment_time");
-
-                    let datePicker = null;
-
-                    if (dateEl && typeof flatpickr !== "undefined") {
-                        datePicker = flatpickr(dateEl, {
-                            dateFormat: "Y-m-d",
-                            minDate: "today",
-                            enable: [],
-                            disableMobile: true,
-                            onChange: function () {
-                                loadSlots();
-                            }
-                        });
-                    }
-
-                    directionEl.addEventListener("change", loadDoctors);
-                    doctorEl.addEventListener("change", loadAvailableDates);
-
-                    async function loadDoctors() {
-                        const directionId = directionEl.value;
-
-                        doctorEl.innerHTML = '<option value="">Оберіть лікаря</option>';
-                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
-
-                        if (datePicker) {
-                            datePicker.clear();
-                            datePicker.set("enable", []);
-                        } else {
-                            dateEl.value = "";
-                        }
-
-                        if (!directionId) return;
-
-                        const res = await fetch(`/appointments/doctors/?direction_id=${directionId}`);
-                        const data = await res.json();
-                        const doctors = data.doctors || [];
-
-                        doctors.forEach((doctor) => {
-                            const opt = document.createElement("option");
-                            opt.value = doctor.id;
-                            opt.textContent = doctor.full_name;
-                            doctorEl.appendChild(opt);
-                        });
-                    }
-
-                    async function loadAvailableDates() {
-                        const doctorId = doctorEl.value;
-                        const directionId = directionEl.value;
-
-                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
-
-                        if (datePicker) {
-                            datePicker.clear();
-                            datePicker.set("enable", []);
-                        } else {
-                            dateEl.value = "";
-                        }
-
-                        if (!doctorId || !directionId) return;
-
-                        const res = await fetch(`/appointments/dates/?doctor_id=${doctorId}&direction_id=${directionId}`);
-                        const data = await res.json();
-                        const dates = data.dates || [];
-
-                        if (!dates.length) return;
-
-                        if (datePicker) {
-                            datePicker.set("enable", dates);
-                        }
-                    }
-
-                    async function loadSlots() {
-                        const doctorId = doctorEl.value;
-                        const directionId = directionEl.value;
-                        const dateValue = dateEl.value;
-
-                        timeEl.innerHTML = '<option value="">Оберіть час</option>';
-
-                        if (!doctorId || !directionId || !dateValue) return;
-
-                        const res = await fetch(`/appointments/slots/?doctor_id=${doctorId}&direction_id=${directionId}&date=${dateValue}`);
-                        const data = await res.json();
-                        const slots = data.slots || [];
-
-                        slots.forEach((slot) => {
-                            const opt = document.createElement("option");
-                            opt.value = slot.value;
-                            opt.textContent = slot.label;
-                            timeEl.appendChild(opt);
-                        });
-                    }
-                });
-            </script>
-
             <button type="submit" class="btn btn-primary">Створити запис</button>
         </form>
     </div>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const directionField = document.getElementById("id_direction");
+            const doctorField = document.getElementById("id_doctor");
+            const dateField = document.getElementById("id_appointment_date");
+            const timeField = document.getElementById("id_appointment_time");
+
+            let availableDates = [];
+            let datePicker = null;
+
+            function resetDoctors() {
+                doctorField.innerHTML = '<option value="">Оберіть лікаря</option>';
+            }
+
+            function resetTimes() {
+                timeField.innerHTML = '<option value="">Оберіть час</option>';
+            }
+
+            function resetDatePicker() {
+                availableDates = [];
+                if (datePicker) {
+                    datePicker.clear();
+                    datePicker.set("enable", []);
+                }
+                if (dateField) {
+                    dateField.value = "";
+                }
+            }
+
+            function initDatePicker() {
+                if (!dateField) return;
+
+                datePicker = flatpickr(dateField, {
+                    dateFormat: "Y-m-d",
+                    minDate: "today",
+                    allowInput: false,
+                    enable: [],
+                    onChange: function(selectedDates, dateStr) {
+                        loadTimes(directionField.value, doctorField.value, dateStr);
+                    }
+                });
+            }
+
+            function loadDoctors(directionId) {
+                fetch(`/appointments/ajax/load-doctors/?direction_id=${directionId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resetDoctors();
+                        resetDatePicker();
+                        resetTimes();
+
+                        data.doctors.forEach(function (doctor) {
+                            const option = document.createElement("option");
+                            option.value = doctor.id;
+                            option.textContent = doctor.full_name;
+                            doctorField.appendChild(option);
+                        });
+                    });
+            }
+
+            function loadDates(directionId, doctorId) {
+                if (!directionId || !doctorId) {
+                    resetDatePicker();
+                    resetTimes();
+                    return;
+                }
+
+                fetch(`/appointments/ajax/load-dates/?direction_id=${directionId}&doctor_id=${doctorId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        availableDates = data.dates || [];
+                        resetTimes();
+
+                        if (datePicker) {
+                            datePicker.clear();
+                            datePicker.set("enable", availableDates);
+                        }
+                    });
+            }
+
+            function loadTimes(directionId, doctorId, appointmentDate) {
+                if (!directionId || !doctorId || !appointmentDate) {
+                    resetTimes();
+                    return;
+                }
+
+                fetch(`/appointments/ajax/load-slots/?direction_id=${directionId}&doctor_id=${doctorId}&date=${appointmentDate}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resetTimes();
+
+                        data.slots.forEach(function (slot) {
+                            const option = document.createElement("option");
+                            option.value = slot.value;
+                            option.textContent = slot.label;
+                            timeField.appendChild(option);
+                        });
+                    });
+            }
+
+            initDatePicker();
+
+            if (directionField) {
+                directionField.addEventListener("change", function () {
+                    const directionId = this.value;
+                    resetDoctors();
+                    resetDatePicker();
+                    resetTimes();
+
+                    if (!directionId) {
+                        return;
+                    }
+
+                    loadDoctors(directionId);
+                });
+            }
+
+            if (doctorField) {
+                doctorField.addEventListener("change", function () {
+                    resetDatePicker();
+                    resetTimes();
+                    loadDates(directionField.value, this.value);
+                });
+            }
+        });
+    </script>
 {% endblock %}

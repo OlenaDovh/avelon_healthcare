@@ -52,7 +52,6 @@ SECURE_HSTS_PRELOAD = not DEBUG
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -95,13 +94,13 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'analysis.context_processors.cart_items_count',
+                "accounts.context_processors.user_roles",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'avelon_healthcare.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
@@ -116,7 +115,6 @@ DATABASES = {
         'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -136,7 +134,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
@@ -146,7 +143,6 @@ TIME_ZONE = 'Europe/Kyiv'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
@@ -172,7 +168,7 @@ LOGGING = {
     'handlers': {
         'file': {
             'class': 'logging.FileHandler',
-            'filename': os.path.join(BASE_DIR, 'logs/app.log'),
+            'filename': os.path.join(BASE_DIR, 'logs/app.logs'),
             'formatter': 'standard',
         },
     },
@@ -190,7 +186,6 @@ AUTHENTICATION_BACKENDS = [
 LOGIN_URL = 'accounts:login'
 LOGIN_REDIRECT_URL = 'accounts:profile'
 LOGOUT_REDIRECT_URL = 'core:home'
-
 
 EMAIL_BACKEND = os.getenv(
     "EMAIL_BACKEND",

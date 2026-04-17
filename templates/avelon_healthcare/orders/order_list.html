@@ -14,6 +14,7 @@
                         <th>Кількість аналізів</th>
                         <th>Загальна ціна</th>
                         <th>Статус</th>
+                        <th>Причина відхилення</th>
                         <th>Оплата</th>
                         <th>Дата створення</th>
                         <th></th>
@@ -26,6 +27,13 @@
                             <td>{{ order.analyses_count }}</td>
                             <td>{{ order.total_price }} грн</td>
                             <td>{{ order.get_status_display }}</td>
+                            <td>
+                                {% if order.status == "rejected" %}
+                                    {{ order.rejection_reason|default:"—" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
                             <td>{{ order.get_payment_method_display }}</td>
                             <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
                             <td class="text-end">

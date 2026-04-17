@@ -13,7 +13,9 @@ class AppointmentAdmin(admin.ModelAdmin):
 
     list_display = (
         "user",
-        "full_name",
+        "last_name",
+        "first_name",
+        "middle_name",
         "phone",
         "email",
         "direction",
@@ -31,7 +33,9 @@ class AppointmentAdmin(admin.ModelAdmin):
     search_fields = (
         "user__username",
         "user__email",
-        "full_name",
+        "last_name",
+        "first_name",
+        "middle_name"
         "phone",
         "email",
         "doctor__full_name",
@@ -45,7 +49,9 @@ class AppointmentAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "user",
-                    "full_name",
+                    "last_name",
+                    "first_name",
+                    "middle_name"
                     "phone",
                     "email",
                     "direction",

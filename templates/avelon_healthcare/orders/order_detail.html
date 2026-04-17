@@ -7,6 +7,9 @@
 
     <p><strong>Дата оформлення:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
     <p><strong>Статус:</strong> {{ order.get_status_display }}</p>
+    {% if order.status == "rejected" and order.rejection_reason %}
+    <p><strong>Причина відхилення:</strong> {{ order.rejection_reason }}</p>
+{% endif %}
     <p><strong>Спосіб оплати:</strong> {{ order.get_payment_method_display }}</p>
     <p><strong>Загальна сума:</strong> {{ order.total_price }} грн</p>
 

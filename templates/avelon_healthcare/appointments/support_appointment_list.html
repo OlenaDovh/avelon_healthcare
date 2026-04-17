@@ -1,0 +1,51 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Усі записи{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Усі записи</h1>
+        <a href="{% url 'appointments:support_appointment_create' %}" class="btn btn-primary">
+            Створити запис
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Пацієнт</th>
+                    <th>Лікар</th>
+                    <th>Напрям</th>
+                    <th>Дата</th>
+                    <th>Час</th>
+                    <th>Статус</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for appointment in appointments %}
+                    <tr>
+                        <td>{{ appointment.id }}</td>
+                        <td>{{ appointment.customer_name }}</td>
+                        <td>{{ appointment.doctor.full_name }}</td>
+                        <td>{{ appointment.direction.name }}</td>
+                        <td>{{ appointment.appointment_date }}</td>
+                        <td>{{ appointment.appointment_time_range }}</td>
+                        <td>{{ appointment.get_status_display }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'appointments:support_appointment_update' appointment.id %}" class="btn btn-sm btn-outline-primary">
+                                Редагувати
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8">Записів не знайдено.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

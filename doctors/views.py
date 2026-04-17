@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import logging
 
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, render
 
 from .models import Direction, Doctor
+
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +29,11 @@ def doctor_list_view(request: HttpRequest) -> HttpResponse:
     doctors: QuerySet[Doctor] = Doctor.objects.prefetch_related("directions").all()
 
     if query:
-        doctors = doctors.filter(full_name__icontains=query)
+        doctors = doctors.filter(
+            Q(last_name__icontains=query) |
+            Q(first_name__icontains=query) |
+            Q(middle_name__icontains=query)
+        )
 
     if position:
         doctors = doctors.filter(position__icontains=position)

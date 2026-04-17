@@ -15,7 +15,7 @@ from .views import (
     password_change_view,
     profile_update_view,
     profile_view,
-    register_view,
+    register_view, staff_dashboard_view, verify_email_view, support_patient_list_view, support_patient_update_view,
 )
 
 app_name = "accounts"
@@ -51,5 +51,14 @@ urlpatterns = [
             template_name="avelon_healthcare/accounts/password_reset_complete.html"
         ),
         name="password_reset_complete",
+    ),
+    path("staff/", staff_dashboard_view, name="staff_dashboard"),
+    path("verify-email/<uidb64>/<token>/", verify_email_view, name="verify_email"),
+    path("staff/patients/", support_patient_list_view, name="support_patient_list"),
+    path("staff/patients/<int:user_id>/edit/", support_patient_update_view, name="support_patient_update"),
+    path(
+        "resend-verification-email/",
+        views.resend_verification_email_view,
+        name="resend_verification_email",
     ),
 ]

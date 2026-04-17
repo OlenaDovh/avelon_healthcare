@@ -43,7 +43,6 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ doctor.full_name }}</h5>
                         <p class="mb-1"><strong>Посада:</strong> {{ doctor.position }}</p>
-                        <p class="mb-1"><strong>Спеціальність:</strong> {{ doctor.specialty_direction.name }}</p>
                         <p class="mb-1"><strong>Категорія:</strong> {{ doctor.qualification_category }}</p>
                         <p class="mb-2"><strong>Стаж:</strong> {{ doctor.experience_years }} років</p>
 
@@ -51,6 +50,8 @@
                             <strong>Напрями:</strong>
                             {% for direction in doctor.directions.all %}
                                 {{ direction.name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                —
                             {% endfor %}
                         </p>
 

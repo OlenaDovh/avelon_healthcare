@@ -17,7 +17,23 @@
 
                         {% if not request.user.is_authenticated %}
                             <div class="mb-3">
-                                {{ order_form.full_name.label_tag }}
+                                <div class="mb-3">
+    {{ order_form.last_name.label_tag }}
+    {{ order_form.last_name }}
+    {{ order_form.last_name.errors }}
+</div>
+
+<div class="mb-3">
+    {{ order_form.first_name.label_tag }}
+    {{ order_form.first_name }}
+    {{ order_form.first_name.errors }}
+</div>
+
+<div class="mb-3">
+    {{ order_form.middle_name.label_tag }}
+    {{ order_form.middle_name }}
+    {{ order_form.middle_name.errors }}
+</div>
                                 {{ order_form.full_name }}
                                 {% if order_form.full_name.errors %}
                                     <div class="text-danger small mt-1">{{ order_form.full_name.errors }}</div>

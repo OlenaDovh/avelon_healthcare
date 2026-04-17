@@ -16,7 +16,6 @@
 
         <div class="col-md-8">
             <p><strong>Посада:</strong> {{ doctor.position }}</p>
-            <p><strong>Спеціальність:</strong> {{ doctor.specialty_direction.name }}</p>
             <p><strong>Кваліфікаційна категорія:</strong> {{ doctor.qualification_category }}</p>
             <p><strong>Стаж:</strong> {{ doctor.experience_years }} років</p>
             <p><strong>Ціновий діапазон:</strong> від {{ doctor.price_from }} грн до {{ doctor.price_to }} грн</p>
@@ -27,8 +26,16 @@
                     <a href="{% url 'doctors:direction_detail' direction.id %}">
                         {{ direction.name }}
                     </a>{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    —
                 {% endfor %}
             </p>
+
+            <div class="mt-3">
+                <a href="{% url 'appointments:appointment_create' %}" class="btn btn-primary">
+                    Записатися на прийом
+                </a>
+            </div>
         </div>
     </div>
 

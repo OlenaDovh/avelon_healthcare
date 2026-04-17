@@ -4,16 +4,25 @@ import logging
 from decimal import Decimal
 
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.db.models import QuerySet
+from django.db.models import QuerySet, Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from accounts.permissions import support_required
+from accounts.selectors import patient_users_queryset, is_patient
 from analysis.models import Analysis
 
-from .forms import AuthenticatedOrderForm, GuestOrderForm
+from .forms import (
+    AuthenticatedOrderForm,
+    GuestOrderForm,
+    OrderCancelForm,
+    SupportOrderCreateForm,
+    SupportOrderUpdateForm,
+)
 from .models import Order, OrderItem, OrderStatus, PaymentMethod
 from .utils import (
     build_order_invoice_response,
@@ -26,45 +35,20 @@ from .utils import (
 
 logger = logging.getLogger(__name__)
 
+User = get_user_model()
+
 
 def _get_cart(request: HttpRequest) -> dict[str, int]:
-    """
-    Повертає кошик із сесії.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-
-    Returns:
-        dict[str, int]: Поточний кошик.
-    """
     return request.session.get("cart", {})
 
 
 def _clear_cart(request: HttpRequest) -> None:
-    """
-    Очищає кошик у сесії.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-
-    Returns:
-        None
-    """
     request.session["cart"] = {}
     request.session.modified = True
 
 
 @transaction.atomic
 def order_create_view(request: HttpRequest) -> HttpResponse:
-    """
-    Створює замовлення на основі вмісту кошика.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-
-    Returns:
-        HttpResponse: Редірект на сторінку деталей замовлення або кошика.
-    """
     if request.method != "POST":
         messages.warning(request, "Некоректний спосіб запиту.")
         return redirect("analysis:cart_detail")
@@ -72,7 +56,6 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     cart: dict[str, int] = _get_cart(request)
 
     if not cart:
-        logger.warning("Спроба оформити порожній кошик.")
         messages.warning(request, "Кошик порожній.")
         return redirect("analysis:cart_detail")
 
@@ -86,7 +69,6 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     analyses: QuerySet[Analysis] = Analysis.objects.filter(id__in=analysis_ids, is_active=True)
 
     if not analyses.exists():
-        logger.warning("Спроба оформити замовлення без валідних аналізів.")
         messages.warning(request, "Не вдалося оформити замовлення.")
         return redirect("analysis:cart_detail")
 
@@ -94,19 +76,29 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     total_price: Decimal = sum((analysis.price for analysis in analyses), Decimal("0.00"))
 
     if request.user.is_authenticated:
-        full_name: str = request.user.get_full_name() or request.user.username
-        phone: str = getattr(request.user, "phone", "") or ""
-        email: str = request.user.email or ""
         user = request.user
+
+        last_name = user.last_name
+        first_name = user.first_name
+        middle_name = user.middle_name
+
+        phone = getattr(user, "phone", "") or ""
+        email = user.email or ""
     else:
-        full_name = form.cleaned_data["full_name"]
+        user = None
+
+        last_name = form.cleaned_data["last_name"]
+        first_name = form.cleaned_data["first_name"]
+        middle_name = form.cleaned_data.get("middle_name", "")
+
         phone = form.cleaned_data["phone"]
         email = form.cleaned_data["email"]
-        user = None
 
     order: Order = Order.objects.create(
         user=user,
-        full_name=full_name,
+        last_name=last_name,
+        first_name=first_name,
+        middle_name=middle_name,
         phone=phone,
         email=email,
         total_price=total_price,
@@ -115,11 +107,7 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     )
 
     order_items: list[OrderItem] = [
-        OrderItem(
-            order=order,
-            analysis=analysis,
-            price=analysis.price,
-        )
+        OrderItem(order=order, analysis=analysis, price=analysis.price)
         for analysis in analyses
     ]
     OrderItem.objects.bulk_create(order_items)
@@ -137,19 +125,8 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def order_list_view(request: HttpRequest) -> HttpResponse:
-    """
-    Відображає список замовлень поточного користувача.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-
-    Returns:
-        HttpResponse: HTML-відповідь зі списком замовлень.
-    """
     orders: QuerySet[Order] = Order.objects.filter(user=request.user).order_by("-created_at")
     update_bank_transfer_orders_status(orders)
-
-    logger.info("Відкрито список замовлень. user=%s", request.user.username)
 
     return render(
         request,
@@ -160,16 +137,6 @@ def order_list_view(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def order_detail_view(request: HttpRequest, order_id: int) -> HttpResponse:
-    """
-    Відображає деталі замовлення поточного користувача.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-        order_id (int): Ідентифікатор замовлення.
-
-    Returns:
-        HttpResponse: HTML-відповідь зі сторінкою деталей замовлення.
-    """
     order: Order = get_object_or_404(
         Order.objects.prefetch_related("items__analysis"),
         id=order_id,
@@ -191,115 +158,61 @@ def order_detail_view(request: HttpRequest, order_id: int) -> HttpResponse:
 @login_required
 @transaction.atomic
 def order_pay_view(request: HttpRequest, order_id: int) -> HttpResponse:
-    """
-    Проводить мок-оплату онлайн для замовлення.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-        order_id (int): Ідентифікатор замовлення.
-
-    Returns:
-        HttpResponse: Редірект на сторінку деталей замовлення.
-    """
-    order: Order = get_object_or_404(
-        Order,
-        id=order_id,
-        user=request.user,
-    )
+    order: Order = get_object_or_404(Order, id=order_id, user=request.user)
 
     if request.method != "POST":
-        messages.warning(request, "Некоректний спосіб запиту.")
         return redirect("orders:order_detail", order_id=order.id)
 
     if order.status != OrderStatus.NEW:
-        messages.warning(request, "Оплата доступна лише для нового замовлення.")
         return redirect("orders:order_detail", order_id=order.id)
 
     if order.payment_method != PaymentMethod.ONLINE:
-        messages.warning(request, "Для цього замовлення онлайн-оплата недоступна.")
-        return redirect("orders:order_detail", order_id=order.id)
-
-    payment_provider: str = request.POST.get("payment_provider", "").strip()
-
-    valid_payment_providers: set[str] = {
-        "portmone",
-        "easypay",
-        "ipay",
-        "masterpass",
-    }
-    if payment_provider not in valid_payment_providers:
-        messages.warning(request, "Оберіть платіжну систему.")
         return redirect("orders:order_detail", order_id=order.id)
 
     order.status = OrderStatus.PAID
     order.paid_at = timezone.now()
     order.save(update_fields=["status", "paid_at"])
 
-    logger.info(
-        "Виконано онлайн-оплату замовлення. user=%s order_id=%s provider=%s",
-        request.user.username,
-        order.id,
-        payment_provider,
-    )
-
-    messages.success(request, "Оплату успішно проведено.")
     return redirect("orders:order_detail", order_id=order.id)
 
 
 @login_required
 def order_cancel_view(request: HttpRequest, order_id: int) -> HttpResponse:
-    """
-    Скасовує замовлення поточного користувача.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-        order_id (int): Ідентифікатор замовлення.
-
-    Returns:
-        HttpResponse: Редірект на список замовлень.
-    """
     order: Order = get_object_or_404(
-        Order,
-        id=order_id,
+        Order.objects.select_related("user"),
+        pk=order_id,
         user=request.user,
     )
 
-    if order.status == OrderStatus.NEW:
-        order.status = OrderStatus.REJECTED
-        order.save(update_fields=["status"])
+    if order.status != OrderStatus.NEW:
+        return redirect("orders:order_list")
 
-        logger.info(
-            "Скасовано замовлення. user=%s order_id=%s",
-            request.user.username,
-            order.id,
-        )
-        messages.success(request, "Замовлення успішно скасовано.")
+    if request.method == "POST":
+        form = OrderCancelForm(request.POST)
+
+        if form.is_valid():
+            user_reason: str = form.cleaned_data["reason"]
+
+            order.status = OrderStatus.REJECTED
+            order.rejection_reason = user_reason
+            order.save(update_fields=["status", "rejection_reason"])
+
+            return redirect("orders:order_list")
     else:
-        logger.warning(
-            "Спроба скасувати замовлення з неактивним статусом. user=%s order_id=%s",
-            request.user.username,
-            order.id,
-        )
-        messages.warning(
-            request,
-            "Скасувати можна лише замовлення зі статусом 'Нове'.",
-        )
+        form = OrderCancelForm()
 
-    return redirect("orders:order_list")
+    return render(
+        request,
+        "avelon_healthcare/orders/order_cancel.html",
+        {
+            "order": order,
+            "form": form,
+        },
+    )
 
 
 @login_required
 def order_invoice_view(request: HttpRequest, order_id: int) -> HttpResponse:
-    """
-    Генерує PDF-рахунок для замовлення.
-
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
-        order_id (int): Ідентифікатор замовлення.
-
-    Returns:
-        HttpResponse: PDF-файл із рахунком.
-    """
     order: Order = get_object_or_404(
         Order.objects.prefetch_related("items__analysis"),
         id=order_id,
@@ -307,7 +220,129 @@ def order_invoice_view(request: HttpRequest, order_id: int) -> HttpResponse:
     )
 
     if order.payment_method != PaymentMethod.BANK_TRANSFER:
-        messages.warning(request, "Рахунок доступний лише для оплати на рахунок.")
         return redirect("orders:order_detail", order_id=order.id)
 
     return build_order_invoice_response(order)
+
+
+@login_required
+@support_required
+def support_order_list_view(request: HttpRequest) -> HttpResponse:
+    orders = (
+        Order.objects.prefetch_related("items__analysis")
+        .select_related("user")
+        .filter(
+            Q(user__isnull=True) | Q(user__in=patient_users_queryset())
+        )
+        .distinct()
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "avelon_healthcare/orders/support_order_list.html",
+        {"orders": orders},
+    )
+
+
+@login_required
+@support_required
+@transaction.atomic
+def support_order_create_view(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        form = SupportOrderCreateForm(request.POST)
+
+        if form.is_valid():
+            user: User | None = form.cleaned_data.get("user")
+
+            if user and not is_patient(user):
+                messages.error(request, "Можна обирати тільки користувачів із групою patient.")
+                return redirect("orders:support_order_create")
+
+            analyses = form.cleaned_data["analyses"]
+            payment_method: str = form.cleaned_data["payment_method"]
+            total_price: Decimal = sum((a.price for a in analyses), Decimal("0.00"))
+
+            if user:
+                last_name = user.last_name
+                first_name = user.first_name
+                middle_name = user.middle_name
+
+                phone = getattr(user, "phone", "") or ""
+                email = user.email or ""
+            else:
+                last_name = form.cleaned_data["last_name"]
+                first_name = form.cleaned_data["first_name"]
+                middle_name = form.cleaned_data.get("middle_name", "")
+
+                phone = form.cleaned_data["phone"]
+                email = form.cleaned_data["email"]
+
+            order: Order = Order.objects.create(
+                user=user,
+                last_name=last_name,
+                first_name=first_name,
+                middle_name=middle_name,
+                phone=phone,
+                email=email,
+                total_price=total_price,
+                payment_method=payment_method,
+                status=OrderStatus.NEW,
+            )
+
+            OrderItem.objects.bulk_create(
+                [
+                    OrderItem(order=order, analysis=a, price=a.price)
+                    for a in analyses
+                ]
+            )
+
+            return redirect("orders:support_order_list")
+    else:
+        form = SupportOrderCreateForm()
+
+    return render(
+        request,
+        "avelon_healthcare/orders/support_order_form.html",
+        {"form": form},
+    )
+
+
+@login_required
+@support_required
+def support_order_update_view(request: HttpRequest, order_id: int) -> HttpResponse:
+    order: Order = get_object_or_404(
+        Order.objects.prefetch_related("items__analysis").select_related("user"),
+        Q(id=order_id) & (
+            Q(user__isnull=True) | Q(user__in=patient_users_queryset())
+        ),
+    )
+
+    if request.method == "POST":
+        form = SupportOrderUpdateForm(request.POST, request.FILES, instance=order)
+
+        if form.is_valid():
+            updated_order: Order = form.save(commit=False)
+
+            if updated_order.status == OrderStatus.PAID and updated_order.paid_at is None:
+                updated_order.paid_at = timezone.now()
+
+            if updated_order.status != OrderStatus.PAID:
+                updated_order.paid_at = None
+
+            if updated_order.status != OrderStatus.REJECTED:
+                updated_order.rejection_reason = ""
+
+            updated_order.save()
+            return redirect("orders:support_order_list")
+    else:
+        form = SupportOrderUpdateForm(instance=order)
+
+    return render(
+        request,
+        "avelon_healthcare/orders/support_order_update.html",
+        {
+            "form": form,
+            "order": order,
+        },
+    )

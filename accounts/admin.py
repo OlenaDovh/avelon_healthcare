@@ -42,6 +42,7 @@ class CustomUserAdmin(UserAdmin):
         'phone',
         'email',
         'is_staff',
+        'email_verified',
     )
 
     search_fields = ('username', 'email', 'phone')

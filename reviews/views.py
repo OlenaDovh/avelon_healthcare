@@ -8,10 +8,11 @@ from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from accounts.permissions import support_required
 from appointments.models import Appointment, AppointmentStatus
 
-from .forms import ReviewCreateForm
 from .models import Review
+from .forms import ReviewCreateForm, ReviewReplyForm
 
 logger = logging.getLogger(__name__)
 
@@ -100,5 +101,60 @@ def review_create_view(request: HttpRequest, appointment_id: int) -> HttpRespons
         {
             "form": form,
             "appointment": appointment,
+        },
+    )
+
+@login_required
+@support_required
+def support_review_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список усіх відгуків для support.
+
+    Args:
+        request (HttpRequest): HTTP-запит.
+
+    Returns:
+        HttpResponse: HTML-відповідь.
+    """
+    reviews = Review.objects.select_related("user", "appointment").order_by("-created_at")
+
+    return render(
+        request,
+        "avelon_healthcare/reviews/support_review_list.html",
+        {"reviews": reviews},
+    )
+
+
+@login_required
+@support_required
+def support_review_reply_view(request: HttpRequest, review_id: int) -> HttpResponse:
+    """
+    Додає або редагує відповідь на відгук.
+
+    Args:
+        request (HttpRequest): HTTP-запит.
+        review_id (int): Ідентифікатор відгуку.
+
+    Returns:
+        HttpResponse: HTML-відповідь або редірект.
+    """
+    review: Review = get_object_or_404(Review, id=review_id)
+
+    if request.method == "POST":
+        form = ReviewReplyForm(request.POST, instance=review)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Відповідь на відгук успішно збережено.")
+            return redirect("reviews:support_review_list")
+    else:
+        form = ReviewReplyForm(instance=review)
+
+    return render(
+        request,
+        "avelon_healthcare/reviews/support_review_reply.html",
+        {
+            "form": form,
+            "review": review,
         },
     )

@@ -4,7 +4,6 @@
 
 {% block content %}
 
-<!-- HERO -->
 <div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-5">
         <h1 class="display-5 fw-bold">Avelon Healthcare</h1>
@@ -19,42 +18,6 @@
     </div>
 </div>
 
-<!-- НАПРЯМИ -->
-<h2 class="mb-4">Популярні напрями</h2>
-
-<div class="row g-4 mb-5">
-
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Гастроентерологія</h5>
-                <p class="card-text">
-                    Діагностика та лікування захворювань шлунково-кишкового тракту.
-                </p>
-                <a href="{% url 'doctors:direction_list' %}" class="btn btn-outline-primary">
-                    Детальніше
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-6">
-        <div class="card h-100 shadow-sm">
-            <div class="card-body">
-                <h5 class="card-title">Гінекологія</h5>
-                <p class="card-text">
-                    Консультації, обстеження та лікування жіночого здоров'я.
-                </p>
-                <a href="{% url 'doctors:direction_list' %}" class="btn btn-outline-primary">
-                    Детальніше
-                </a>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<!-- ПОСЛУГИ -->
 <h2 class="mb-4">Наші послуги</h2>
 
 <div class="row g-4 mb-5">
@@ -86,10 +49,10 @@
     <div class="col-md-4">
         <div class="card text-center shadow-sm h-100">
             <div class="card-body">
-                <h5>Запис онлайн</h5>
-                <p>Зручний запис до лікаря у кілька кліків</p>
-                <a href="{% url 'appointments:appointment_create' %}" class="btn btn-primary">
-                    Записатися
+                <h5>Напрями</h5>
+                <p>Оберіть потрібний медичний напрям і знайдіть лікаря</p>
+                <a href="{% url 'doctors:direction_list' %}" class="btn btn-outline-primary">
+                    Переглянути
                 </a>
             </div>
         </div>
@@ -97,7 +60,6 @@
 
 </div>
 
-<!-- CTA -->
 <div class="text-center p-5 bg-primary text-white rounded">
     <h3>Потрібна консультація?</h3>
     <p>Залиште заявку і ми зв'яжемось з вами</p>

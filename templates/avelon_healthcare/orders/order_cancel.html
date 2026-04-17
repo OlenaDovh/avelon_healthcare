@@ -1,0 +1,21 @@
+{% block title %}Скасування замовлення{% endblock %}
+
+{% block content %}
+    <h2>Скасувати замовлення</h2>
+
+    <p>Замовлення №{{ order.id }}</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.reason.label_tag }}
+            {{ form.reason }}
+            {{ form.reason.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-danger">
+            Скасувати замовлення
+        </button>
+    </form>
+{% endblock %}

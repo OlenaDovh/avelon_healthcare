@@ -1,0 +1,853 @@
+INFO 2026-04-16 00:15:18,995 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-16 00:15:23,477 log Not Found: /favicon.ico
+INFO 2026-04-16 00:16:18,462 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-16 00:33:37,197 views Неуспішна спроба входу в систему.
+INFO 2026-04-16 01:10:05,895 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-16 01:10:06,888 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:10:33,788 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-16 01:10:34,861 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:11:29,810 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
+INFO 2026-04-16 01:11:30,753 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:14:56,972 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 01:14:59,183 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:15:03,082 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 01:15:04,512 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:15:30,504 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 01:15:32,731 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:15:37,565 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 01:15:39,580 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:16:05,245 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 01:16:06,673 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:23:38,554 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\apps.py changed, reloading.
+INFO 2026-04-16 01:23:39,415 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:44:52,587 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-16 01:52:38,038 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\core\views.py", line 32, in home_view
+    return render(
+        request,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 200, in render
+    template = context.template.engine.select_template(template_name)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 228, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 644, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\User\PycharmProjects\avelon_healthcare\templates\avelon_healthcare\components\header.html, Invalid block tag on line 80: 'else'. Did you forget to register or load this tag?
+INFO 2026-04-16 01:52:59,556 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-16 01:53:03,076 log Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'else'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\core\views.py", line 32, in home_view
+    return render(
+        request,
+    ...<5 lines>...
+        },
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 200, in render
+    template = context.template.engine.select_template(template_name)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 228, in select_template
+    return self.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 644, in invalid_block_tag
+    raise self.error(
+    ...<3 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\User\PycharmProjects\avelon_healthcare\templates\avelon_healthcare\components\header.html, Invalid block tag on line 80: 'else'. Did you forget to register or load this tag?
+INFO 2026-04-16 01:57:01,269 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\avelon_healthcare\settings.py changed, reloading.
+INFO 2026-04-16 01:57:03,030 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:57:48,348 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\constants.py changed, reloading.
+INFO 2026-04-16 01:57:49,208 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:58:23,904 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py changed, reloading.
+INFO 2026-04-16 01:58:25,145 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:58:43,148 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py changed, reloading.
+INFO 2026-04-16 01:58:44,104 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 01:58:56,602 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py changed, reloading.
+INFO 2026-04-16 01:58:57,922 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 02:01:42,218 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 02:01:44,340 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-16 02:02:53,228 log Internal Server Error: /appointments/create/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\_server_cursor.py", line 98, in execute
+    raise ex.with_traceback(None)
+psycopg.errors.UndefinedColumn: стовпець doctors_direction.user_id не існує
+LINE 1: ...OR WITH HOLD FOR SELECT "doctors_direction"."id", "doctors_d...
+                                                             ^
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py", line 73, in appointment_create_view
+    return render(
+        request,
+    ...<6 lines>...
+        },
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 66, in render
+    result = block.nodelist.render(context)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1156, in render
+    return render_value_in_context(output, context)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1133, in render_value_in_context
+    value = str(value)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\utils.py", line 79, in __str__
+    return self.as_widget()
+           ~~~~~~~~~~~~~~^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\boundfield.py", line 108, in as_widget
+    return widget.render(
+           ~~~~~~~~~~~~~^
+        name=self.html_initial_name if only_initial else self.html_name,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        renderer=self.form.renderer,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\widgets.py", line 330, in render
+    context = self.get_context(name, value, attrs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\widgets.py", line 833, in get_context
+    context = super().get_context(name, value, attrs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\widgets.py", line 784, in get_context
+    context["widget"]["optgroups"] = self.optgroups(
+                                     ~~~~~~~~~~~~~~^
+        name, context["widget"]["value"], attrs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\widgets.py", line 724, in optgroups
+    for index, (option_value, option_label) in enumerate(self.choices):
+                                               ~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\forms\models.py", line 1448, in __iter__
+    for obj in queryset:
+               ^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\query.py", line 508, in _iterator
+    yield from iterable
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\query.py", line 95, in __iter__
+    results = compiler.execute_sql(
+        chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\compiler.py", line 1624, in execute_sql
+    cursor.execute(sql, params)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 122, in execute
+    return super().execute(sql, params)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 79, in execute
+    return self._execute_with_wrappers(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        sql, params, many=False, executor=self._execute
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 92, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 100, in _execute
+    with self.db.wrap_database_errors:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\utils.py", line 94, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\backends\utils.py", line 105, in _execute
+    return self.cursor.execute(sql, params)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\_server_cursor.py", line 98, in execute
+    raise ex.with_traceback(None)
+django.db.utils.ProgrammingError: стовпець doctors_direction.user_id не існує
+LINE 1: ...OR WITH HOLD FOR SELECT "doctors_direction"."id", "doctors_d...
+                                                             ^
+INFO 2026-04-16 02:03:51,516 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-16 02:04:04,885 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-16 02:08:26,985 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 02:08:33,930 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 02:08:38,240 views Неуспішна спроба реєстрації користувача.
+ERROR 2026-04-16 02:29:10,705 log Internal Server Error: /accounts/staff/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\smartif.py", line 181, in translate_token
+    op = OPERATORS[token]
+         ~~~~~~~~~^^^^^^^
+KeyError: 'request.user.groups.filter(name="support").exists'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py", line 274, in staff_dashboard_view
+    return render(
+        request,
+        "avelon_healthcare/accounts/staff_dashboard.html",
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\backends\django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 186, in get_template
+    template, origin = self.find_template(template_name)
+                       ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+        contents,
+    ...<2 lines>...
+        self.engine,
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 307, in do_extends
+    nodelist = parser.parse()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader_tags.py", line 235, in do_block
+    nodelist = parser.parse(("endblock",))
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 585, in parse
+    raise self.error(token, e)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 583, in parse
+    compiled_result = compile_func(self, token)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\defaulttags.py", line 993, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+                ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\defaulttags.py", line 926, in __init__
+    super().__init__(*args, **kwargs)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\smartif.py", line 172, in __init__
+    mapped_tokens.append(self.translate_token(token))
+                         ~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\smartif.py", line 183, in translate_token
+    return self.create_var(token)
+           ~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\defaulttags.py", line 929, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 676, in compile_filter
+    return FilterExpression(token, self)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 776, in __init__
+    raise TemplateSyntaxError(
+    ...<2 lines>...
+    )
+django.template.exceptions.TemplateSyntaxError: Template: C:\Users\User\PycharmProjects\avelon_healthcare\templates\avelon_healthcare\accounts\staff_dashboard.html, Could not parse the remainder: '(name="support").exists' from 'request.user.groups.filter(name="support").exists'
+INFO 2026-04-16 11:41:01,726 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-16 11:43:05,879 log Not Found: /favicon.ico
+WARNING 2026-04-16 11:47:02,875 log Forbidden (CSRF token from POST incorrect.): /admin/login/
+WARNING 2026-04-16 11:49:05,692 log Forbidden (CSRF token from POST incorrect.): /admin/login/
+WARNING 2026-04-16 11:49:12,286 log Forbidden (CSRF token from POST incorrect.): /admin/login/
+WARNING 2026-04-16 11:50:32,519 log Forbidden (CSRF token from POST incorrect.): /admin/login/
+WARNING 2026-04-16 11:51:21,221 log Forbidden (CSRF token from POST incorrect.): /accounts/login/
+WARNING 2026-04-16 12:00:55,737 views Неуспішна спроба реєстрації користувача.
+INFO 2026-04-16 12:07:08,230 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\signals.py changed, reloading.
+INFO 2026-04-16 12:07:09,895 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 12:07:33,586 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\apps.py changed, reloading.
+INFO 2026-04-16 12:07:34,934 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 12:10:43,473 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\signals.py changed, reloading.
+INFO 2026-04-16 12:10:44,950 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 12:10:59,644 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\apps.py changed, reloading.
+INFO 2026-04-16 12:11:00,562 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 12:11:18,098 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\constants.py changed, reloading.
+INFO 2026-04-16 12:11:19,385 autoreload Watching for file changes with StatReloader
+INFO 2026-04-16 12:13:24,997 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\signals.py changed, reloading.
+INFO 2026-04-16 12:13:26,342 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-16 12:15:32,373 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 12:15:39,449 views Неуспішна спроба реєстрації користувача.
+INFO 2026-04-17 02:27:43,450 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 02:27:47,064 log Not Found: /favicon.ico
+INFO 2026-04-17 03:14:23,769 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:14:25,713 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:14:40,983 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:14:42,152 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:14:53,898 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:14:54,718 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:15:10,519 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:15:12,441 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:15:50,336 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 03:15:51,757 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:16:06,163 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 03:16:07,883 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:16:26,143 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\admin.py changed, reloading.
+INFO 2026-04-17 03:16:27,711 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:17:08,069 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\admin.py changed, reloading.
+INFO 2026-04-17 03:17:09,634 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:17:23,680 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\admin.py changed, reloading.
+INFO 2026-04-17 03:17:25,301 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:17:55,659 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:17:56,455 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:20:38,437 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:20:40,268 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:21:30,908 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 03:21:32,497 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:22:15,238 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:22:16,049 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:28:11,735 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:28:13,955 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:28:20,333 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:28:21,563 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:28:27,943 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:28:29,034 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:28:41,157 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:28:42,646 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:28:56,806 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:28:57,661 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:29:07,499 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:29:09,474 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:29:40,598 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:29:42,109 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:30:52,946 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\admin.py changed, reloading.
+INFO 2026-04-17 03:30:53,983 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:32:51,465 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:51:44,390 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 03:51:48,226 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:52:07,475 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:52:09,391 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:52:39,305 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 03:52:40,586 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:53:00,320 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\urls.py changed, reloading.
+INFO 2026-04-17 03:53:01,581 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:54:24,021 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 03:54:26,181 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:54:30,542 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 03:54:32,028 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:54:41,681 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 03:54:44,557 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:55:01,510 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 03:55:03,925 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:55:09,904 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 03:55:12,075 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:55:23,969 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 03:55:27,301 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:55:58,477 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\urls.py changed, reloading.
+INFO 2026-04-17 03:56:00,146 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:56:42,037 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\urls.py changed, reloading.
+INFO 2026-04-17 03:56:43,310 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:57:43,788 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 03:57:44,958 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:57:51,843 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 03:57:53,897 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:58:04,013 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 03:58:06,080 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:58:27,041 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:58:28,937 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:58:37,588 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:58:39,601 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:58:55,047 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 03:58:57,763 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:59:17,855 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\urls.py changed, reloading.
+INFO 2026-04-17 03:59:19,764 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 03:59:27,372 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\urls.py changed, reloading.
+INFO 2026-04-17 04:13:22,762 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 04:14:45,320 views Неуспішна спроба входу в систему.
+WARNING 2026-04-17 04:15:06,192 views Неуспішна спроба входу в систему.
+INFO 2026-04-17 04:36:02,157 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 04:36:03,102 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:36:28,077 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 04:36:29,025 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:36:53,305 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 04:36:54,293 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:37:50,587 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 04:37:52,221 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:38:45,680 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 04:38:46,897 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:39:24,281 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\forms.py changed, reloading.
+INFO 2026-04-17 04:39:25,123 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:40:09,464 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 04:40:11,348 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:40:43,829 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 04:40:44,575 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:41:57,618 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 04:41:58,534 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:42:28,078 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 04:42:29,114 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:43:03,334 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 04:43:04,847 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:43:44,200 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 04:43:45,204 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:44:43,910 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:44:45,091 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:46:13,325 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:46:14,946 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:51:36,883 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:51:38,754 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:51:56,554 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:51:58,602 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:53:00,958 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 04:53:02,185 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:53:11,251 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 04:53:13,290 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:53:25,606 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 04:53:26,571 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:53:50,559 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:53:52,577 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 04:53:56,148 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 04:53:57,270 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 10:35:01,980 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 10:35:20,584 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 10:35:22,465 log Not Found: /favicon.ico
+INFO 2026-04-17 10:44:04,853 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 10:44:07,482 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 10:45:28,133 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 10:45:28,897 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 10:50:45,445 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-17 10:50:54,071 log Internal Server Error: /accounts/staff/patients/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py", line 127, in wrapped
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py", line 367, in support_patient_list_view
+    ).order_by("last_name", "first_name", "second_name").distinct()
+      ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\query.py", line 1772, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 2343, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'second_name' into field. Choices are: appointments, birth_date, date_joined, discount, doctor_profile, email, email_verified, first_name, groups, id, is_active, is_staff, is_superuser, last_login, last_name, logentry, middle_name, orders, password, phone, preferred_contact_channel, reviews, user_permissions, username
+INFO 2026-04-17 10:51:15,379 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 10:51:16,327 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 10:52:06,947 log Forbidden (CSRF token from POST incorrect.): /admin/login/
+ERROR 2026-04-17 10:56:49,148 log Internal Server Error: /orders/staff/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py", line 127, in wrapped
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py", line 340, in support_order_list_view
+    Q(user__isnull=True) | Q(user__groups__name=PATIENT_GROUP_NAME)
+                                                ^^^^^^^^^^^^^^^^^^
+NameError: name 'PATIENT_GROUP_NAME' is not defined
+INFO 2026-04-17 11:01:46,832 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\views.py changed, reloading.
+INFO 2026-04-17 11:01:48,457 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:05:55,349 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:11:35,924 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 11:11:37,690 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:12:22,874 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 11:12:23,994 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:44:55,629 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
+INFO 2026-04-17 11:44:56,914 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:45:41,536 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
+INFO 2026-04-17 11:45:42,442 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:46:11,824 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
+INFO 2026-04-17 11:46:12,609 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:56:41,385 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
+INFO 2026-04-17 11:56:43,243 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:58:51,351 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\views.py changed, reloading.
+INFO 2026-04-17 11:58:52,309 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:59:02,849 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\views.py changed, reloading.
+INFO 2026-04-17 11:59:03,891 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 11:59:24,789 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\views.py changed, reloading.
+INFO 2026-04-17 11:59:26,182 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:01:41,556 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 12:01:43,012 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:02:12,673 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 12:02:14,024 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:02:48,396 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 12:02:49,390 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:03:44,778 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
+INFO 2026-04-17 12:03:45,677 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:45:59,399 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 12:56:21,636 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-17 13:00:37,483 log Internal Server Error: /appointments/doctors/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py", line 252, in available_doctors
+    ).distinct().order_by("full_name")
+                 ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\query.py", line 1772, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 2343, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'full_name' into field. Choices are: appointments, directions, education, experience_years, first_name, id, last_name, licenses, middle_name, photo, position, price_from, price_to, qualification_category, user, user_id, when_to_contact, work_experience_description, workdays
+ERROR 2026-04-17 13:01:47,157 log Internal Server Error: /appointments/doctors/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py", line 252, in available_doctors
+    ).distinct().order_by("full_name")
+                 ~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\query.py", line 1772, in order_by
+    obj.query.add_ordering(*field_names)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 2343, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\sql\query.py", line 1842, in names_to_path
+    raise FieldError(
+    ...<2 lines>...
+    )
+django.core.exceptions.FieldError: Cannot resolve keyword 'full_name' into field. Choices are: appointments, directions, education, experience_years, first_name, id, last_name, licenses, middle_name, photo, position, price_from, price_to, qualification_category, user, user_id, when_to_contact, work_experience_description, workdays
+INFO 2026-04-17 13:05:54,790 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 13:05:56,205 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:06:33,657 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 13:06:34,800 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:07:03,023 autoreload Watching for file changes with StatReloader
+ERROR 2026-04-17 13:07:27,213 log Internal Server Error: /appointments/create/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 964, in _resolve_lookup
+    raise TypeError
+TypeError
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py", line 58, in appointment_create_view
+    send_appointment_email(appointment)
+    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\utils.py", line 65, in send_appointment_email
+    html_body: str = render_to_string(
+                     ~~~~~~~~~~~~~~~~^
+        "avelon_healthcare/appointments/appointment_email.html",
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        },
+        ^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\backends\django.py", line 107, in render
+    return self.template.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 174, in render
+    return self._render(context)
+           ~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1052, in render_annotated
+    return self.render(context)
+           ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 1150, in render
+    output = self.filter_expression.resolve(context)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 809, in resolve
+    arg_vals.append(arg.resolve(context))
+                    ~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 928, in resolve
+    value = self._resolve_lookup(context)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\base.py", line 976, in _resolve_lookup
+    current = getattr(current, bit)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py", line 128, in customer_name
+    if self.full_name:
+       ^^^^^^^^^^^^^^
+AttributeError: 'Appointment' object has no attribute 'full_name'
+INFO 2026-04-17 13:10:20,678 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 13:10:21,442 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:10:33,680 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 13:10:44,034 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:23:14,433 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 13:23:15,955 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:23:51,692 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 13:23:53,314 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:24:28,566 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 13:24:29,524 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:25:08,601 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 13:25:09,610 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:28:22,319 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 13:28:23,378 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:32:18,990 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 13:32:19,777 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:33:13,507 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:36:53,964 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 13:36:55,008 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 13:39:31,201 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 13:39:32,907 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:33:31,898 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:40:31,573 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 14:40:32,612 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:40:46,652 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 14:40:48,274 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:41:19,057 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 14:41:20,157 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:41:41,529 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 14:41:42,580 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 14:41:54,800 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 14:49:57,321 log Not Found: /appointments/ajax/load-doctors/
+INFO 2026-04-17 14:50:10,556 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 14:50:20,767 log Not Found: /appointments/ajax/load-doctors/
+INFO 2026-04-17 14:53:58,940 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:00:41,403 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 15:00:44,680 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:00:55,732 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:35:42,659 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\utils.py changed, reloading.
+INFO 2026-04-17 15:35:44,213 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:45:10,792 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 15:45:11,798 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:45:24,387 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 15:45:25,940 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:50:40,989 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:59:04,696 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\utils.py changed, reloading.
+INFO 2026-04-17 15:59:06,775 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 15:59:36,195 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 15:59:37,966 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:10:53,606 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\utils.py changed, reloading.
+INFO 2026-04-17 16:10:55,130 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:11:06,761 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 16:11:09,715 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:11:48,525 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:16:58,699 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 16:17:00,726 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:23:52,093 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 16:23:53,408 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:24:37,891 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 16:24:39,433 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:25:14,215 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:29:51,852 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:30:34,589 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:40:03,539 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
+INFO 2026-04-17 16:40:04,991 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 16:42:37,886 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 17:05:10,987 views Неуспішна спроба оновлення профілю. user=test_user_4
+INFO 2026-04-17 17:07:28,477 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
+INFO 2026-04-17 17:07:30,406 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 17:12:49,217 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 17:12:50,447 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 17:16:57,666 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
+INFO 2026-04-17 17:16:58,584 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 17:17:30,810 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 17:23:11,760 views Неуспішна спроба оновлення профілю. user=test_user_4
+WARNING 2026-04-17 17:23:20,532 views Неуспішна спроба оновлення профілю. user=test_user_4
+INFO 2026-04-17 17:31:40,131 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 17:31:41,447 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 18:32:26,925 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
+INFO 2026-04-17 18:32:28,264 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 18:32:38,190 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 18:32:39,253 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 18:47:03,041 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-17 18:47:46,075 views Неуспішна спроба оновлення профілю. user=test_user_4
+WARNING 2026-04-17 18:48:49,944 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-17 18:51:00,677 views Неуспішна спроба входу в систему.
+WARNING 2026-04-17 18:51:20,879 views Неуспішна спроба входу в систему.
+WARNING 2026-04-17 18:51:44,325 views Неуспішна спроба входу в систему.
+INFO 2026-04-17 18:58:37,545 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
+INFO 2026-04-17 18:58:39,206 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 19:02:07,034 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
+INFO 2026-04-17 19:02:08,819 autoreload Watching for file changes with StatReloader
+INFO 2026-04-17 19:02:44,506 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\urls.py changed, reloading.
+INFO 2026-04-17 19:02:45,436 autoreload Watching for file changes with StatReloader

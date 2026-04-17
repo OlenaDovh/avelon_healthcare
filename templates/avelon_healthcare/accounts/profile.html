@@ -1,69 +1,100 @@
 {% extends "avelon_healthcare/base.html" %}
 
-{% block title %}Особистий кабінет{% endblock %}
+{% block title %}Профіль{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">Особистий кабінет</h1>
+    <div style="max-width: 700px;">
+        <h1 class="mb-4">Мій профіль</h1>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h4 class="card-title mb-3">Мої дані</h4>
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">Основна інформація</h5>
 
-            <p><strong>Логін:</strong> {{ request.user.username }}</p>
-            <p><strong>Email:</strong> {{ request.user.email }}</p>
+                <p><strong>Логін:</strong> {{ user.username }}</p>
 
-            <p>
-                <strong>Пошта підтверджена:</strong>
-                {% if request.user.email_verified %}
-                    <span class="text-success">Так</span>
-                {% else %}
-                    <span class="text-danger">Ні</span>
+                <p>
+                    <strong>ПІБ:</strong>
+                    {% if user.last_name or user.first_name %}
+                        {{ user.last_name }} {{ user.first_name }} {{ user.middle_name }}
+                    {% else %}
+                        <span class="text-muted">Не заповнено</span>
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>Активна email:</strong>
+                    {% if user.email %}
+                        {{ user.email }}
+                    {% else %}
+                        <span class="text-muted">Не вказано</span>
+                    {% endif %}
+                </p>
+
+                {% if user.pending_email %}
+                    <div class="alert alert-warning py-2">
+                        <p class="mb-1">
+                            <strong>Нова email очікує підтвердження:</strong> {{ user.pending_email }}
+                        </p>
+
+                        <p class="mb-2">
+                            Активною залишається поточна адреса, доки ви не підтвердите нову.
+                        </p>
+
+                        <a href="{% url 'accounts:resend_verification_email' %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Надіслати лист повторно
+                        </a>
+                    </div>
                 {% endif %}
-            </p>
 
-            <p>
-    <strong>ПІБ:</strong>
-    {{ request.user.last_name }} {{ request.user.first_name }} {{ request.user.middle_name }}
-</p>
-            <p>
-                <strong>Телефон:</strong>
-                {{ request.user.phone|default:"Не вказано" }}
-            </p>
+                <p>
+                    <strong>Пошта підтверджена:</strong>
+                    {% if user.email_verified and not user.pending_email %}
+                        <span class="text-success">Так</span>
+                    {% else %}
+                        <span class="text-warning">Очікує підтвердження</span>
+                    {% endif %}
+                </p>
 
-            <p>
-                <strong>Дата народження:</strong>
-                {{ request.user.birth_date|default:"Не вказано" }}
-            </p>
+                <p>
+                    <strong>Телефон:</strong>
+                    {% if user.phone %}
+                        {{ user.phone }}
+                    {% else %}
+                        <span class="text-muted">Не вказано</span>
+                    {% endif %}
+                </p>
 
-            <p>
-                <strong>Канал зв’язку:</strong>
-                {{ request.user.get_preferred_contact_channel_display|default:"Не обрано" }}
-            </p>
+                <p>
+                    <strong>Дата народження:</strong>
+                    {% if user.birth_date %}
+                        {{ user.birth_date|date:"d.m.Y" }}
+                    {% else %}
+                        <span class="text-muted">Не вказано</span>
+                    {% endif %}
+                </p>
 
-            <p><strong>Знижка:</strong> {{ request.user.discount }}%</p>
+                <p>
+                    <strong>Канал зв'язку:</strong>
+                    {% if user.get_preferred_contact_channel_display %}
+                        {{ user.get_preferred_contact_channel_display }}
+                    {% else %}
+                        <span class="text-muted">Не обрано</span>
+                    {% endif %}
+                </p>
 
-            <div class="d-flex flex-wrap gap-2 mt-3">
-                <a href="{% url 'accounts:profile_update' %}" class="btn btn-outline-dark">
-                    Редагувати профіль
-                </a>
-                <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-warning">
-                    Змінити пароль
-                </a>
+                <p><strong>Знижка:</strong> {{ user.discount }}%</p>
             </div>
         </div>
+
+        <div class="d-flex gap-2">
+            <a href="{% url 'accounts:profile_update' %}" class="btn btn-primary">
+                Редагувати профіль
+            </a>
+
+            <a href="{% url 'accounts:password_change' %}" class="btn btn-outline-secondary">
+                Змінити пароль
+            </a>
+        </div>
     </div>
-
-    <div class="d-flex flex-wrap gap-2 mb-4">
-        <a href="{% url 'appointments:appointment_list' %}" class="btn btn-outline-primary">
-            Мої записи до лікаря
-        </a>
-
-        <a href="{% url 'orders:order_list' %}" class="btn btn-outline-secondary">
-            Мої замовлення аналізів
-        </a>
-    </div>
-
-    <a href="{% url 'accounts:logout' %}" class="btn btn-outline-danger">
-        Вийти
-    </a>
 {% endblock %}

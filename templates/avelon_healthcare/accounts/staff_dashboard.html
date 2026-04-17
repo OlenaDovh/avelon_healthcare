@@ -1,0 +1,87 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Робочий кабінет{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Робочий кабінет</h1>
+
+    <div class="row g-3">
+
+        {% if is_support or is_superadmin %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Пацієнти</h5>
+                        <p class="card-text">Перегляд і редагування пацієнтів.</p>
+                        <a href="{% url 'accounts:support_patient_list' %}" class="btn btn-outline-primary">Відкрити</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Записи на прийом</h5>
+                        <p class="card-text">Створення і редагування записів.</p>
+                        <a href="{% url 'appointments:support_appointment_list' %}" class="btn btn-outline-primary">Відкрити</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Замовлення аналізів</h5>
+                        <p class="card-text">Створення і редагування замовлень.</p>
+                        <a href="{% url 'orders:support_order_list' %}" class="btn btn-outline-primary">Відкрити</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Відгуки</h5>
+                        <p class="card-text">Відповіді на відгуки користувачів.</p>
+                        <a href="{% url 'reviews:support_review_list' %}" class="btn btn-outline-primary">Відкрити</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if is_doctor or is_superadmin %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Кабінет лікаря</h5>
+                        <p class="card-text">Мої записи, мій графік, висновки.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if is_head_manager or is_superadmin %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Керування лікарями</h5>
+                        <p class="card-text">Лікарі, напрями, аналізи, графіки.</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if is_content_manager or is_superadmin %}
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Контент</h5>
+                        <p class="card-text">Акції, контакти, сторінки, відгуки.</p>
+                        <a href="/admin/" class="btn btn-outline-dark">Перейти в адмінку</a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}
