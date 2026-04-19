@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from django.urls import path
 
+from . import views
 from .views import (
     add_to_cart_view,
     analysis_list_view,
@@ -16,4 +17,7 @@ urlpatterns = [
     path("cart/", cart_detail_view, name="cart_detail"),
     path("add/<int:analysis_id>/", add_to_cart_view, name="add_to_cart"),
     path("remove/<int:analysis_id>/", remove_from_cart_view, name="remove_from_cart"),
+path("head-manager/analysis/", views.head_manager_analysis_list_view, name="head_manager_analysis_list"),
+path("head-manager/analysis/create/", views.head_manager_analysis_create_view, name="head_manager_analysis_create"),
+path("head-manager/analysis/<int:pk>/update/", views.head_manager_analysis_update_view, name="head_manager_analysis_update"),
 ]

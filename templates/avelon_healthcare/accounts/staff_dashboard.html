@@ -78,8 +78,47 @@
             <div class="col-md-6">
                 <div class="card h-100">
                     <div class="card-body">
-                        <h5 class="card-title">Керування лікарями</h5>
-                        <p class="card-text">Лікарі, напрями, аналізи, графіки.</p>
+                        <h5 class="card-title">Лікарі</h5>
+                        <p class="card-text">Створення та редагування лікарів.</p>
+                        <a href="{% url 'doctors:head_manager_doctor_list' %}" class="btn btn-outline-primary">
+                            Відкрити
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Напрями</h5>
+                        <p class="card-text">Створення та редагування напрямів.</p>
+                        <a href="{% url 'doctors:head_manager_direction_list' %}" class="btn btn-outline-primary">
+                            Відкрити
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Аналізи</h5>
+                        <p class="card-text">Створення та редагування аналізів.</p>
+                        <a href="{% url 'analysis:head_manager_analysis_list' %}" class="btn btn-outline-primary">
+                            Відкрити
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Графіки прийомів</h5>
+                        <p class="card-text">Створення та редагування графіків лікарів.</p>
+                        <a href="{% url 'doctors:head_manager_schedule_list' %}" class="btn btn-outline-primary">
+                            Відкрити
+                        </a>
                     </div>
                 </div>
             </div>

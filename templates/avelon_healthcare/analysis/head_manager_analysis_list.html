@@ -1,0 +1,57 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Аналізи{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Аналізи</h1>
+        <a href="{% url 'analysis:head_manager_analysis_create' %}" class="btn btn-primary">
+            Створити аналіз
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Назва</th>
+                    <th>Що перевірити</th>
+                    <th>Біоматеріал</th>
+                    <th>Термін</th>
+                    <th>Ціна</th>
+                    <th>Активний</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for analysis in analyses %}
+                    <tr>
+                        <td>{{ analysis.id }}</td>
+                        <td>{{ analysis.name }}</td>
+                        <td>{{ analysis.what_to_check|default:"—" }}</td>
+                        <td>{{ analysis.biomaterial|default:"—" }}</td>
+                        <td>{{ analysis.duration_days }} дн.</td>
+                        <td>{{ analysis.price }}</td>
+                        <td>
+                            {% if analysis.is_active %}
+                                <span class="badge bg-success">Так</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Ні</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'analysis:head_manager_analysis_update' analysis.id %}" class="btn btn-sm btn-outline-primary">
+                                Редагувати
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8">Аналізів не знайдено.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

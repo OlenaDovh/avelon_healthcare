@@ -4,8 +4,10 @@ from collections.abc import Callable
 from functools import wraps
 from typing import Any
 
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 
 from .constants import (
     CONTENT_MANAGER_GROUP,
@@ -130,27 +132,19 @@ def support_required(
     return wrapped
 
 
-def head_manager_required(
-    view_func: Callable[..., HttpResponse],
-) -> Callable[..., HttpResponse]:
-    """
-    Дозволяє доступ тільки head manager або superadmin.
-
-    Args:
-        view_func (Callable[..., HttpResponse]): View-функція.
-
-    Returns:
-        Callable[..., HttpResponse]: Обгорнута view-функція.
-    """
+def head_manager_required(view_func):
     @wraps(view_func)
-    def wrapped(
-        request: HttpRequest,
-        *args: Any,
-        **kwargs: Any,
-    ) -> HttpResponse:
-        if request.user.is_superuser or is_head_manager(request.user):
+    def wrapped(request, *args, **kwargs):
+        user = request.user
+
+        if not user.is_authenticated:
+            return redirect("accounts:login")
+
+        if user.is_superuser or user.groups.filter(name="head_manager").exists():
             return view_func(request, *args, **kwargs)
-        raise PermissionDenied
+
+        messages.error(request, "У вас немає доступу до цієї сторінки.")
+        return redirect("core:home")
 
     return wrapped
 

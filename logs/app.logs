@@ -4940,3 +4940,162 @@ WARNING 2026-04-19 21:47:25,555 log Not Found: /.well-known/appspecific/com.chro
 WARNING 2026-04-19 21:47:39,414 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
 WARNING 2026-04-19 21:47:43,804 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
 WARNING 2026-04-19 21:47:52,971 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:07,532 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:09,865 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:13,936 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:37,227 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:38,742 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:38,866 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:40,140 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:00:42,772 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:01:29,681 log Not Found: /static/js/main.js
+WARNING 2026-04-20 00:05:18,992 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:05:54,074 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:05:56,085 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:05:58,270 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:05:59,846 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:06:00,655 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:06:45,998 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:06:54,863 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:07:15,902 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:07:16,860 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:11:55,194 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:12:22,989 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:12:45,930 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+ERROR 2026-04-20 00:12:47,436 log Internal Server Error: /analysis/head-manager/analysis/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 254, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 506, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 561, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py", line 144, in wrapped
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\analysis\views.py", line 212, in head_manager_analysis_list_view
+    return render(
+        request,
+        "avelon_healthcare/analysis/head_manager_analysis_list.html",
+        {"analyses": analyses},
+    )
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: avelon_healthcare/analysis/head_manager_analysis_list.html
+WARNING 2026-04-20 00:12:47,622 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:01,018 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:05,281 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:11,301 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:12,666 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:15,009 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:17:16,520 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:18:38,704 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:18:43,037 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:18:44,876 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:18:48,790 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+ERROR 2026-04-20 00:28:36,292 log Internal Server Error: /doctors/head-manager/schedules/create/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 254, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 506, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 561, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py", line 144, in wrapped
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\doctors\views.py", line 282, in head_manager_schedule_create_view
+    form = DoctorWorkDayForm()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\doctors\forms.py", line 97, in __init__
+    doctor_id = self.data.get("doctor") or getattr(self.instance.doctor, "id", None)
+                                                   ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 267, in __get__
+    raise self.RelatedObjectDoesNotExist(
+        "%s has no %s." % (self.field.model.__name__, self.field.name)
+    )
+doctors.models.DoctorWorkDay.doctor.RelatedObjectDoesNotExist: DoctorWorkDay has no doctor.. Did you mean: 'doctor_id'?
+WARNING 2026-04-20 00:28:36,417 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:28:40,808 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:28:40,884 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:28:42,460 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:28:43,690 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:28:43,778 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+ERROR 2026-04-20 00:28:44,424 log Internal Server Error: /doctors/head-manager/schedules/create/
+Traceback (most recent call last):
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\exception.py", line 42, in inner
+    response = await get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 557, in thread_handler
+    raise exc_info[1]
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\core\handlers\base.py", line 254, in _get_response_async
+    response = await wrapped_callback(
+               ^^^^^^^^^^^^^^^^^^^^^^^
+        request, *callback_args, **callback_kwargs
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 506, in __call__
+    ret = await asyncio.shield(exec_coro)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\AppData\Local\Programs\Python\Python313\Lib\concurrent\futures\thread.py", line 59, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\asgiref\sync.py", line 561, in thread_handler
+    return func(*args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\contrib\auth\decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\accounts\permissions.py", line 144, in wrapped
+    return view_func(request, *args, **kwargs)
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\doctors\views.py", line 282, in head_manager_schedule_create_view
+    form = DoctorWorkDayForm()
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\doctors\forms.py", line 97, in __init__
+    doctor_id = self.data.get("doctor") or getattr(self.instance.doctor, "id", None)
+                                                   ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\db\models\fields\related_descriptors.py", line 267, in __get__
+    raise self.RelatedObjectDoesNotExist(
+        "%s has no %s." % (self.field.model.__name__, self.field.name)
+    )
+doctors.models.DoctorWorkDay.doctor.RelatedObjectDoesNotExist: DoctorWorkDay has no doctor.. Did you mean: 'doctor_id'?
+WARNING 2026-04-20 00:28:44,539 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:29:05,588 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:29:05,707 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:29:10,389 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:29:11,748 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-20 00:29:13,253 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
