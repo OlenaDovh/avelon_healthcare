@@ -4,69 +4,80 @@
 
 {% block content %}
 
-<div class="p-5 mb-4 bg-light rounded-3">
-    <div class="container-fluid py-5">
-        <h1 class="display-5 fw-bold">Avelon Healthcare</h1>
-        <p class="col-md-8 fs-5">
-            Сучасна багатопрофільна клініка.
-            Консультації лікарів, аналізи, діагностика та лікування.
+    <div class="p-5 mb-4 bg-light rounded-3">
+        <div class="container-fluid py-5">
+            <h1 class="display-5 fw-bold">Avelon Healthcare</h1>
+            <p class="col-md-8 fs-5">
+                Сучасна багатопрофільна клініка.
+                Консультації лікарів, аналізи, діагностика та лікування.
+            </p>
+
+            <a href="{% url 'appointments:appointment_create' %}" class="btn btn-primary btn-lg">
+                Записатися на прийом
+            </a>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+    <div class="card-body">
+        <h3>Wellness-прогноз для тебе</h3>
+
+        <p class="mt-2 mb-1">
+            {{ horoscope_text }}
         </p>
 
-        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-primary btn-lg">
-            Записатися на прийом
+    </div>
+</div>
+
+    <h2 class="mb-4">Наші послуги</h2>
+
+    <div class="row g-4 mb-5">
+
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Лікарі</h5>
+                    <p>Консультації кваліфікованих спеціалістів</p>
+                    <a href="{% url 'doctors:doctor_list' %}" class="btn btn-outline-primary">
+                        Переглянути
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Аналізи</h5>
+                    <p>Швидка лабораторна діагностика</p>
+                    <a href="{% url 'analysis:analysis_list' %}" class="btn btn-outline-primary">
+                        Переглянути
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card text-center shadow-sm h-100">
+                <div class="card-body">
+                    <h5>Напрями</h5>
+                    <p>Оберіть потрібний медичний напрям і знайдіть лікаря</p>
+                    <a href="{% url 'doctors:direction_list' %}" class="btn btn-outline-primary">
+                        Переглянути
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="text-center p-5 bg-primary text-white rounded">
+        <h3>Потрібна консультація?</h3>
+        <p>Залиште заявку і ми зв'яжемось з вами</p>
+
+        <a href="{% url 'appointments:appointment_create' %}" class="btn btn-light">
+            Записатися зараз
         </a>
     </div>
-</div>
-
-<h2 class="mb-4">Наші послуги</h2>
-
-<div class="row g-4 mb-5">
-
-    <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-            <div class="card-body">
-                <h5>Лікарі</h5>
-                <p>Консультації кваліфікованих спеціалістів</p>
-                <a href="{% url 'doctors:doctor_list' %}" class="btn btn-outline-primary">
-                    Переглянути
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-            <div class="card-body">
-                <h5>Аналізи</h5>
-                <p>Швидка лабораторна діагностика</p>
-                <a href="{% url 'analysis:analysis_list' %}" class="btn btn-outline-primary">
-                    Переглянути
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card text-center shadow-sm h-100">
-            <div class="card-body">
-                <h5>Напрями</h5>
-                <p>Оберіть потрібний медичний напрям і знайдіть лікаря</p>
-                <a href="{% url 'doctors:direction_list' %}" class="btn btn-outline-primary">
-                    Переглянути
-                </a>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<div class="text-center p-5 bg-primary text-white rounded">
-    <h3>Потрібна консультація?</h3>
-    <p>Залиште заявку і ми зв'яжемось з вами</p>
-
-    <a href="{% url 'appointments:appointment_create' %}" class="btn btn-light">
-        Записатися зараз
-    </a>
-</div>
 
 {% endblock %}

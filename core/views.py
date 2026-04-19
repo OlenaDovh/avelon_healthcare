@@ -5,6 +5,7 @@ import logging
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 
+from daily_horoscope.services import get_or_create_daily_horoscope_for_session
 from doctors.models import Doctor
 from analysis.models import Analysis
 
@@ -29,6 +30,8 @@ def home_view(request: HttpRequest) -> HttpResponse:
 
     logger.info("Відкрито головну сторінку.")
 
+    horoscope_data = get_or_create_daily_horoscope_for_session(request)
+
     return render(
         request,
         "avelon_healthcare/core/home.html",
@@ -36,6 +39,8 @@ def home_view(request: HttpRequest) -> HttpResponse:
             "doctors": doctors,
             "analyses": analyses,
             "promotions": promotions,
+            "horoscope_text": horoscope_data["text"],
+            "horoscope_theme": horoscope_data.get("theme"),
         },
     )
 

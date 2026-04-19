@@ -7,6 +7,7 @@ from django.contrib.auth.views import (
 )
 from django.urls import path, reverse_lazy
 
+from . import views
 from .forms import UserSetPasswordForm
 from .views import (
     UserPasswordResetView,
@@ -15,7 +16,11 @@ from .views import (
     password_change_view,
     profile_update_view,
     profile_view,
-    register_view, staff_dashboard_view, verify_email_view, support_patient_list_view, support_patient_update_view,
+    register_view,
+    staff_dashboard_view,
+    verify_email_view,
+    support_patient_list_view,
+    support_patient_update_view,
 )
 
 app_name = "accounts"

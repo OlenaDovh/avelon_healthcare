@@ -851,3 +851,91 @@ INFO 2026-04-17 19:02:07,034 autoreload C:\Users\User\PycharmProjects\avelon_hea
 INFO 2026-04-17 19:02:08,819 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 19:02:44,506 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\urls.py changed, reloading.
 INFO 2026-04-17 19:02:45,436 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:34:42,047 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 01:34:44,941 log Not Found: /favicon.ico
+WARNING 2026-04-19 01:34:51,026 log Not Found: /daily-horoscope/today/
+WARNING 2026-04-19 01:34:54,234 log Not Found: /daily-horoscope/today/
+WARNING 2026-04-19 01:34:55,541 log Not Found: /daily-horoscope/today/
+WARNING 2026-04-19 01:34:56,056 log Not Found: /daily-horoscope/today/
+WARNING 2026-04-19 01:34:56,299 log Not Found: /daily-horoscope/today/
+WARNING 2026-04-19 01:35:11,375 log Not Found: /daily-horoscope/today/
+INFO 2026-04-19 01:41:57,852 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\services.py changed, reloading.
+INFO 2026-04-19 01:41:59,270 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:42:31,757 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\views.py changed, reloading.
+INFO 2026-04-19 01:42:32,702 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:42:38,438 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\views.py changed, reloading.
+INFO 2026-04-19 01:42:39,343 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:44:20,213 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\core\views.py changed, reloading.
+INFO 2026-04-19 01:44:21,198 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:44:37,739 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\core\views.py changed, reloading.
+INFO 2026-04-19 01:44:39,461 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:45:15,828 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\avelon_healthcare\urls.py changed, reloading.
+INFO 2026-04-19 01:45:16,853 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 01:45:51,921 log Not Found: /favicon.ico
+WARNING 2026-04-19 01:45:54,262 log Not Found: /favicon.ico
+WARNING 2026-04-19 01:46:01,133 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:46:19,175 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:46:24,704 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:50:55,532 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:50:58,126 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:50:59,702 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:50:59,894 log Not Found: /favicon.ico
+INFO 2026-04-19 01:51:11,089 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 01:51:12,899 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:51:14,337 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:51:57,679 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:51:58,464 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2026-04-19 01:54:01,675 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 01:54:05,580 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:54:51,288 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 01:54:52,201 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:55:02,819 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:56:12,934 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 01:56:18,418 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:56:57,383 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:57:37,182 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 01:57:38,173 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 01:57:48,264 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 01:58:26,459 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 01:58:46,336 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2026-04-19 02:19:21,864 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:21:03,691 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:21:05,592 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:21:21,026 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:21:22,330 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:21:30,036 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:21:38,297 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 02:21:58,793 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:22:17,122 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2026-04-19 02:26:10,931 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:26:12,519 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 02:26:14,319 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:26:15,340 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:26:15,462 log Not Found: /favicon.ico
+WARNING 2026-04-19 02:26:21,223 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:26:32,949 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:27:02,348 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:37:39,428 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:37:54,778 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:38:04,717 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2026-04-19 02:39:00,290 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\services.py changed, reloading.
+INFO 2026-04-19 02:39:01,590 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:39:28,947 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:39:29,885 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:41:17,131 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:41:18,603 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 02:46:47,288 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\daily_horoscope\ai.py changed, reloading.
+INFO 2026-04-19 02:47:01,540 autoreload Watching for file changes with StatReloader
+WARNING 2026-04-19 02:49:21,669 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:50:17,857 log Not Found: /favicon.ico
+WARNING 2026-04-19 02:51:47,593 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:51:50,093 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:51:50,977 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:52:04,496 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-04-19 02:52:07,759 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+INFO 2026-04-19 03:13:31,847 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\avelon_healthcare\settings.py changed, reloading.
+INFO 2026-04-19 03:13:33,214 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 03:13:41,882 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\avelon_healthcare\settings.py changed, reloading.
+INFO 2026-04-19 03:13:42,537 autoreload Watching for file changes with StatReloader
+INFO 2026-04-19 03:13:56,541 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\avelon_healthcare\settings.py changed, reloading.
+INFO 2026-04-19 03:13:57,570 autoreload Watching for file changes with StatReloader

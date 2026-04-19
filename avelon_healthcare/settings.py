@@ -55,6 +55,8 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    "channels",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +70,8 @@ INSTALLED_APPS = [
     'analysis.apps.AnalysisConfig',
     'orders.apps.OrdersConfig',
     'reviews.apps.ReviewsConfig',
+    'daily_horoscope.apps.DailyHoroscopeConfig',
+    "support_chat",
 ]
 
 MIDDLEWARE = [
@@ -204,3 +208,17 @@ DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 BANK_TRANSFER_AUTO_PAY_AFTER_MINUTES = int(
     os.getenv("BANK_TRANSFER_AUTO_PAY_AFTER_MINUTES", "2")
 )
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3-flash-preview")
+
+ASGI_APPLICATION = "avelon_healthcare.asgi.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
