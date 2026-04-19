@@ -31,6 +31,7 @@ urlpatterns = [
     path("analysis/", include("analysis.urls")),
     path("orders/", include("orders.urls")),
     path("reviews/", include("reviews.urls")),
+    path("support-chat/", include("support_chat.urls")),
 ]
 
 if settings.DEBUG:

@@ -47,6 +47,20 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-6">
+                <div class="card h-100 border-success">
+                    <div class="card-body">
+                        <h5 class="card-title">Онлайн чат підтримки</h5>
+                        <p class="card-text">
+                            Всі активні звернення користувачів. Підключення до чатів у реальному часі.
+                        </p>
+                        <a href="{% url 'support_chat:operator_dashboard' %}" class="btn btn-success">
+                            Відкрити чати
+                        </a>
+                    </div>
+                </div>
+            </div>
         {% endif %}
 
         {% if is_doctor or is_superadmin %}

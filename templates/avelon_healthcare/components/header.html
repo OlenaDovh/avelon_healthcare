@@ -37,10 +37,6 @@
 
                 {% if request.user.is_authenticated %}
                     {% if is_staff_role %}
-                        <a href="{% url 'accounts:staff_dashboard' %}" class="btn btn-outline-primary">
-                            Робочий кабінет
-                        </a>
-
                         <a href="{% url 'accounts:staff_dashboard' %}" class="btn btn-outline-dark">
                             Кабінет
                         </a>

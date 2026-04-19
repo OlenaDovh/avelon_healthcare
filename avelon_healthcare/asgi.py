@@ -1,16 +1,23 @@
-"""
-ASGI config for avelon_healthcare project.
-
-It exposes the ASGI callable as a module-level variable named ``application``.
-
-For more information on this file, see
-https://docs.djangoproject.com/en/6.0/howto/deployment/asgi/
-"""
+from __future__ import annotations
 
 import os
 
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "avelon_healthcare.settings")
+
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'avelon_healthcare.settings')
+django_asgi_app = get_asgi_application()
 
-application = get_asgi_application()
+from channels.auth import AuthMiddlewareStack
+from channels.routing import ProtocolTypeRouter, URLRouter
+
+import support_chat.routing
+
+application = ProtocolTypeRouter(
+    {
+        "http": django_asgi_app,
+        "websocket": AuthMiddlewareStack(
+            URLRouter(support_chat.routing.websocket_urlpatterns)
+        ),
+    }
+)

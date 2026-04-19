@@ -11,16 +11,39 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  worker:
+    build: .
+    command: celery -A config worker -l info
+    volumes:
+      - .:/app
+      - media_data:/app/media
+    env_file:
+      - .env
+    depends_on:
+      - redis
+      - db
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/app
+      - media_data:/app/media
+      - static_data:/app/staticfiles
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis
     env_file:
-      - .env.docker
+      - .env
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
 volumes:
   postgres_data:
+  media_data:
+  static_data:
