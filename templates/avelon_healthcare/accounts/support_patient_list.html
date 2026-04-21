@@ -1,0 +1,42 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Пацієнти{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Пацієнти</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Логін</th>
+                    <th>ПІБ</th>
+                    <th>Телефон</th>
+                    <th>Email</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for patient in page_obj %}
+                    <tr>
+                        <td>{{ patient.id }}</td>
+                        <td>{{ patient.username }}</td>
+                        <td>{{ patient.full_name|default:"—" }}</td>
+                        <td>{{ patient.phone|default:"—" }}</td>
+                        <td>{{ patient.email }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'accounts:support_patient_update' patient.id %}" class="btn btn-sm btn-outline-primary">
+                                Редагувати
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6">Пацієнтів не знайдено.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

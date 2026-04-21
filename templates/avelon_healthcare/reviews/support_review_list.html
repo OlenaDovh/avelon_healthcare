@@ -1,0 +1,29 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Відгуки{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Відгуки</h1>
+
+    {% for review in reviews %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <p class="mb-2">{{ review.text }}</p>
+                <p class="text-muted mb-2">
+                    <strong>{{ review.user.username }}</strong>,
+                    {{ review.created_at|date:"d.m.Y H:i" }}
+                </p>
+
+                {% if review.clinic_reply %}
+                    <p><strong>Відповідь:</strong> {{ review.clinic_reply }}</p>
+                {% endif %}
+
+                <a href="{% url 'reviews:support_review_reply' review.id %}" class="btn btn-sm btn-outline-primary">
+                    Відповісти / редагувати
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <p>Відгуків немає.</p>
+    {% endfor %}
+{% endblock %}

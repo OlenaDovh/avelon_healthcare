@@ -15,7 +15,9 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ doctor.full_name }}</h5>
                         <p><strong>Посада:</strong> {{ doctor.position }}</p>
-                        <p><strong>Спеціальність:</strong> {{ doctor.specialty_direction.name }}</p>
+                        <p><strong>Категорія:</strong> {{ doctor.qualification_category }}</p>
+                        <p><strong>Стаж:</strong> {{ doctor.experience_years }} років</p>
+
                         <a href="{% url 'doctors:doctor_detail' doctor.id %}" class="btn btn-outline-primary">
                             Деталі лікаря
                         </a>

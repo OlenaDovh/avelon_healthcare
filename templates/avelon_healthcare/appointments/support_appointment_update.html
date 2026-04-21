@@ -1,0 +1,292 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Редагування запису{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Перегляд / редагування запису #{{ appointment.id }}</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p><strong>Пацієнт:</strong> {{ appointment.customer_name|default:"—" }}</p>
+            <p><strong>Телефон:</strong> {{ appointment.phone|default:"—" }}</p>
+            <p><strong>Email:</strong> {{ appointment.email|default:"—" }}</p>
+            <p><strong>Напрям:</strong> {{ appointment.direction.name }}</p>
+            <p><strong>Лікар:</strong> {{ appointment.doctor.full_name }}</p>
+            <p><strong>Дата:</strong> {{ appointment.appointment_date|date:"d.m.Y" }}</p>
+            <p><strong>Час:</strong> {{ appointment.appointment_time_range }}}</p>
+            <p><strong>Статус:</strong> {{ appointment.get_status_display }}</p>
+
+            {% if appointment.description %}
+                <p><strong>Опис:</strong> {{ appointment.description }}</p>
+            {% endif %}
+
+            {% if appointment.rejection_reason %}
+                <p><strong>Причина відхилення:</strong> {{ appointment.rejection_reason }}</p>
+            {% endif %}
+
+            {% if appointment.final_conclusion %}
+                <p>
+                    <strong>Поточний висновок:</strong>
+                    <a href="{{ appointment.final_conclusion.url }}" target="_blank">Переглянути PDF</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if appointment.status == "rejected" %}
+        <div class="alert alert-secondary">
+            Цей запис відхилено. Для нього доступний тільки перегляд.
+        </div>
+
+    {% elif appointment.status == "completed" %}
+        <div class="alert alert-info">
+            Запис завершено. Можна лише додати або замінити файл висновку.
+        </div>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                {{ form.final_conclusion.label_tag }}
+                {{ form.final_conclusion }}
+                {{ form.final_conclusion.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зберегти файл</button>
+        </form>
+
+    {% else %}
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                {{ form.direction.label_tag }}
+                {{ form.direction }}
+                {{ form.direction.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.doctor.label_tag }}
+                {{ form.doctor }}
+                {{ form.doctor.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.appointment_date.label_tag }}
+                {{ form.appointment_date }}
+                {{ form.appointment_date.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.appointment_time.label_tag }}
+                {{ form.appointment_time }}
+                {{ form.appointment_time.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.status.label_tag }}
+                {{ form.status }}
+                {{ form.status.errors }}
+            </div>
+
+            <div class="mb-3" id="rejection-reason-block" style="display: none;">
+                {{ form.rejection_reason.label_tag }}
+                {{ form.rejection_reason }}
+                {{ form.rejection_reason.errors }}
+            </div>
+
+            <div class="mb-3" id="final-conclusion-block" style="display: none;">
+                {{ form.final_conclusion.label_tag }}
+                {{ form.final_conclusion }}
+                {{ form.final_conclusion.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+        </form>
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const directionField = document.getElementById("id_direction");
+                const doctorField = document.getElementById("id_doctor");
+                const dateField = document.getElementById("id_appointment_date");
+                const timeField = document.getElementById("id_appointment_time");
+                const statusField = document.getElementById("id_status");
+                const reasonBlock = document.getElementById("rejection-reason-block");
+                const conclusionBlock = document.getElementById("final-conclusion-block");
+
+                const appointmentId = "{{ appointment.id }}";
+                const currentDate = "{{ appointment.appointment_date|date:'Y-m-d' }}";
+                const currentTime = "{{ appointment.appointment_time|time:'H:i' }}";
+
+                let datePicker = null;
+
+                function toggleFields() {
+                    if (!statusField) return;
+
+                    if (reasonBlock) {
+                        reasonBlock.style.display = statusField.value === "rejected" ? "block" : "none";
+                    }
+
+                    if (conclusionBlock) {
+                        conclusionBlock.style.display = statusField.value === "completed" ? "block" : "none";
+                    }
+                }
+
+                function resetDoctors() {
+                    doctorField.innerHTML = '<option value="">Оберіть лікаря</option>';
+                }
+
+                function resetTimes() {
+                    timeField.innerHTML = '<option value="">Оберіть час</option>';
+                }
+
+                function resetDatePicker() {
+                    if (datePicker) {
+                        datePicker.clear();
+                        datePicker.set("enable", []);
+                    }
+                    if (dateField) {
+                        dateField.value = "";
+                    }
+                }
+
+                function initDatePicker() {
+                    if (!dateField) return;
+
+                    datePicker = flatpickr(dateField, {
+                        dateFormat: "Y-m-d",
+                        minDate: "today",
+                        allowInput: false,
+                        enable: [],
+                        onChange: function(selectedDates, dateStr) {
+                            loadTimes(directionField.value, doctorField.value, dateStr);
+                        }
+                    });
+                }
+
+                function loadDoctors(directionId, selectedDoctorId = null) {
+                    fetch(`/appointments/ajax/load-doctors/?direction_id=${directionId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            resetDoctors();
+
+                            data.doctors.forEach(function (doctor) {
+                                const option = document.createElement("option");
+                                option.value = doctor.id;
+                                option.textContent = doctor.full_name;
+
+                                if (selectedDoctorId && String(doctor.id) === String(selectedDoctorId)) {
+                                    option.selected = true;
+                                }
+
+                                doctorField.appendChild(option);
+                            });
+                        });
+                }
+
+                function loadDates(directionId, doctorId, selectedDate = null) {
+                    if (!directionId || !doctorId) {
+                        resetDatePicker();
+                        resetTimes();
+                        return;
+                    }
+
+                    fetch(`/appointments/ajax/load-dates/?direction_id=${directionId}&doctor_id=${doctorId}&exclude_appointment_id=${appointmentId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const enabledDates = data.dates || [];
+
+                            if (datePicker) {
+                                datePicker.clear();
+                                datePicker.set("enable", enabledDates);
+
+                                if (selectedDate) {
+                                    datePicker.setDate(selectedDate, false);
+                                }
+                            }
+
+                            if (selectedDate) {
+                                loadTimes(directionId, doctorId, selectedDate, currentTime);
+                            } else {
+                                resetTimes();
+                            }
+                        });
+                }
+
+                function loadTimes(directionId, doctorId, appointmentDate, selectedTime = null) {
+                    if (!directionId || !doctorId || !appointmentDate) {
+                        resetTimes();
+                        return;
+                    }
+
+                    fetch(`/appointments/ajax/load-slots/?direction_id=${directionId}&doctor_id=${doctorId}&date=${appointmentDate}&exclude_appointment_id=${appointmentId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            resetTimes();
+
+                            const slots = data.slots || [];
+
+                            slots.forEach(function (slot) {
+                                const option = document.createElement("option");
+                                option.value = slot.value;
+                                option.textContent = slot.label;
+
+                                if (selectedTime && slot.value === selectedTime) {
+                                    option.selected = true;
+                                }
+
+                                timeField.appendChild(option);
+                            });
+                        });
+                }
+
+                initDatePicker();
+                toggleFields();
+
+                if (directionField && doctorField && directionField.value && doctorField.value) {
+                    loadDoctors(directionField.value, doctorField.value);
+                    loadDates(directionField.value, doctorField.value, currentDate);
+                }
+
+                if (statusField) {
+                    statusField.addEventListener("change", toggleFields);
+                }
+
+                if (directionField) {
+                    directionField.addEventListener("change", function () {
+                        const directionId = this.value;
+
+                        resetDoctors();
+                        resetDatePicker();
+                        resetTimes();
+
+                        if (!directionId) {
+                            return;
+                        }
+
+                        loadDoctors(directionId);
+                    });
+                }
+
+                if (doctorField) {
+                    doctorField.addEventListener("change", function () {
+                        resetDatePicker();
+                        resetTimes();
+                        loadDates(directionField.value, this.value);
+                    });
+                }
+            });
+        </script>
+    {% endif %}
+{% endblock %}

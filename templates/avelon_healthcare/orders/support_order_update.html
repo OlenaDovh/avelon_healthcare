@@ -1,0 +1,45 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Редагування замовлення{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Редагування замовлення #{{ order.id }}</h1>
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.status.label_tag }}
+            {{ form.status }}
+            {{ form.status.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.rejection_reason.label_tag }}
+            {{ form.rejection_reason }}
+            {{ form.rejection_reason.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.payment_method.label_tag }}
+            {{ form.payment_method }}
+            {{ form.payment_method.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.result_file.label_tag }}
+            {{ form.result_file }}
+            {{ form.result_file.errors }}
+        </div>
+
+        {% if order.result_file %}
+            <p>
+                Поточний файл:
+                <a href="{{ order.result_file.url }}" target="_blank">Переглянути PDF</a>
+            </p>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+{% endblock %}

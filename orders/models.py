@@ -3,6 +3,7 @@ from __future__ import annotations
 from decimal import Decimal
 
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 
@@ -43,11 +44,23 @@ class Order(models.Model):
         blank=True,
         null=True,
     )
-    full_name: models.CharField = models.CharField(
-        max_length=255,
-        verbose_name="ПІБ",
+    last_name = models.CharField(
+        max_length=150,
         blank=True,
         default="",
+        verbose_name="Прізвище",
+    )
+    first_name = models.CharField(
+        max_length=150,
+        blank=True,
+        default="",
+        verbose_name="Ім'я",
+    )
+    middle_name = models.CharField(
+        max_length=150,
+        blank=True,
+        default="",
+        verbose_name="По батькові",
     )
     phone: models.CharField = models.CharField(
         max_length=30,
@@ -93,6 +106,10 @@ class Order(models.Model):
         null=True,
         verbose_name="Результати аналізів (PDF)",
     )
+    rejection_reason: models.TextField = models.TextField(
+        blank=True,
+        verbose_name="Причина відхилення",
+    )
 
     class Meta:
         """
@@ -112,6 +129,18 @@ class Order(models.Model):
         """
         return f"Замовлення #{self.id}"
 
+    def clean(self) -> None:
+        """
+        Перевіряє коректність замовлення.
+
+        Raises:
+            ValidationError: Якщо для відхиленого замовлення не вказана причина.
+        """
+        if self.status == OrderStatus.REJECTED and not self.rejection_reason.strip():
+            raise ValidationError(
+                {"rejection_reason": "Вкажіть причину відхилення."}
+            )
+
     @property
     def analyses_count(self) -> int:
         """
@@ -130,11 +159,12 @@ class Order(models.Model):
         Returns:
             str: Ім'я замовника.
         """
-        if self.full_name:
+
+        if self.last_name or self.first_name:
             return self.full_name
 
         if self.user:
-            return self.user.get_full_name() or self.user.username
+            return self.user.full_name or self.user.username
 
         return ""
 
@@ -148,6 +178,10 @@ class Order(models.Model):
         self.status = OrderStatus.PAID
         self.paid_at = timezone.now()
         self.save(update_fields=["status", "paid_at"])
+
+    @property
+    def full_name(self) -> str:
+        return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))
 
 
 class OrderItem(models.Model):

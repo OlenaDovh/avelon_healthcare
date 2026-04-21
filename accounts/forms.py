@@ -4,7 +4,12 @@ from typing import Any
 
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import (
+    PasswordChangeForm,
+    PasswordResetForm,
+    SetPasswordForm,
+    UserCreationForm,
+)
 from django.core.exceptions import ValidationError
 
 User = get_user_model()
@@ -13,13 +18,6 @@ User = get_user_model()
 class RegisterForm(UserCreationForm):
     """
     Форма реєстрації нового користувача.
-
-    Містить поля:
-    - логін
-    - email
-    - телефон
-    - пароль
-    - підтвердження пароля
     """
 
     email = forms.EmailField(
@@ -43,24 +41,19 @@ class RegisterForm(UserCreationForm):
     )
 
     class Meta:
-        """
-        Метадані форми реєстрації.
-        """
-
         model = User
-        fields = ("username", "email", "phone", "first_name", "last_name", "middle_name", "password1", "password2")
+        fields = (
+            "username",
+            "email",
+            "phone",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "password1",
+            "password2",
+        )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Ініціалізує форму реєстрації та налаштовує поля.
-
-        Args:
-            *args (Any): Позиційні аргументи.
-            **kwargs (Any): Іменовані аргументи.
-
-        Returns:
-            None
-        """
         super().__init__(*args, **kwargs)
 
         self.fields["username"].label = "Логін"
@@ -69,6 +62,22 @@ class RegisterForm(UserCreationForm):
                 "class": "form-control",
                 "placeholder": "Введіть логін",
             }
+        )
+
+        self.fields["first_name"].label = "Ім'я"
+        self.fields["first_name"].widget.attrs.update(
+            {"class": "form-control"}
+        )
+
+        self.fields["last_name"].label = "Прізвище"
+        self.fields["last_name"].widget.attrs.update(
+            {"class": "form-control"}
+        )
+
+        self.fields["middle_name"].label = "По батькові"
+        self.fields["middle_name"].required = False
+        self.fields["middle_name"].widget.attrs.update(
+            {"class": "form-control"}
         )
 
         self.fields["password1"].label = "Пароль"
@@ -88,28 +97,20 @@ class RegisterForm(UserCreationForm):
         )
 
     def clean_email(self) -> str:
-        """
-        Перевіряє унікальність email.
-
-        Returns:
-            str: Валідоване значення email.
-
-        Raises:
-            ValidationError: Якщо користувач із таким email вже існує.
-        """
-        email: str = self.cleaned_data["email"].lower()
+        email: str = self.cleaned_data["email"].lower().strip()
 
         if User.objects.filter(email__iexact=email).exists():
             raise ValidationError("Користувач із такою електронною поштою вже існує.")
+
+        if User.objects.filter(pending_email__iexact=email).exists():
+            raise ValidationError("Ця електронна пошта вже очікує підтвердження в іншого користувача.")
 
         return email
 
 
 class LoginForm(forms.Form):
     """
-    Форма входу користувача в систему.
-
-    Дозволяє виконувати вхід за логіном або email.
+    Форма входу користувача.
     """
 
     login = forms.CharField(
@@ -132,15 +133,6 @@ class LoginForm(forms.Form):
     )
 
     def clean(self) -> dict[str, Any]:
-        """
-        Перевіряє коректність введених даних для авторизації.
-
-        Returns:
-            dict[str, Any]: Очищені дані форми.
-
-        Raises:
-            ValidationError: Якщо логін або пароль неправильні.
-        """
         cleaned_data: dict[str, Any] = super().clean()
         login_value: str | None = cleaned_data.get("login")
         password: str | None = cleaned_data.get("password")
@@ -150,6 +142,9 @@ class LoginForm(forms.Form):
         if user is None:
             raise ValidationError("Невірний логін/email або пароль.")
 
+        if not user.email_verified and not user.pending_email:
+            raise ValidationError("Підтвердіть електронну пошту перед входом.")
+
         cleaned_data["user"] = user
         return cleaned_data
 
@@ -157,20 +152,26 @@ class LoginForm(forms.Form):
 class ProfileUpdateForm(forms.ModelForm):
     """
     Форма редагування профілю користувача.
-
-    Дозволяє змінювати email, дату народження
-    та пріоритетний канал зв'язку.
-    Логін не редагується, телефон лише відображається окремо.
     """
 
     class Meta:
-        """
-        Метадані форми редагування профілю.
-        """
-
         model = User
-        fields = ("email", "first_name", "last_name", "middle_name", "birth_date", "preferred_contact_channel")
+        fields = (
+            "email",
+            "phone",
+            "first_name",
+            "last_name",
+            "middle_name",
+            "birth_date",
+            "preferred_contact_channel",
+        )
         widgets = {
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "+380XXXXXXXXX",
+                }
+            ),
             "email": forms.EmailInput(
                 attrs={
                     "class": "form-control",
@@ -188,47 +189,53 @@ class ProfileUpdateForm(forms.ModelForm):
                     "class": "form-select",
                 }
             ),
+            "first_name": forms.TextInput(
+                attrs={"class": "form-control"}
+            ),
+            "last_name": forms.TextInput(
+                attrs={"class": "form-control"}
+            ),
+            "middle_name": forms.TextInput(
+                attrs={"class": "form-control"}
+            ),
         }
         labels = {
             "email": "Електронна пошта",
             "birth_date": "Дата народження",
             "preferred_contact_channel": "Пріоритетний канал зв'язку",
+            "phone": "Номер телефону",
+            "first_name": "Ім'я",
+            "last_name": "Прізвище",
+            "middle_name": "По батькові",
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Ініціалізує форму редагування профілю.
-
-        Args:
-            *args (Any): Позиційні аргументи.
-            **kwargs (Any): Іменовані аргументи.
-
-        Returns:
-            None
-        """
         super().__init__(*args, **kwargs)
         self.fields["preferred_contact_channel"].required = False
         self.fields["birth_date"].required = False
+        self.fields["middle_name"].required = False
 
     def clean_email(self) -> str:
-        """
-        Перевіряє унікальність email під час редагування профілю.
-
-        Returns:
-            str: Валідований email.
-
-        Raises:
-            ValidationError: Якщо email уже використовується іншим користувачем.
-        """
-        email: str = self.cleaned_data["email"].lower()
+        email: str = self.cleaned_data["email"].lower().strip()
 
         existing_user = User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk)
         if existing_user.exists():
             raise ValidationError("Користувач із такою електронною поштою вже існує.")
 
+        existing_pending = User.objects.filter(pending_email__iexact=email).exclude(pk=self.instance.pk)
+        if existing_pending.exists():
+            raise ValidationError("Ця електронна пошта вже очікує підтвердження в іншого користувача.")
+
         return email
 
-from django.contrib.auth.forms import PasswordChangeForm
+    def clean_phone(self) -> str:
+        phone: str = self.cleaned_data["phone"].strip()
+
+        existing_user = User.objects.filter(phone=phone).exclude(pk=self.instance.pk)
+        if existing_user.exists():
+            raise ValidationError("Користувач із таким номером телефону вже існує.")
+
+        return phone
 
 
 class UserPasswordChangeForm(PasswordChangeForm):
@@ -237,16 +244,6 @@ class UserPasswordChangeForm(PasswordChangeForm):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Ініціалізує форму зміни пароля та налаштовує поля.
-
-        Args:
-            *args (Any): Позиційні аргументи.
-            **kwargs (Any): Іменовані аргументи.
-
-        Returns:
-            None
-        """
         super().__init__(*args, **kwargs)
 
         self.fields["old_password"].label = "Поточний пароль"
@@ -273,8 +270,6 @@ class UserPasswordChangeForm(PasswordChangeForm):
             }
         )
 
-from django.contrib.auth.forms import PasswordResetForm, SetPasswordForm
-
 
 class UserPasswordResetForm(PasswordResetForm):
     """
@@ -282,16 +277,6 @@ class UserPasswordResetForm(PasswordResetForm):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Ініціалізує форму запиту відновлення пароля.
-
-        Args:
-            *args (Any): Позиційні аргументи.
-            **kwargs (Any): Іменовані аргументи.
-
-        Returns:
-            None
-        """
         super().__init__(*args, **kwargs)
 
         self.fields["email"].label = "Електронна пошта"
@@ -309,16 +294,6 @@ class UserSetPasswordForm(SetPasswordForm):
     """
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """
-        Ініціалізує форму встановлення нового пароля.
-
-        Args:
-            *args (Any): Позиційні аргументи.
-            **kwargs (Any): Іменовані аргументи.
-
-        Returns:
-            None
-        """
         super().__init__(*args, **kwargs)
 
         self.fields["new_password1"].label = "Новий пароль"
@@ -337,3 +312,72 @@ class UserSetPasswordForm(SetPasswordForm):
             }
         )
 
+
+class SupportPatientUpdateForm(forms.ModelForm):
+    """
+    Форма редагування пацієнта для support.
+    """
+
+    class Meta:
+        model = User
+        fields = (
+            "first_name",
+            "last_name",
+            "middle_name",
+            "phone",
+            "birth_date",
+            "preferred_contact_channel",
+            "discount",
+        )
+        widgets = {
+            "first_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Ім'я",
+                }
+            ),
+            "last_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Прізвище",
+                }
+            ),
+            "middle_name": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "По батькові",
+                }
+            ),
+            "phone": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "+380XXXXXXXXX",
+                }
+            ),
+            "birth_date": forms.DateInput(
+                attrs={
+                    "class": "form-control",
+                    "type": "date",
+                }
+            ),
+            "preferred_contact_channel": forms.Select(
+                attrs={
+                    "class": "form-select",
+                }
+            ),
+            "discount": forms.NumberInput(
+                attrs={
+                    "class": "form-control",
+                    "min": 0,
+                }
+            ),
+        }
+
+    def clean_phone(self) -> str:
+        phone: str = self.cleaned_data["phone"]
+
+        existing_user = User.objects.filter(phone=phone).exclude(pk=self.instance.pk)
+        if existing_user.exists():
+            raise ValidationError("Користувач із таким номером телефону вже існує.")
+
+        return phone

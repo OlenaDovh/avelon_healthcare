@@ -33,6 +33,7 @@ class OrderAdmin(admin.ModelAdmin):
         "total_price",
         "paid_at",
         "created_at",
+        "rejection_reason",
     )
     list_filter = ("status", "payment_method", "created_at", "paid_at")
     search_fields = (
@@ -45,12 +46,26 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ("created_at",)
     inlines = [OrderItemInline]
 
+    fields = (
+        "user",
+        "full_name",
+        "phone",
+        "email",
+        "status",
+        "rejection_reason",
+        "payment_method",
+        "paid_at",
+        "total_price",
+        "result_file",
+        "created_at",
+    )
+
     def save_model(
-        self,
-        request,
-        obj: Order,
-        form,
-        change: bool,
+            self,
+            request,
+            obj: Order,
+            form,
+            change: bool,
     ) -> None:
         """
         Зберігає замовлення та автоматично виставляє дату оплати.
@@ -69,6 +84,9 @@ class OrderAdmin(admin.ModelAdmin):
 
         if obj.status != OrderStatus.PAID:
             obj.paid_at = None
+
+        if obj.status != OrderStatus.REJECTED:
+            obj.rejection_reason = ""
 
         super().save_model(request, obj, form, change)
 

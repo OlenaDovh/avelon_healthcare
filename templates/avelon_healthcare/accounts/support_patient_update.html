@@ -1,0 +1,59 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Редагування пацієнта{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Редагування пацієнта</h1>
+
+    <p class="text-muted">
+        {{ patient.username }} / {{ patient.email }}
+    </p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.middle_name.label_tag }}
+            {{ form.middle_name }}
+            {{ form.middle_name.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {{ form.phone.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.birth_date.label_tag }}
+            {{ form.birth_date }}
+            {{ form.birth_date.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.preferred_contact_channel.label_tag }}
+            {{ form.preferred_contact_channel }}
+            {{ form.preferred_contact_channel.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.discount.label_tag }}
+            {{ form.discount }}
+            {{ form.discount.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+{% endblock %}

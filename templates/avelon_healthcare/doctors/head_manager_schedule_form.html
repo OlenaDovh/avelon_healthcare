@@ -1,0 +1,117 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Редагування графіка{% else %}Створення графіка{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">
+        {% if form.instance.pk %}Редагування графіка{% else %}Створення графіка{% endif %}
+    </h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.doctor.label_tag }}
+            {{ form.doctor }}
+            {{ form.doctor.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.direction.label_tag }}
+            {{ form.direction }}
+            {{ form.direction.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.work_date.label_tag }}
+            {{ form.work_date }}
+            {{ form.work_date.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.appointment_duration_minutes.label_tag }}
+            {{ form.appointment_duration_minutes }}
+            {{ form.appointment_duration_minutes.errors }}
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="mb-3">Робочі періоди</h5>
+
+                {{ formset.management_form }}
+
+                {% for period_form in formset %}
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            {{ period_form.start_time.label_tag }}
+                            {{ period_form.start_time }}
+                            {{ period_form.start_time.errors }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ period_form.end_time.label_tag }}
+                            {{ period_form.end_time }}
+                            {{ period_form.end_time.errors }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a href="{% url 'doctors:head_manager_schedule_list' %}" class="btn btn-outline-secondary">Назад</a>
+        </div>
+    </form>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const doctorField = document.getElementById("id_doctor");
+            const directionField = document.getElementById("id_direction");
+            const currentDirectionId = "{{ form.instance.direction_id|default:'' }}";
+
+            function resetDirections() {
+                directionField.innerHTML = '<option value="">Оберіть напрям</option>';
+            }
+
+            function loadDirections(doctorId, selectedDirectionId = "") {
+                if (!doctorId) {
+                    resetDirections();
+                    return;
+                }
+
+                fetch(`/doctors/head-manager/ajax/load-doctor-directions/?doctor_id=${doctorId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        resetDirections();
+
+                        (data.directions || []).forEach(direction => {
+                            const option = document.createElement("option");
+                            option.value = direction.id;
+                            option.textContent = direction.name;
+
+                            if (String(direction.id) === String(selectedDirectionId)) {
+                                option.selected = true;
+                            }
+
+                            directionField.appendChild(option);
+                        });
+                    });
+            }
+
+            if (doctorField) {
+                doctorField.addEventListener("change", function () {
+                    loadDirections(this.value);
+                });
+
+                if (doctorField.value) {
+                    loadDirections(doctorField.value, currentDirectionId);
+                } else {
+                    resetDirections();
+                }
+            }
+        });
+    </script>
+{% endblock %}

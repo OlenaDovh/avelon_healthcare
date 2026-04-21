@@ -31,7 +31,9 @@ urlpatterns = [
     path("analysis/", include("analysis.urls")),
     path("orders/", include("orders.urls")),
     path("reviews/", include("reviews.urls")),
+    path("support-chat/", include("support_chat.urls")),
 ]
 
 if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

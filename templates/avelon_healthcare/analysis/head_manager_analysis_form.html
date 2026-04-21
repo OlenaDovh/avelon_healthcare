@@ -1,0 +1,69 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}
+    {% if form.instance.pk %}Редагування аналізу{% else %}Створення аналізу{% endif %}
+{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">
+        {% if form.instance.pk %}Редагування аналізу{% else %}Створення аналізу{% endif %}
+    </h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.what_to_check.label_tag }}
+            {{ form.what_to_check }}
+            {{ form.what_to_check.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.disease.label_tag }}
+            {{ form.disease }}
+            {{ form.disease.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.for_whom.label_tag }}
+            {{ form.for_whom }}
+            {{ form.for_whom.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.biomaterial.label_tag }}
+            {{ form.biomaterial }}
+            {{ form.biomaterial.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.duration_days.label_tag }}
+            {{ form.duration_days }}
+            {{ form.duration_days.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.price.label_tag }}
+            {{ form.price }}
+            {{ form.price.errors }}
+        </div>
+
+        <div class="form-check mb-3">
+            {{ form.is_active }}
+            {{ form.is_active.label_tag }}
+            {{ form.is_active.errors }}
+        </div>
+
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Зберегти</button>
+            <a href="{% url 'analysis:head_manager_analysis_list' %}" class="btn btn-outline-secondary">Назад</a>
+        </div>
+    </form>
+{% endblock %}

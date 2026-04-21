@@ -1,0 +1,58 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Створення замовлення{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Створення замовлення</h1>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="mb-3">
+            {{ form.user.label_tag }}
+            {{ form.user }}
+            {{ form.user.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.last_name.label_tag }}
+            {{ form.last_name }}
+            {{ form.last_name.errors }}
+
+            {{ form.first_name.label_tag }}
+            {{ form.first_name }}
+            {{ form.first_name.errors }}
+
+            {{ form.middle_name.label_tag }}
+            {{ form.middle_name }}
+            {{ form.middle_name.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.phone.label_tag }}
+            {{ form.phone }}
+            {{ form.phone.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.payment_method.label_tag }}
+            {{ form.payment_method }}
+            {{ form.payment_method.errors }}
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">{{ form.analyses.label }}</label>
+            {{ form.analyses }}
+            {{ form.analyses.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Створити</button>
+    </form>
+{% endblock %}

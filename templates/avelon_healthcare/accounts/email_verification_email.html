@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Підтвердження пошти</title>
+</head>
+<body style="font-family: Arial, sans-serif; font-size: 14px; color: #212529;">
+    <h2>Avelon Healthcare</h2>
+
+    <p>Вітаємо, {{ user.last_name }} {{ user.first_name }}.</p>
+    <p>Щоб завершити реєстрацію, підтвердіть вашу електронну пошту.</p>
+
+    <p>
+        <a href="{{ verify_url }}">Підтвердити електронну пошту</a>
+    </p>
+
+    <p>Якщо ви не реєструвалися, просто проігноруйте цей лист.</p>
+</body>
+</html>

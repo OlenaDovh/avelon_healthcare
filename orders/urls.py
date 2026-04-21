@@ -8,7 +8,7 @@ from .views import (
     order_detail_view,
     order_list_view,
     order_pay_view,
-    order_invoice_view,
+    order_invoice_view, support_order_list_view, support_order_create_view, support_order_update_view,
 )
 
 app_name = "orders"
@@ -20,4 +20,7 @@ urlpatterns = [
     path("<int:order_id>/pay/", order_pay_view, name="order_pay"),
     path("<int:order_id>/cancel/", order_cancel_view, name="order_cancel"),
     path("<int:order_id>/invoice/", order_invoice_view, name="order_invoice"),
+    path("staff/", support_order_list_view, name="support_order_list"),
+    path("staff/create/", support_order_create_view, name="support_order_create"),
+    path("staff/<int:order_id>/edit/", support_order_update_view, name="support_order_update"),
 ]

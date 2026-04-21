@@ -1,17 +1,16 @@
 from __future__ import annotations
 
-from django.db import models
 from datetime import datetime, timedelta
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils import timezone
 
 
 class Direction(models.Model):
     """
     Модель медичного напряму клініки.
-
-    Використовується для групування лікарів за спеціалізаціями
-    та відображення інформації про медичні послуги.
     """
 
     name = models.CharField(
@@ -45,26 +44,38 @@ class Direction(models.Model):
 class Doctor(models.Model):
     """
     Модель лікаря клініки.
-
-    Зберігає базову інформацію про лікаря, його спеціальність,
-    категорію, стаж, фото та напрями, з якими він працює.
     """
 
-    full_name: models.CharField = models.CharField(
-        max_length=255,
-        verbose_name="ПІБ лікаря",
+    user: models.OneToOneField = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name="doctor_profile",
+        null=True,
+        blank=True,
+        verbose_name="Користувач",
+    )
+    last_name: models.CharField = models.CharField(
+        max_length=150,
+        verbose_name="Прізвище",
+    )
+    first_name: models.CharField = models.CharField(
+        max_length=150,
+        verbose_name="Ім'я",
+    )
+    middle_name: models.CharField = models.CharField(
+        max_length=150,
+        blank=True,
+        verbose_name="По батькові",
     )
     position: models.CharField = models.CharField(
         max_length=255,
         verbose_name="Посада",
     )
-
     directions = models.ManyToManyField(
         Direction,
         related_name="doctors",
         verbose_name="Напрями",
     )
-
     qualification_category: models.CharField = models.CharField(
         max_length=255,
         verbose_name="Кваліфікаційна категорія",
@@ -114,7 +125,17 @@ class Doctor(models.Model):
 
         verbose_name = "Лікар"
         verbose_name_plural = "Лікарі"
-        ordering = ["full_name"]
+        ordering = ["last_name", "first_name"]
+
+    @property
+    def full_name(self) -> str:
+        """
+        Повертає повне ім'я лікаря.
+
+        Returns:
+            str: ПІБ лікаря.
+        """
+        return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))
 
     def __str__(self) -> str:
         """
@@ -123,9 +144,14 @@ class Doctor(models.Model):
         Returns:
             str: ПІБ лікаря.
         """
-        return str(self.full_name)
+        return self.full_name
+
 
 class DoctorWorkDay(models.Model):
+    """
+    Модель робочого дня лікаря.
+    """
+
     APPOINTMENT_DURATION_CHOICES = (
         (15, "15 хв"),
         (30, "30 хв"),
@@ -146,7 +172,6 @@ class DoctorWorkDay(models.Model):
         default=30,
         verbose_name="Тривалість 1 прийому",
     )
-
     direction = models.ForeignKey(
         Direction,
         on_delete=models.CASCADE,
@@ -155,9 +180,13 @@ class DoctorWorkDay(models.Model):
     )
 
     class Meta:
+        """
+        Метадані моделі робочого дня.
+        """
+
         verbose_name = "Розклад лікаря на дату"
         verbose_name_plural = "Розклад лікарів на дати"
-        ordering = ["-work_date", "doctor__full_name"]
+        ordering = ["-work_date", "doctor__last_name", "doctor__first_name"]
         constraints = [
             models.UniqueConstraint(
                 fields=["doctor", "direction", "work_date"],
@@ -166,9 +195,21 @@ class DoctorWorkDay(models.Model):
         ]
 
     def __str__(self) -> str:
+        """
+        Повертає строкове представлення робочого дня.
+
+        Returns:
+            str: ПІБ лікаря і дата.
+        """
         return f"{self.doctor.full_name} — {self.work_date}"
 
     def clean(self) -> None:
+        """
+        Виконує валідацію робочого дня.
+
+        Returns:
+            None
+        """
         if self.work_date and self.work_date < timezone.localdate():
             raise ValidationError("Не можна створити графік на минулу дату.")
 
@@ -176,12 +217,26 @@ class DoctorWorkDay(models.Model):
             if not self.doctor.directions.filter(id=self.direction_id).exists():
                 raise ValidationError("Обраний лікар не має цього напряму.")
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: object, **kwargs: object) -> None:
+        """
+        Зберігає робочий день.
+
+        Args:
+            *args (object): Позиційні аргументи.
+            **kwargs (object): Іменовані аргументи.
+
+        Returns:
+            None
+        """
         self.full_clean()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
 
 class DoctorWorkPeriod(models.Model):
+    """
+    Модель робочого періоду лікаря.
+    """
+
     workday = models.ForeignKey(
         DoctorWorkDay,
         on_delete=models.CASCADE,
@@ -196,15 +251,31 @@ class DoctorWorkPeriod(models.Model):
     )
 
     class Meta:
+        """
+        Метадані моделі робочого періоду.
+        """
+
         verbose_name = "Робочий період"
         verbose_name_plural = "Робочі періоди"
         ordering = ["start_time"]
 
     def __str__(self) -> str:
+        """
+        Повертає строкове представлення робочого періоду.
+
+        Returns:
+            str: Часовий інтервал.
+        """
         return f"{self.start_time} - {self.end_time}"
 
     def get_slots(self) -> list[tuple[datetime, datetime]]:
-        result = []
+        """
+        Повертає доступні слоти в межах періоду.
+
+        Returns:
+            list[tuple[datetime, datetime]]: Список слотів.
+        """
+        result: list[tuple[datetime, datetime]] = []
         duration = timedelta(minutes=self.workday.appointment_duration_minutes)
 
         current = datetime.combine(self.workday.work_date, self.start_time)
@@ -217,11 +288,23 @@ class DoctorWorkPeriod(models.Model):
         return result
 
     def clean(self) -> None:
+        """
+        Виконує валідацію робочого періоду.
+
+        Returns:
+            None
+        """
         super().clean()
         self._validate_time_order()
         self._validate_overlap()
 
     def _validate_time_order(self) -> None:
+        """
+        Перевіряє порядок часу початку і завершення.
+
+        Returns:
+            None
+        """
         if not self.start_time or not self.end_time:
             return
 
@@ -229,6 +312,12 @@ class DoctorWorkPeriod(models.Model):
             raise ValidationError("Час початку періоду має бути меншим за час завершення.")
 
     def _validate_overlap(self) -> None:
+        """
+        Перевіряє перетин з іншими періодами.
+
+        Returns:
+            None
+        """
         if not self.start_time or not self.end_time or not self.workday_id:
             return
 
@@ -242,6 +331,16 @@ class DoctorWorkPeriod(models.Model):
                     "Цей період перетинається з іншим періодом роботи лікаря."
                 )
 
-    def save(self, *args, **kwargs):
+    def save(self, *args: object, **kwargs: object) -> None:
+        """
+        Зберігає робочий період.
+
+        Args:
+            *args (object): Позиційні аргументи.
+            **kwargs (object): Іменовані аргументи.
+
+        Returns:
+            None
+        """
         self.full_clean()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)

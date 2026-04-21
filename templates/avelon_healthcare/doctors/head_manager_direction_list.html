@@ -1,0 +1,43 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Напрями{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Напрями</h1>
+        <a href="{% url 'doctors:head_manager_direction_create' %}" class="btn btn-primary">
+            Створити напрям
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Назва</th>
+                    <th>Опис</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for direction in directions %}
+                    <tr>
+                        <td>{{ direction.id }}</td>
+                        <td>{{ direction.name }}</td>
+                        <td>{{ direction.description|default:"—"|truncatechars:120 }}</td>
+                        <td class="text-end">
+                            <a href="{% url 'doctors:head_manager_direction_update' direction.id %}" class="btn btn-sm btn-outline-primary">
+                                Редагувати
+                            </a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">Напрямів не знайдено.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

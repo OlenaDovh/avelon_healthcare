@@ -30,7 +30,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('full_name', models.CharField(max_length=255, verbose_name='ПІБ лікаря')),
                 ('position', models.CharField(max_length=255, verbose_name='Посада')),
-                ('specialty_name', models.CharField(max_length=255, verbose_name='Назва спеціальності')),
                 ('qualification_category', models.CharField(max_length=255, verbose_name='Кваліфікаційна категорія')),
                 ('experience_years', models.PositiveIntegerField(verbose_name='Стаж (років)')),
                 ('price_from', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Ціна від')),

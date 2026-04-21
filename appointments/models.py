@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from doctors.models import Direction, Doctor
+from doctors.models import Direction, Doctor, DoctorWorkDay
 
 
 class AppointmentStatus(models.TextChoices):
@@ -30,11 +32,14 @@ class Appointment(models.Model):
         blank=True,
         null=True,
     )
-    full_name: models.CharField = models.CharField(
-        max_length=255,
-        verbose_name="ПІБ",
-        blank=True,
-        default="",
+    last_name = models.CharField(
+        max_length=150, verbose_name="Прізвище"
+    )
+    first_name = models.CharField(
+        max_length=150, verbose_name="Імʼя"
+    )
+    middle_name = models.CharField(
+        max_length=150, blank=True, verbose_name="По батькові"
     )
     phone: models.CharField = models.CharField(
         max_length=30,
@@ -75,6 +80,10 @@ class Appointment(models.Model):
         default=AppointmentStatus.PLANNED,
         verbose_name="Статус",
     )
+    rejection_reason: models.TextField = models.TextField(
+        blank=True,
+        verbose_name="Причина відхилення",
+    )
     final_conclusion: models.FileField = models.FileField(
         upload_to="appointments/conclusions/",
         blank=True,
@@ -108,36 +117,75 @@ class Appointment(models.Model):
         Raises:
             ValidationError: Якщо лікар не належить до вибраного напряму.
         """
+        super().clean()
+
         if self.doctor_id and self.direction_id:
             if not self.doctor.directions.filter(id=self.direction_id).exists():
                 raise ValidationError(
                     {"doctor": "Обраний лікар не працює в цьому напрямі."}
                 )
 
+        if self.status == AppointmentStatus.REJECTED and not self.rejection_reason.strip():
+            raise ValidationError(
+                {"rejection_reason": "Вкажіть причину відхилення."}
+            )
+
     @property
     def customer_name(self) -> str:
         """
         Повертає ім'я пацієнта.
-
-        Returns:
-            str: Ім'я пацієнта.
         """
-        if self.full_name:
+        if self.last_name or self.first_name:
             return self.full_name
 
         if self.user:
-            return self.user.get_full_name() or self.user.username
+            return self.user.full_name or self.user.username
 
         return ""
+
+    @property
+    def full_name(self) -> str:
+        """
+        Повертає ПІБ пацієнта.
+        """
+        return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))
+
+    @property
+    def appointment_end_time(self):
+        """
+        Повертає час завершення слота.
+        """
+        workday = DoctorWorkDay.objects.filter(
+            doctor=self.doctor,
+            direction=self.direction,
+            work_date=self.appointment_date,
+        ).first()
+
+        if not workday:
+            return None
+
+        start_dt = datetime.combine(self.appointment_date, self.appointment_time)
+        end_dt = start_dt + timedelta(minutes=workday.appointment_duration_minutes)
+        return end_dt.time()
+
+    @property
+    def appointment_time_range(self) -> str:
+        """
+        Повертає часовий діапазон слота у форматі HH:MM - HH:MM.
+        """
+        end_time = self.appointment_end_time
+        start_str = self.appointment_time.strftime("%H:%M")
+
+        if not end_time:
+            return start_str
+
+        return f"{start_str} - {end_time.strftime('%H:%M')}"
 
     def __str__(self) -> str:
         """
         Повертає строкове представлення запису.
-
-        Returns:
-            str: Інформація про запис.
         """
         return (
             f"{self.customer_name} — {self.doctor.full_name} — "
-            f"{self.appointment_date} {self.appointment_time}"
+            f"{self.appointment_date} {self.appointment_time_range}"
         )

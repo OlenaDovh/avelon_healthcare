@@ -1,0 +1,29 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Відповідь на відгук{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Відповідь на відгук</h1>
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <p class="mb-2">{{ review.text }}</p>
+            <p class="text-muted mb-0">
+                <strong>{{ review.user.username }}</strong>,
+                {{ review.created_at|date:"d.m.Y H:i" }}
+            </p>
+        </div>
+    </div>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="mb-3">
+            {{ form.clinic_reply.label_tag }}
+            {{ form.clinic_reply }}
+            {{ form.clinic_reply.errors }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Зберегти</button>
+    </form>
+{% endblock %}

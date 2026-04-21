@@ -41,3 +41,28 @@ class ReviewCreateForm(forms.ModelForm):
         """
         text: str = self.cleaned_data["text"].strip()
         return text
+
+class ReviewReplyForm(forms.ModelForm):
+    """
+    Форма відповіді на відгук.
+    """
+
+    class Meta:
+        """
+        Метадані форми відповіді на відгук.
+        """
+
+        model = Review
+        fields = ("clinic_reply",)
+        widgets = {
+            "clinic_reply": forms.Textarea(
+                attrs={
+                    "class": "form-control",
+                    "rows": 4,
+                    "placeholder": "Введіть відповідь на відгук",
+                }
+            ),
+        }
+        labels = {
+            "clinic_reply": "Відповідь клініки",
+        }

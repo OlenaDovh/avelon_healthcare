@@ -12,13 +12,6 @@ phone_validator: RegexValidator = RegexValidator(
 class User(AbstractUser):
     """
     Кастомна модель користувача.
-
-    Розширює стандартну модель Django, додаючи:
-    - номер телефону
-    - статус підтвердження email
-    - знижку
-    - дату народження
-    - пріоритетний канал зв’язку
     """
 
     first_name = models.CharField(max_length=150, verbose_name="Ім'я")
@@ -28,6 +21,12 @@ class User(AbstractUser):
     email = models.EmailField(
         unique=True,
         verbose_name='Електронна пошта'
+    )
+
+    pending_email = models.EmailField(
+        blank=True,
+        default="",
+        verbose_name="Нова електронна пошта (очікує підтвердження)",
     )
 
     phone = models.CharField(
@@ -68,10 +67,8 @@ class User(AbstractUser):
     )
 
     def __str__(self) -> str:
-        """
-        Повертає строкове представлення користувача.
+        return self.full_name or self.username
 
-        Returns:
-            str: Логін користувача
-        """
-        return self.username
+    @property
+    def full_name(self) -> str:
+        return f"{self.last_name} {self.first_name} {self.middle_name}".strip()

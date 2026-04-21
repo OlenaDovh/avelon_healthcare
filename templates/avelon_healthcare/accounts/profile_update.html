@@ -9,9 +9,8 @@
         <div class="card mb-4">
             <div class="card-body">
                 <p><strong>Логін:</strong> {{ request.user.username }}</p>
-                <p><strong>Телефон:</strong> {{ request.user.phone }}</p>
                 <p class="text-muted mb-0">
-                    Номер телефону змінюється лише через звернення на гарячу лінію.
+                    Ви можете самостійно змінювати контактні дані профілю.
                 </p>
             </div>
         </div>
@@ -42,6 +41,12 @@
                 {{ form.email.label_tag }}
                 {{ form.email }}
                 {{ form.email.errors }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.phone.label_tag }}
+                {{ form.phone }}
+                {{ form.phone.errors }}
             </div>
 
             <div class="mb-3">
