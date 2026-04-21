@@ -1,0 +1,88 @@
+{% load static %}
+
+<div
+    id="support-chat-root"
+    data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
+    data-sender-name="{% if request.user.is_authenticated %}{{ request.user.full_name|default:request.user.username|escapejs }}{% else %}Гість{% endif %}"
+    data-current-session-url="{% url 'support_chat:current_session' %}"
+    data-create-session-url="{% url 'support_chat:create_session' %}"
+    data-ws-base-url="{% if request.is_secure %}wss://{% else %}ws://{% endif %}{{ request.get_host }}/ws/support-chat/"
+    data-csrf-token="{{ csrf_token }}"
+></div>
+
+<div id="support-chat-launcher" class="support-chat-launcher">
+    💬
+</div>
+
+<div id="support-chat-panel" class="support-chat-panel d-none">
+    <div class="support-chat-header">
+        <div>
+            <strong>Підтримка</strong>
+            <div id="support-chat-status" class="small text-muted">Чат не розпочато</div>
+        </div>
+        <div class="d-flex gap-2">
+            <button id="support-chat-close-btn" class="btn btn-sm btn-outline-secondary" type="button">—</button>
+            <button id="support-chat-finish-btn" class="btn btn-sm btn-outline-danger" type="button">Завершити</button>
+        </div>
+    </div>
+
+    <div class="support-chat-body">
+        <div id="support-chat-start-form-wrap" class="support-chat-start-form-wrap">
+            {% if not request.user.is_authenticated %}
+                <div class="mb-3">
+                    <label for="chat-guest-name" class="form-label">Ваше ім’я</label>
+                    <input id="chat-guest-name" type="text" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="chat-guest-email" class="form-label">Email</label>
+                    <input id="chat-guest-email" type="email" class="form-control">
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label for="chat-topic" class="form-label">Тема</label>
+                <select id="chat-topic" class="form-select">
+                    <option value="appointment">Запис</option>
+                    <option value="analysis">Аналізи</option>
+                    <option value="order">Замовлення</option>
+                    <option value="account">Акаунт</option>
+                    <option value="other">Інше</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="chat-description" class="form-label">Опис</label>
+                <textarea id="chat-description" class="form-control" rows="4"></textarea>
+            </div>
+
+            <button id="start-support-chat-btn" class="btn btn-primary w-100" type="button">
+                Почати чат
+            </button>
+        </div>
+
+        <div id="support-chat-messages-wrap" class="support-chat-messages-wrap d-none">
+            <div id="support-chat-messages" class="support-chat-messages"></div>
+
+            <div class="support-chat-input-wrap">
+                <textarea
+                    id="support-chat-message-input"
+                    class="form-control"
+                    rows="2"
+                    placeholder="Ваше повідомлення..."
+                ></textarea>
+
+                <button id="support-chat-send-btn" class="btn btn-success mt-2 w-100" type="button">
+                    Надіслати
+                </button>
+
+                <button id="support-chat-new-btn" class="btn btn-outline-primary w-100 mt-2 d-none" type="button">
+                    Новий чат
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="{% static 'css/support_chat/widget.css' %}">
+<script src="{% static 'js/support_chat/widget.js' %}"></script>

@@ -1,0 +1,50 @@
+{% extends "avelon_healthcare/base.html" %}
+{% load static %}
+
+{% block title %}Чати підтримки{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Чати підтримки</h1>
+
+    <h3>Черга</h3>
+    <div id="waiting-sessions-container" class="mb-5">
+        {% for session in waiting_sessions %}
+            <div class="card mb-3" data-session-id="{{ session.id }}">
+                <div class="card-body">
+                    <p><strong>Користувач:</strong> {{ session.customer_display_name }}</p>
+                    <p><strong>Тема:</strong> {{ session.get_topic_display }}</p>
+                    <p><strong>Опис:</strong> {{ session.initial_description }}</p>
+                    <button class="btn btn-primary" onclick="claimChat({{ session.id }})">
+                        Підключитися
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <p id="waiting-empty-text">Немає чатів у черзі.</p>
+        {% endfor %}
+    </div>
+
+    <h3>Мої активні чати</h3>
+    <div id="active-sessions-container">
+        {% for session in active_sessions %}
+            <div class="card mb-3" data-session-id="{{ session.id }}">
+                <div class="card-body">
+                    <p><strong>Користувач:</strong> {{ session.customer_display_name }}</p>
+                    <p><strong>Тема:</strong> {{ session.get_topic_display }}</p>
+                    <a href="{% url 'support_chat:operator_chat_room' session.id %}" class="btn btn-outline-primary">
+                        Відкрити чат
+                    </a>
+                </div>
+            </div>
+            {% empty %}
+            <p id="active-empty-text">Немає активних чатів.</p>
+        {% endfor %}
+    </div>
+
+    <script>
+        window.CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
+    <script src="{% static 'js/support_chat_dashboard.js' %}"></script>
+
+{% endblock %}

@@ -1,12 +1,19 @@
 from django.contrib.auth.models import AbstractUser
-from django.core.validators import RegexValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
 
-phone_validator: RegexValidator = RegexValidator(
-    regex=r'^\+380\d{9}$',
-    message='Номер телефону має бути у форматі +380XXXXXXXXX'
+phone_validator = RegexValidator(
+    regex=r"^\+380\d{9}$",
+    message="Номер телефону має бути у форматі +380XXXXXXXXX",
 )
+
+
+class PreferredContactChannel(models.TextChoices):
+    PHONE = "phone", "Телефон"
+    EMAIL = "email", "Email"
+    TELEGRAM = "telegram", "Telegram"
+    VIBER = "viber", "Viber"
 
 
 class User(AbstractUser):
@@ -20,7 +27,7 @@ class User(AbstractUser):
 
     email = models.EmailField(
         unique=True,
-        verbose_name='Електронна пошта'
+        verbose_name="Електронна пошта",
     )
 
     pending_email = models.EmailField(
@@ -33,37 +40,31 @@ class User(AbstractUser):
         max_length=13,
         unique=True,
         validators=[phone_validator],
-        verbose_name='Номер телефону'
+        verbose_name="Номер телефону",
     )
 
-    email_verified: models.BooleanField = models.BooleanField(
+    email_verified = models.BooleanField(
         default=False,
-        verbose_name='Пошта підтверджена'
+        verbose_name="Пошта підтверджена",
     )
 
-    discount: models.PositiveIntegerField = models.PositiveIntegerField(
+    discount = models.PositiveIntegerField(
         default=0,
-        verbose_name='Знижка, %'
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        verbose_name="Знижка, %",
     )
 
-    birth_date: models.DateField = models.DateField(
+    birth_date = models.DateField(
         null=True,
         blank=True,
-        verbose_name='Дата народження'
+        verbose_name="Дата народження",
     )
 
-    CONTACT_CHOICES: list[tuple[str, str]] = [
-        ('phone', 'Телефон'),
-        ('email', 'Email'),
-        ('telegram', 'Telegram'),
-        ('viber', 'Viber'),
-    ]
-
-    preferred_contact_channel: models.CharField = models.CharField(
+    preferred_contact_channel = models.CharField(
         max_length=20,
-        choices=CONTACT_CHOICES,
+        choices=PreferredContactChannel.choices,
         blank=True,
-        verbose_name='Пріоритетний канал зв’язку'
+        verbose_name="Пріоритетний канал зв’язку",
     )
 
     def __str__(self) -> str:
@@ -71,4 +72,4 @@ class User(AbstractUser):
 
     @property
     def full_name(self) -> str:
-        return f"{self.last_name} {self.first_name} {self.middle_name}".strip()
+        return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))

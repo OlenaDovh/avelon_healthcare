@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import random
-
+from django.http import HttpRequest
 from django.utils import timezone
 
-from .ai import FALLBACK_TEXT, generate_horoscope_text
+from daily_horoscope.ai import FALLBACK_TEXT, generate_horoscope_text
 
 SESSION_KEY = "daily_horoscope"
 
@@ -19,7 +19,7 @@ HOROSCOPE_THEMES = [
 ]
 
 
-def get_or_create_daily_horoscope_for_session(request) -> dict[str, str]:
+def get_or_create_daily_horoscope_for_session(request: HttpRequest) -> dict[str, str]:
     today = timezone.localdate()
     today_str = today.strftime("%Y-%m-%d")
 
@@ -31,10 +31,8 @@ def get_or_create_daily_horoscope_for_session(request) -> dict[str, str]:
     if horoscope_data and horoscope_data.get("date") == today_str:
         return horoscope_data
 
-    seed_value = f"{today_str}-{request.session.session_key}"
-    random.seed(seed_value)
-
-    theme = random.choice(HOROSCOPE_THEMES)
+    rng = random.Random(f"{today_str}-{request.session.session_key}")
+    theme = rng.choice(HOROSCOPE_THEMES)
     weekday = today.strftime("%A")
 
     text = generate_horoscope_text(theme=theme, weekday=weekday)
@@ -45,8 +43,7 @@ def get_or_create_daily_horoscope_for_session(request) -> dict[str, str]:
         "theme": theme,
     }
 
-    if text != FALLBACK_TEXT:
-        request.session[SESSION_KEY] = result
-        request.session.modified = True
+    request.session[SESSION_KEY] = result
+    request.session.modified = True
 
     return result
