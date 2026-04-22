@@ -1,7 +1,7 @@
 INFO 2026-04-16 00:15:18,995 autoreload Watching for file changes with StatReloader
 WARNING 2026-04-16 00:15:23,477 log Not Found: /favicon.ico
 INFO 2026-04-16 00:16:18,462 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-16 00:33:37,197 views Неуспішна спроба входу в систему.
+WARNING 2026-04-16 00:33:37,197 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 INFO 2026-04-16 01:10:05,895 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
 INFO 2026-04-16 01:10:06,888 autoreload Watching for file changes with StatReloader
 INFO 2026-04-16 01:10:33,788 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\models.py changed, reloading.
@@ -207,7 +207,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\_server_cursor.py", line 98, in execute
     raise ex.with_traceback(None)
-psycopg.errors.UndefinedColumn: стовпець doctors_direction.user_id не існує
+psycopg.errors.UndefinedColumn: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ doctors_direction.user_id пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: ...OR WITH HOLD FOR SELECT "doctors_direction"."id", "doctors_d...
                                                              ^
 
@@ -329,14 +329,14 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\_server_cursor.py", line 98, in execute
     raise ex.with_traceback(None)
-django.db.utils.ProgrammingError: стовпець doctors_direction.user_id не існує
+django.db.utils.ProgrammingError: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ doctors_direction.user_id пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: ...OR WITH HOLD FOR SELECT "doctors_direction"."id", "doctors_d...
                                                              ^
 INFO 2026-04-16 02:03:51,516 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\doctors\models.py changed, reloading.
 INFO 2026-04-16 02:04:04,885 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-16 02:08:26,985 views Неуспішна спроба реєстрації користувача.
-WARNING 2026-04-16 02:08:33,930 views Неуспішна спроба реєстрації користувача.
-WARNING 2026-04-16 02:08:38,240 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 02:08:26,985 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-16 02:08:33,930 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-16 02:08:38,240 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 ERROR 2026-04-16 02:29:10,705 log Internal Server Error: /accounts/staff/
 Traceback (most recent call last):
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\django\template\smartif.py", line 181, in translate_token
@@ -431,7 +431,7 @@ WARNING 2026-04-16 11:49:05,692 log Forbidden (CSRF token from POST incorrect.):
 WARNING 2026-04-16 11:49:12,286 log Forbidden (CSRF token from POST incorrect.): /admin/login/
 WARNING 2026-04-16 11:50:32,519 log Forbidden (CSRF token from POST incorrect.): /admin/login/
 WARNING 2026-04-16 11:51:21,221 log Forbidden (CSRF token from POST incorrect.): /accounts/login/
-WARNING 2026-04-16 12:00:55,737 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 12:00:55,737 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 INFO 2026-04-16 12:07:08,230 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\signals.py changed, reloading.
 INFO 2026-04-16 12:07:09,895 autoreload Watching for file changes with StatReloader
 INFO 2026-04-16 12:07:33,586 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\apps.py changed, reloading.
@@ -444,8 +444,8 @@ INFO 2026-04-16 12:11:18,098 autoreload C:\Users\User\PycharmProjects\avelon_hea
 INFO 2026-04-16 12:11:19,385 autoreload Watching for file changes with StatReloader
 INFO 2026-04-16 12:13:24,997 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\signals.py changed, reloading.
 INFO 2026-04-16 12:13:26,342 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-16 12:15:32,373 views Неуспішна спроба реєстрації користувача.
-WARNING 2026-04-16 12:15:39,449 views Неуспішна спроба реєстрації користувача.
+WARNING 2026-04-16 12:15:32,373 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-16 12:15:39,449 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 INFO 2026-04-17 02:27:43,450 autoreload Watching for file changes with StatReloader
 WARNING 2026-04-17 02:27:47,064 log Not Found: /favicon.ico
 INFO 2026-04-17 03:14:23,769 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
@@ -531,8 +531,8 @@ INFO 2026-04-17 03:59:17,855 autoreload C:\Users\User\PycharmProjects\avelon_hea
 INFO 2026-04-17 03:59:19,764 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 03:59:27,372 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\orders\urls.py changed, reloading.
 INFO 2026-04-17 04:13:22,762 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-17 04:14:45,320 views Неуспішна спроба входу в систему.
-WARNING 2026-04-17 04:15:06,192 views Неуспішна спроба входу в систему.
+WARNING 2026-04-17 04:14:45,320 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-17 04:15:06,192 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 INFO 2026-04-17 04:36:02,157 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
 INFO 2026-04-17 04:36:03,102 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 04:36:28,077 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
@@ -719,7 +719,7 @@ Traceback (most recent call last):
   File "C:\Users\User\PycharmProjects\avelon_healthcare\appointments\utils.py", line 65, in send_appointment_email
     html_body: str = render_to_string(
                      ~~~~~~~~~~~~~~~~^
-        "avelon_healthcare/appointments/appointment_email.html",
+        "avelon_healthcare/appointments/pages/appointment_email.html",
         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
     ...<2 lines>...
         },
@@ -823,7 +823,7 @@ INFO 2026-04-17 16:30:34,589 autoreload Watching for file changes with StatReloa
 INFO 2026-04-17 16:40:03,539 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\models.py changed, reloading.
 INFO 2026-04-17 16:40:04,991 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 16:42:37,886 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-17 17:05:10,987 views Неуспішна спроба оновлення профілю. user=test_user_4
+WARNING 2026-04-17 17:05:10,987 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. user=test_user_4
 INFO 2026-04-17 17:07:28,477 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\forms.py changed, reloading.
 INFO 2026-04-17 17:07:30,406 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 17:12:49,217 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
@@ -831,8 +831,8 @@ INFO 2026-04-17 17:12:50,447 autoreload Watching for file changes with StatReloa
 INFO 2026-04-17 17:16:57,666 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\appointments\views.py changed, reloading.
 INFO 2026-04-17 17:16:58,584 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 17:17:30,810 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-17 17:23:11,760 views Неуспішна спроба оновлення профілю. user=test_user_4
-WARNING 2026-04-17 17:23:20,532 views Неуспішна спроба оновлення профілю. user=test_user_4
+WARNING 2026-04-17 17:23:11,760 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. user=test_user_4
+WARNING 2026-04-17 17:23:20,532 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. user=test_user_4
 INFO 2026-04-17 17:31:40,131 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
 INFO 2026-04-17 17:31:41,447 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 18:32:26,925 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\models.py changed, reloading.
@@ -840,11 +840,11 @@ INFO 2026-04-17 18:32:28,264 autoreload Watching for file changes with StatReloa
 INFO 2026-04-17 18:32:38,190 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
 INFO 2026-04-17 18:32:39,253 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 18:47:03,041 autoreload Watching for file changes with StatReloader
-WARNING 2026-04-17 18:47:46,075 views Неуспішна спроба оновлення профілю. user=test_user_4
-WARNING 2026-04-17 18:48:49,944 views Неуспішна спроба реєстрації користувача.
-WARNING 2026-04-17 18:51:00,677 views Неуспішна спроба входу в систему.
-WARNING 2026-04-17 18:51:20,879 views Неуспішна спроба входу в систему.
-WARNING 2026-04-17 18:51:44,325 views Неуспішна спроба входу в систему.
+WARNING 2026-04-17 18:47:46,075 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. user=test_user_4
+WARNING 2026-04-17 18:48:49,944 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-17 18:51:00,677 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-17 18:51:20,879 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
+WARNING 2026-04-17 18:51:44,325 views пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 INFO 2026-04-17 18:58:37,545 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\forms.py changed, reloading.
 INFO 2026-04-17 18:58:39,206 autoreload Watching for file changes with StatReloader
 INFO 2026-04-17 19:02:07,034 autoreload C:\Users\User\PycharmProjects\avelon_healthcare\accounts\views.py changed, reloading.
@@ -948,7 +948,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-psycopg.errors.UndefinedTable: відношення "support_chat_supportchatsession" не існує
+psycopg.errors.UndefinedTable: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 
@@ -1057,7 +1057,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-django.db.utils.ProgrammingError: відношення "support_chat_supportchatsession" не існує
+django.db.utils.ProgrammingError: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 ERROR 2026-04-19 04:10:40,326 log Internal Server Error: /support-chat/create-session/
@@ -1067,7 +1067,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-psycopg.errors.UndefinedTable: відношення "support_chat_supportchatsession" не існує
+psycopg.errors.UndefinedTable: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 
@@ -1176,7 +1176,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-django.db.utils.ProgrammingError: відношення "support_chat_supportchatsession" не існує
+django.db.utils.ProgrammingError: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 WARNING 2026-04-19 04:11:00,008 log Not Found: /static/support_chat/chat-icon.png
@@ -1201,7 +1201,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-psycopg.errors.UndefinedTable: відношення "support_chat_supportchatsession" не існує
+psycopg.errors.UndefinedTable: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 
@@ -1310,7 +1310,7 @@ Traceback (most recent call last):
            ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
   File "C:\Users\User\PycharmProjects\avelon_healthcare\.venv\Lib\site-packages\psycopg\cursor.py", line 117, in execute
     raise ex.with_traceback(None)
-django.db.utils.ProgrammingError: відношення "support_chat_supportchatsession" не існує
+django.db.utils.ProgrammingError: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ "support_chat_supportchatsession" пїЅпїЅ пїЅпїЅпїЅпїЅ
 LINE 1: INSERT INTO "support_chat_supportchatsession" ("user_id", "g...
                     ^
 WARNING 2026-04-19 04:20:02,533 log Not Found: /static/support_chat/chat-icon.png

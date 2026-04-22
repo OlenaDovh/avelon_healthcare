@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+from django.db import transaction
+
 from appointments.models import Appointment
-from appointments.services.notifications import send_appointment_email
+from appointments.tasks import send_appointment_email_task
 
 
 def fill_appointment_from_user(*, appointment: Appointment, user) -> Appointment:
@@ -26,5 +28,9 @@ def fill_appointment_from_guest_data(*, appointment: Appointment, cleaned_data: 
 
 def save_new_appointment(*, appointment: Appointment) -> Appointment:
     appointment.save()
-    send_appointment_email(appointment)
+
+    transaction.on_commit(
+        lambda: send_appointment_email_task.delay(appointment.id)
+    )
+
     return appointment

@@ -1,15 +1,3 @@
-{% load static %}
-
-<div
-    id="support-chat-root"
-    data-is-authenticated="{{ request.user.is_authenticated|yesno:'true,false' }}"
-    data-sender-name="{% if request.user.is_authenticated %}{{ request.user.full_name|default:request.user.username|escapejs }}{% else %}Гість{% endif %}"
-    data-current-session-url="{% url 'support_chat:current_session' %}"
-    data-create-session-url="{% url 'support_chat:create_session' %}"
-    data-ws-base-url="{% if request.is_secure %}wss://{% else %}ws://{% endif %}{{ request.get_host }}/ws/support-chat/"
-    data-csrf-token="{{ csrf_token }}"
-></div>
-
 <div id="support-chat-launcher" class="support-chat-launcher">
     💬
 </div>
@@ -84,5 +72,459 @@
     </div>
 </div>
 
-<link rel="stylesheet" href="{% static 'css/support_chat/widget.css' %}">
-<script src="{% static 'js/support_chat/widget.js' %}"></script>
+<style>
+    .support-chat-launcher {
+        position: fixed;
+        right: 20px;
+        bottom: 20px;
+        width: 68px;
+        height: 68px;
+        border-radius: 50%;
+        background: #198754;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        cursor: pointer;
+        z-index: 99999;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .support-chat-panel {
+        position: fixed;
+        right: 20px;
+        bottom: 100px;
+        width: 360px;
+        max-width: calc(100vw - 24px);
+        height: 560px;
+        max-height: calc(100vh - 140px);
+        background: #fff;
+        border-radius: 16px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        z-index: 100000;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .support-chat-panel.d-none {
+        display: none !important;
+    }
+
+    .support-chat-header {
+        padding: 12px 14px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .support-chat-body {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .support-chat-start-form-wrap {
+        flex: 1;
+        overflow-y: auto;
+        padding: 14px;
+    }
+
+    .support-chat-messages-wrap {
+        flex: 1;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .support-chat-messages {
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
+        padding: 12px;
+    }
+
+    .support-chat-msg {
+        max-width: 85%;
+        padding: 8px 12px;
+        border-radius: 12px;
+        margin-bottom: 8px;
+        white-space: pre-wrap;
+        word-break: break-word;
+    }
+
+    .support-chat-msg.user {
+        background: #d1e7dd;
+        margin-left: auto;
+    }
+
+    .support-chat-msg.operator {
+        background: #f1f3f5;
+        margin-right: auto;
+    }
+
+    .support-chat-msg.system {
+        background: #fff3cd;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .support-chat-input-wrap {
+        border-top: 1px solid #eee;
+        padding: 10px 12px 12px;
+        background: #fff;
+        flex-shrink: 0;
+    }
+
+    #support-chat-message-input {
+        resize: none;
+        max-height: 120px;
+    }
+
+    @media (max-width: 576px) {
+        .support-chat-launcher {
+            right: 16px;
+            bottom: 16px;
+            width: 60px;
+            height: 60px;
+            font-size: 26px;
+        }
+
+        .support-chat-panel {
+            right: 12px;
+            left: 12px;
+            width: auto;
+            bottom: 88px;
+            max-width: none;
+            height: auto;
+            max-height: calc(100vh - 110px);
+            border-radius: 14px;
+        }
+
+        .support-chat-header {
+            padding: 10px 12px;
+        }
+
+        .support-chat-start-form-wrap,
+        .support-chat-messages {
+            padding: 10px;
+        }
+
+        .support-chat-input-wrap {
+            padding: 10px;
+        }
+    }
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const launcher = document.getElementById("support-chat-launcher");
+    const panel = document.getElementById("support-chat-panel");
+    const closeBtn = document.getElementById("support-chat-close-btn");
+    const finishBtn = document.getElementById("support-chat-finish-btn");
+    const startBtn = document.getElementById("start-support-chat-btn");
+    const messagesWrap = document.getElementById("support-chat-messages-wrap");
+    const startFormWrap = document.getElementById("support-chat-start-form-wrap");
+    const messagesBox = document.getElementById("support-chat-messages");
+    const sendBtn = document.getElementById("support-chat-send-btn");
+    const newChatBtn = document.getElementById("support-chat-new-btn");
+    const input = document.getElementById("support-chat-message-input");
+    const statusNode = document.getElementById("support-chat-status");
+
+    let socket = null;
+    let sessionId = null;
+    const renderedMessageIds = new Set();
+
+    const isAuthenticated = {{ request.user.is_authenticated|yesno:"true,false" }};
+    const senderName = "{% if request.user.is_authenticated %}{{ request.user.full_name|default:request.user.username|escapejs }}{% else %}Гість{% endif %}";
+
+    function setStatus(text) {
+        if (statusNode) statusNode.textContent = text;
+    }
+
+    function openPanel() {
+        panel.classList.remove("d-none");
+    }
+
+    function closePanel() {
+        panel.classList.add("d-none");
+    }
+
+    function switchToChatMode() {
+        startFormWrap.classList.add("d-none");
+        messagesWrap.classList.remove("d-none");
+    }
+
+    function switchToStartMode() {
+        startFormWrap.classList.remove("d-none");
+        messagesWrap.classList.add("d-none");
+    }
+
+    function clearMessages() {
+        messagesBox.innerHTML = "";
+        renderedMessageIds.clear();
+    }
+
+    function renderMessage(messageId, authorType, text) {
+        if (messageId && renderedMessageIds.has(String(messageId))) {
+            return;
+        }
+
+        const item = document.createElement("div");
+        item.className = `support-chat-msg ${authorType}`;
+
+        if (messageId) {
+            item.dataset.messageId = String(messageId);
+            renderedMessageIds.add(String(messageId));
+        }
+
+        item.textContent = text;
+        messagesBox.appendChild(item);
+
+        messagesBox.scrollTo({
+            top: messagesBox.scrollHeight,
+            behavior: "smooth"
+        });
+    }
+
+    function connectWebSocket() {
+        if (!sessionId) return;
+
+        if (socket) {
+            socket.close();
+        }
+
+        const protocol = window.location.protocol === "https:" ? "wss" : "ws";
+        socket = new WebSocket(`${protocol}://${window.location.host}/ws/support-chat/${sessionId}/`);
+
+        socket.onopen = function () {
+            console.log("User WebSocket connected");
+        };
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+
+            if (data.event_type === "message") {
+                renderMessage(data.message_id, data.sender_role, data.text);
+            } else if (data.event_type === "operator_connected") {
+                renderMessage(data.message_id || `operator-${Date.now()}`, "system", data.text);
+                setStatus("Оператор підключився");
+            } else if (data.event_type === "closed") {
+                renderMessage(data.message_id || `closed-${Date.now()}`, "system", data.text);
+                setStatus("Чат завершено");
+
+                if (input) input.disabled = true;
+                if (sendBtn) sendBtn.disabled = true;
+                if (finishBtn) finishBtn.disabled = true;
+                if (newChatBtn) newChatBtn.classList.remove("d-none");
+            }
+        };
+
+        socket.onerror = function (error) {
+            console.error("User WebSocket error:", error);
+        };
+
+        socket.onclose = function (event) {
+            console.warn("User WebSocket closed:", event);
+        };
+    }
+
+    function loadExistingSession() {
+        fetch("/support-chat/current-session/")
+            .then(response => response.json())
+            .then(data => {
+                if (!data.ok || !data.session) {
+                    return;
+                }
+
+                sessionId = data.session.id;
+                switchToChatMode();
+                clearMessages();
+
+                (data.session.messages || []).forEach(message => {
+                    renderMessage(message.id, message.author_type, message.text);
+                });
+
+                if (data.session.status === "waiting") {
+                    setStatus("Очікуємо підключення оператора");
+                } else if (data.session.status === "active") {
+                    setStatus(
+                        data.session.operator_name
+                            ? `Оператор: ${data.session.operator_name}`
+                            : "Оператор підключився"
+                    );
+                } else if (data.session.status === "closed") {
+                    setStatus("Чат завершено");
+                    if (input) input.disabled = true;
+                    if (sendBtn) sendBtn.disabled = true;
+                    if (finishBtn) finishBtn.disabled = true;
+                    if (newChatBtn) newChatBtn.classList.remove("d-none");
+                }
+
+                connectWebSocket();
+            });
+    }
+
+    function startChat() {
+        const formData = new URLSearchParams();
+        const description = document.getElementById("chat-description").value.trim();
+
+        if (!description) {
+            alert("Опишіть питання");
+            return;
+        }
+
+        if (!isAuthenticated) {
+            const guestName = document.getElementById("chat-guest-name").value.trim();
+            const guestEmail = document.getElementById("chat-guest-email").value.trim();
+
+            if (!guestName) {
+                alert("Вкажіть ваше ім’я");
+                return;
+            }
+
+            if (!guestEmail) {
+                alert("Вкажіть email");
+                return;
+            }
+
+            formData.append("guest_name", guestName);
+            formData.append("guest_email", guestEmail);
+        }
+
+        formData.append("topic", document.getElementById("chat-topic").value);
+        formData.append("initial_description", description);
+
+        fetch("/support-chat/create-session/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: formData.toString()
+        })
+        .then(async response => {
+            const data = await response.json();
+            return { status: response.status, data };
+        })
+        .then(({ status, data }) => {
+            if (status >= 400 || !data.ok) {
+                console.error("Create chat error:", data);
+                alert("Не вдалося створити чат");
+                return;
+            }
+
+            sessionId = data.session_id;
+            switchToChatMode();
+            clearMessages();
+
+            if (newChatBtn) newChatBtn.classList.add("d-none");
+            if (input) input.disabled = false;
+            if (sendBtn) sendBtn.disabled = false;
+            if (finishBtn) finishBtn.disabled = false;
+
+            (data.messages || []).forEach(message => {
+                renderMessage(message.id, message.author_type, message.text);
+            });
+
+            setStatus("Очікуємо підключення оператора");
+            connectWebSocket();
+            openPanel();
+        })
+        .catch(error => {
+            console.error("Create chat request failed:", error);
+            alert("Помилка створення чату");
+        });
+    }
+
+    function sendMessage() {
+        const text = input.value.trim();
+        if (!text || !socket || socket.readyState !== WebSocket.OPEN) {
+            console.warn("Socket not ready for sending");
+            return;
+        }
+
+        socket.send(JSON.stringify({
+            type: "message",
+            sender_role: "user",
+            sender_name: senderName,
+            text: text
+        }));
+
+        input.value = "";
+    }
+
+    function finishChat() {
+        if (!socket || socket.readyState !== WebSocket.OPEN) {
+            return;
+        }
+
+        socket.send(JSON.stringify({
+            type: "close_chat"
+        }));
+    }
+
+    function resetChat() {
+        if (socket) {
+            socket.close();
+            socket = null;
+        }
+
+        sessionId = null;
+        clearMessages();
+        switchToStartMode();
+
+        if (input) {
+            input.value = "";
+            input.disabled = false;
+        }
+
+        if (sendBtn) sendBtn.disabled = false;
+        if (finishBtn) finishBtn.disabled = false;
+        if (newChatBtn) newChatBtn.classList.add("d-none");
+
+        setStatus("Чат не розпочато");
+
+        const descriptionField = document.getElementById("chat-description");
+        if (descriptionField) {
+            descriptionField.value = "";
+        }
+
+        const guestNameField = document.getElementById("chat-guest-name");
+        if (guestNameField) {
+            guestNameField.value = "";
+        }
+
+        const guestEmailField = document.getElementById("chat-guest-email");
+        if (guestEmailField) {
+            guestEmailField.value = "";
+        }
+    }
+
+    if (launcher) launcher.addEventListener("click", openPanel);
+    if (closeBtn) closeBtn.addEventListener("click", closePanel);
+    if (startBtn) startBtn.addEventListener("click", startChat);
+    if (sendBtn) sendBtn.addEventListener("click", sendMessage);
+    if (finishBtn) finishBtn.addEventListener("click", finishChat);
+    if (newChatBtn) newChatBtn.addEventListener("click", resetChat);
+
+    if (input) {
+        input.addEventListener("keydown", function (event) {
+            if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
+    }
+
+    loadExistingSession();
+});
+</script>

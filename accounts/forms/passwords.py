@@ -8,12 +8,12 @@ from django.contrib.auth.forms import (
     SetPasswordForm,
 )
 
+from accounts.tasks import send_password_reset_email_task
+
+from django.template.loader import render_to_string
+
 
 class UserPasswordChangeForm(PasswordChangeForm):
-    """
-    Форма зміни пароля для авторизованого користувача.
-    """
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
@@ -43,10 +43,6 @@ class UserPasswordChangeForm(PasswordChangeForm):
 
 
 class UserPasswordResetForm(PasswordResetForm):
-    """
-    Форма запиту на відновлення пароля через email.
-    """
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
@@ -58,12 +54,35 @@ class UserPasswordResetForm(PasswordResetForm):
             }
         )
 
+    def send_mail(
+        self,
+        subject_template_name,
+        email_template_name,
+        context,
+        from_email,
+        to_email,
+        html_email_template_name=None,
+    ):
+
+        subject = render_to_string(subject_template_name, context)
+        subject = "".join(subject.splitlines())
+
+        body = render_to_string(email_template_name, context)
+
+        html_email = None
+        if html_email_template_name:
+            html_email = render_to_string(html_email_template_name, context)
+
+        send_password_reset_email_task.delay(
+            subject=subject,
+            body=body,
+            from_email=from_email,
+            to_email=to_email,
+            html_email=html_email,
+        )
+
 
 class UserSetPasswordForm(SetPasswordForm):
-    """
-    Форма встановлення нового пароля після переходу за посиланням із листа.
-    """
-
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 

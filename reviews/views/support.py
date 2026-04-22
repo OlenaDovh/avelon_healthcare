@@ -17,7 +17,7 @@ def support_review_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/reviews/support_review_list.html",
+        "avelon_healthcare/reviews/pages/support_review_list.html",
         {"reviews": reviews},
     )
 
@@ -39,7 +39,7 @@ def support_review_reply_view(request: HttpRequest, review_id: int) -> HttpRespo
 
     return render(
         request,
-        "avelon_healthcare/reviews/support_review_reply.html",
+        "avelon_healthcare/reviews/pages/support_review_reply.html",
         {
             "form": form,
             "review": review,

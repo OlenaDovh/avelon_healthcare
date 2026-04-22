@@ -48,7 +48,7 @@ def doctor_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/doctor_list.html",
+        "avelon_healthcare/doctors/pages/doctor_list.html",
         {
             "doctors": doctors,
             "positions": positions,
@@ -78,7 +78,7 @@ def doctor_detail_view(request: HttpRequest, doctor_id: int) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/doctor_detail.html",
+        "avelon_healthcare/doctors/pages/doctor_detail.html",
         {"doctor": doctor},
     )
 
@@ -99,7 +99,7 @@ def direction_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/direction_list.html",
+        "avelon_healthcare/doctors/pages/direction_list.html",
         {"directions": directions},
     )
 
@@ -126,7 +126,7 @@ def direction_detail_view(request: HttpRequest, direction_id: int) -> HttpRespon
 
     return render(
         request,
-        "avelon_healthcare/doctors/direction_detail.html",
+        "avelon_healthcare/doctors/pages/direction_detail.html",
         {
             "direction": direction,
             "doctors": doctors,

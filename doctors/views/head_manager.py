@@ -20,7 +20,7 @@ def head_manager_doctor_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_doctor_list.html",
+        "avelon_healthcare/doctors/pages/head_manager_doctor_list.html",
         {"doctors": doctors},
     )
 
@@ -39,7 +39,7 @@ def head_manager_doctor_create_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_doctor_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_doctor_form.html",
         {"form": form},
     )
 
@@ -60,7 +60,7 @@ def head_manager_doctor_update_view(request: HttpRequest, pk: int) -> HttpRespon
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_doctor_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_doctor_form.html",
         {
             "form": form,
             "doctor": doctor,
@@ -75,7 +75,7 @@ def head_manager_direction_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_direction_list.html",
+        "avelon_healthcare/doctors/pages/head_manager_direction_list.html",
         {"directions": directions},
     )
 
@@ -94,7 +94,7 @@ def head_manager_direction_create_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_direction_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_direction_form.html",
         {"form": form},
     )
 
@@ -115,7 +115,7 @@ def head_manager_direction_update_view(request: HttpRequest, pk: int) -> HttpRes
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_direction_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_direction_form.html",
         {
             "form": form,
             "direction": direction,
@@ -134,7 +134,7 @@ def head_manager_schedule_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_schedule_list.html",
+        "avelon_healthcare/doctors/pages/head_manager_schedule_list.html",
         {"schedules": schedules},
     )
 
@@ -163,7 +163,7 @@ def head_manager_schedule_create_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_schedule_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_schedule_form.html",
         {
             "form": form,
             "formset": formset,
@@ -191,7 +191,7 @@ def head_manager_schedule_update_view(request: HttpRequest, pk: int) -> HttpResp
 
     return render(
         request,
-        "avelon_healthcare/doctors/head_manager_schedule_form.html",
+        "avelon_healthcare/doctors/pages/head_manager_schedule_form.html",
         {
             "form": form,
             "formset": formset,

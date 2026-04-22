@@ -2,14 +2,15 @@ from __future__ import annotations
 
 from django.contrib.auth import get_user_model
 from django.contrib.sites.shortcuts import get_current_site
+from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from accounts.tasks import send_html_email_task
 from accounts.tokens import email_verification_token
-from core.utils.email import send_html_email
 
 User = get_user_model()
 
@@ -42,8 +43,10 @@ def send_verification_email(
         },
     )
 
-    send_html_email(
-        subject=subject,
-        html_body=html_body,
-        to=[target_email],
+    transaction.on_commit(
+        lambda: send_html_email_task.delay(
+            subject=subject,
+            html_body=html_body,
+            to=[target_email],
+        )
     )

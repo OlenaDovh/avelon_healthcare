@@ -8,7 +8,7 @@ from appointments.models import Appointment
 
 def send_appointment_email(appointment: Appointment) -> None:
     html_body = render_to_string(
-        "avelon_healthcare/appointments/appointment_email.html",
+        "avelon_healthcare/appointments/email/appointment_email.html",
         {
             "appointment": appointment,
         },

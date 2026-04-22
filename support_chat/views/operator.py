@@ -26,7 +26,7 @@ def operator_dashboard_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/support_chat/operator_dashboard.html",
+        "avelon_healthcare/support_chat/pages/operator_dashboard.html",
         {
             "waiting_sessions": waiting_sessions,
             "active_sessions": active_sessions,
@@ -107,7 +107,7 @@ def operator_chat_room_view(request: HttpRequest, session_id: int) -> HttpRespon
 
     return render(
         request,
-        "avelon_healthcare/support_chat/operator_chat_room.html",
+        "avelon_healthcare/support_chat/pages/operator_chat_room.html",
         {
             "chat_session": session,
             "messages": session.messages.all(),

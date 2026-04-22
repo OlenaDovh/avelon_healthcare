@@ -24,7 +24,7 @@ def review_list_view(request: HttpRequest) -> HttpResponse:
 
     return render(
         request,
-        "avelon_healthcare/reviews/review_list.html",
+        "avelon_healthcare/reviews/pages/review_list.html",
         {"page_obj": page_obj},
     )
 
@@ -61,7 +61,7 @@ def review_create_view(request: HttpRequest, appointment_id: int) -> HttpRespons
 
     return render(
         request,
-        "avelon_healthcare/reviews/review_form.html",
+        "avelon_healthcare/reviews/pages/review_form.html",
         {
             "form": form,
             "appointment": appointment,

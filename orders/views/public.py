@@ -10,7 +10,7 @@ from analysis.models import Analysis
 from orders.forms import AuthenticatedOrderForm, GuestOrderForm
 from orders.services.checkout import create_order_from_analyses
 from orders.services.forms import get_order_form
-from orders.services.notifications import send_order_email
+from orders.tasks import send_order_email_task
 
 
 def _get_cart(request: HttpRequest) -> dict[str, int]:
@@ -77,7 +77,10 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
         email=email,
     )
 
-    send_order_email(order)
+    transaction.on_commit(
+        lambda: send_order_email_task.delay(order.id)
+    )
+
     _clear_cart(request)
 
     messages.success(request, "Замовлення аналізів успішно оформлено.")

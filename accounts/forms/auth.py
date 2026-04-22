@@ -11,9 +11,7 @@ User = get_user_model()
 
 
 class RegisterForm(UserCreationForm):
-    """
-    Форма реєстрації нового користувача.
-    """
+    """Форма для реєстрації нового користувача."""
 
     email = forms.EmailField(
         label="Електронна пошта",
@@ -49,6 +47,16 @@ class RegisterForm(UserCreationForm):
         )
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Ініціалізує форму та налаштовує поля.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["username"].label = "Логін"
@@ -86,6 +94,15 @@ class RegisterForm(UserCreationForm):
         )
 
     def clean_email(self) -> str:
+        """
+        Перевіряє унікальність email та нормалізує його.
+
+        Returns:
+            str: Валідований email.
+
+        Raises:
+            ValidationError: Якщо email вже існує або очікує підтвердження.
+        """
         email: str = self.cleaned_data["email"].lower().strip()
 
         if User.objects.filter(email__iexact=email).exists():
@@ -99,6 +116,15 @@ class RegisterForm(UserCreationForm):
         return email
 
     def clean_phone(self) -> str:
+        """
+        Перевіряє унікальність номера телефону.
+
+        Returns:
+            str: Валідований номер телефону.
+
+        Raises:
+            ValidationError: Якщо номер вже використовується.
+        """
         phone: str = self.cleaned_data["phone"].strip()
 
         if User.objects.filter(phone=phone).exists():
@@ -108,9 +134,7 @@ class RegisterForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    """
-    Форма входу користувача.
-    """
+    """Форма для входу користувача."""
 
     login = forms.CharField(
         label="Логін або Email",
@@ -132,6 +156,15 @@ class LoginForm(forms.Form):
     )
 
     def clean(self) -> dict[str, Any]:
+        """
+        Аутентифікує користувача та додає його в cleaned_data.
+
+        Returns:
+            dict[str, Any]: Очищені дані форми з ключем 'user'.
+
+        Raises:
+            ValidationError: Якщо дані невірні або email не підтверджений.
+        """
         cleaned_data: dict[str, Any] = super().clean()
         login_value: str | None = cleaned_data.get("login")
         password: str | None = cleaned_data.get("password")
