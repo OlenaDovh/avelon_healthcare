@@ -2,6 +2,14 @@ from __future__ import annotations
 
 from django.http import HttpRequest
 
+from accounts.constants import (
+    CONTENT_MANAGER_GROUP,
+    DOCTOR_GROUP,
+    HEAD_MANAGER_GROUP,
+    PATIENT_GROUP,
+    SUPPORT_GROUP,
+)
+
 
 def user_roles(request: HttpRequest) -> dict[str, bool]:
     user = request.user
@@ -17,15 +25,15 @@ def user_roles(request: HttpRequest) -> dict[str, bool]:
             "is_superadmin": False,
         }
 
-    group_names: set[str] = set(user.groups.values_list("name", flat=True))
+    group_names = set(user.groups.values_list("name", flat=True))
 
-    is_support: bool = "support" in group_names
-    is_doctor: bool = "doctor" in group_names
-    is_head_manager: bool = "head_manager" in group_names
-    is_content_manager: bool = "content_manager" in group_names
-    is_superadmin: bool = user.is_superuser
+    is_support = SUPPORT_GROUP in group_names
+    is_doctor = DOCTOR_GROUP in group_names
+    is_head_manager = HEAD_MANAGER_GROUP in group_names
+    is_content_manager = CONTENT_MANAGER_GROUP in group_names
+    is_superadmin = user.is_superuser
 
-    is_staff_role: bool = any(
+    is_staff_role = any(
         (
             is_support,
             is_doctor,
@@ -36,7 +44,7 @@ def user_roles(request: HttpRequest) -> dict[str, bool]:
     )
 
     return {
-        "is_patient": "patient" in group_names,
+        "is_patient": PATIENT_GROUP in group_names,
         "is_support": is_support,
         "is_doctor": is_doctor,
         "is_head_manager": is_head_manager,

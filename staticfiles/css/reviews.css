@@ -1,0 +1,8 @@
+.review-form-container {
+    max-width: 700px;
+}
+.review-reply {
+    border-top: 1px solid #dee2e6;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}

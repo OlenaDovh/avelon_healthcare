@@ -1,48 +1,48 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import User
+
+from accounts.models import User
 
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
-    """
-    Адмін-панель для кастомного користувача.
-
-    Додає відображення додаткових полів:
-    - телефон
-    - знижка
-    - статус підтвердження email
-    """
-
-    model: type[User] = User
+    model = User
 
     fieldsets = UserAdmin.fieldsets + (
-        ('Додаткові поля', {
-            'fields': (
-                'phone',
-                'email_verified',
-                'discount',
-                'birth_date',
-                'preferred_contact_channel',
+        ("Додаткові поля", {
+            "fields": (
+                "phone",
+                "pending_email",
+                "email_verified",
+                "discount",
+                "birth_date",
+                "preferred_contact_channel",
             )
         }),
     )
 
     add_fieldsets = UserAdmin.add_fieldsets + (
-        ('Додаткові поля', {
-            'fields': ('email', 'phone'),
+        ("Додаткові поля", {
+            "fields": ("email", "phone"),
         }),
     )
 
     list_display = (
-        'username',
-        'first_name',
-        'last_name',
-        'middle_name',
-        'phone',
-        'email',
-        'is_staff',
-        'email_verified',
+        "username",
+        "first_name",
+        "last_name",
+        "middle_name",
+        "phone",
+        "email",
+        "pending_email",
+        "is_staff",
+        "email_verified",
     )
 
-    search_fields = ('username', 'email', 'phone')
+    list_filter = (
+        "is_staff",
+        "is_superuser",
+        "email_verified",
+    )
+
+    search_fields = ("username", "email", "phone", "pending_email")

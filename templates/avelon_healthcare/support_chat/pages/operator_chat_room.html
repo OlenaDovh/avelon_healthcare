@@ -1,0 +1,8 @@
+{% load static %}
+
+<script>
+    window.CHAT_SESSION_ID = "{{ chat_session.id }}";
+    window.CHAT_SENDER_NAME = "{{ request.user.full_name|default:request.user.username|escapejs }}";
+</script>
+
+<script src="{% static 'js/support_chat/chat_room.js' %}"></script>

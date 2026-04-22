@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import logging
 import time
+from collections.abc import Callable
 from functools import wraps
+from typing import Any
 
 from django.conf import settings
 from google import genai
 
+logger = logging.getLogger(__name__)
 
 FALLBACK_TEXT = (
     "Сьогодні хороший день, щоб подбати про свій внутрішній баланс. "
@@ -13,14 +17,10 @@ FALLBACK_TEXT = (
 )
 
 
-def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0):
-    """
-    Retry-декоратор для тимчасових помилок AI API.
-    """
-
-    def decorator(func):
+def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0) -> Callable:
+    def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
             current_delay = delay
 
             for attempt in range(1, max_attempts + 1):
@@ -41,11 +41,13 @@ def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0):
                     )
 
                     if not retryable or attempt == max_attempts:
-                        raise ex
+                        raise
 
-                    print(
-                        f"Attempt {attempt} failed: {ex}. "
-                        f"Retrying in {current_delay}s..."
+                    logger.warning(
+                        "Gemini attempt %s failed: %s. Retrying in %.1fs",
+                        attempt,
+                        ex,
+                        current_delay,
                     )
                     time.sleep(current_delay)
                     current_delay *= backoff
@@ -74,10 +76,6 @@ def _request_gemini_text(prompt: str) -> str:
 
 
 def generate_horoscope_text(theme: str, weekday: str) -> str:
-    """
-    Генерує позитивний wellness-прогноз на день через Gemini API.
-    """
-
     if not settings.GEMINI_API_KEY:
         return FALLBACK_TEXT
 
@@ -105,6 +103,6 @@ def generate_horoscope_text(theme: str, weekday: str) -> str:
 
     try:
         return _request_gemini_text(prompt)
-    except Exception as e:
-        print("GEMINI FINAL ERROR:", str(e))
+    except Exception as exc:
+        logger.exception("Gemini final error: %s", exc)
         return FALLBACK_TEXT

@@ -1,0 +1,56 @@
+{% extends "avelon_healthcare/base.html" %}
+{% load static %}
+
+{% block title %}Відгуки{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Відгуки пацієнтів</h1>
+
+{% for review in page_obj %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <p class="mb-2">{{ review.text }}</p>
+
+            <p class="text-muted mb-2">
+                <strong>{{ review.user.username }}</strong>,
+                {{ review.created_at|date:"d.m.Y H:i" }}
+            </p>
+
+            {% if review.clinic_reply %}
+                <div class="review-reply">
+                    <p class="mb-1"><strong>Відповідь клініки:</strong></p>
+                    <p class="mb-0">{{ review.clinic_reply }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% empty %}
+    <p>Відгуків поки немає.</p>
+{% endfor %}
+
+{% if page_obj.paginator.num_pages > 1 %}
+    <nav aria-label="Pagination">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Попередня</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">{{ page_obj.number }}</span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Наступна</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock %}

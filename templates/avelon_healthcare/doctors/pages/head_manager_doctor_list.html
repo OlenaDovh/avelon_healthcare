@@ -1,0 +1,56 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block title %}Лікарі{% endblock %}
+
+{% block content %}
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Лікарі</h1>
+        <a href="{% url 'doctors:head_manager_doctor_create' %}" class="btn btn-primary">
+            Створити лікаря
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>ПІБ</th>
+                <th>Посада</th>
+                <th>Напрями</th>
+                <th>Телефон</th>
+                <th>Email</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for doctor in doctors %}
+                <tr>
+                    <td>{{ doctor.id }}</td>
+                    <td>{{ doctor.full_name|default:"—" }}</td>
+                    <td>{{ doctor.position|default:"—" }}</td>
+                    <td>
+                        {% for direction in doctor.directions.all %}
+                            <span class="badge bg-light text-dark border">{{ direction.name }}</span>
+                            {% empty %}
+                            —
+                        {% endfor %}
+                    </td>
+                    <td>{{ doctor.user.phone|default:"—" }}</td>
+                    <td>{{ doctor.user.email|default:"—" }}</td>
+                    <td class="text-end">
+                        <a href="{% url 'doctors:head_manager_doctor_update' doctor.id %}"
+                           class="btn btn-sm btn-outline-primary">
+                            Редагувати
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">Лікарів не знайдено.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

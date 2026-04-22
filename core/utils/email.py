@@ -1,3 +1,4 @@
+# core/utils/email.py
 from __future__ import annotations
 
 from django.conf import settings
@@ -12,21 +13,9 @@ def send_html_email(
     to: list[str],
     attachments: list[tuple[str, bytes, str]] | None = None,
 ) -> None:
-    """
-    Надсилає HTML-лист.
-
-    Args:
-        subject (str): Тема листа.
-        html_body (str): HTML-вміст листа.
-        to (list[str]): Список отримувачів.
-        attachments (list[tuple[str, bytes, str]] | None): Вкладення.
-
-    Returns:
-        None
-    """
     text_body: str = strip_tags(html_body)
 
-    email: EmailMultiAlternatives = EmailMultiAlternatives(
+    email = EmailMultiAlternatives(
         subject=subject,
         body=text_body,
         from_email=settings.DEFAULT_FROM_EMAIL,

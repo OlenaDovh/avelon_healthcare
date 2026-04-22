@@ -1,0 +1,1 @@
+from .pages import about_view, contacts_view, home_view, promotions_view

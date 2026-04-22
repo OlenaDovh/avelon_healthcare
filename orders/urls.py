@@ -2,13 +2,16 @@ from __future__ import annotations
 
 from django.urls import path
 
-from .views import (
+from orders.views import (
     order_cancel_view,
     order_create_view,
     order_detail_view,
+    order_invoice_view,
     order_list_view,
     order_pay_view,
-    order_invoice_view, support_order_list_view, support_order_create_view, support_order_update_view,
+    support_order_create_view,
+    support_order_list_view,
+    support_order_update_view,
 )
 
 app_name = "orders"

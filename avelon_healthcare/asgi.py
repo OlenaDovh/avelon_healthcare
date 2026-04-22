@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "avelon_healthcare.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "avelon_healthcare.settings.local")
 
 from django.core.asgi import get_asgi_application
 

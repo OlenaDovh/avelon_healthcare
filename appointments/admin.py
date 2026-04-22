@@ -35,7 +35,7 @@ class AppointmentAdmin(admin.ModelAdmin):
         "user__email",
         "last_name",
         "first_name",
-        "middle_name"
+        "middle_name",
         "phone",
         "email",
         "doctor__full_name",
@@ -51,7 +51,7 @@ class AppointmentAdmin(admin.ModelAdmin):
                     "user",
                     "last_name",
                     "first_name",
-                    "middle_name"
+                    "middle_name",
                     "phone",
                     "email",
                     "direction",
