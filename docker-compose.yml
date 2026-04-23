@@ -3,45 +3,55 @@ services:
     image: postgres:16
     restart: always
     environment:
-      POSTGRES_DB: avelon_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: db1304pgapp
-    ports:
-      - "5432:5432"
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  worker:
-    build: .
-    command: celery -A config worker -l info
-    volumes:
-      - .:/app
-      - media_data:/app/media
-    env_file:
-      - .env
-    depends_on:
-      - redis
-      - db
-
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-      - media_data:/app/media
-      - static_data:/app/staticfiles
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - redis
-    env_file:
-      - .env
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7-alpine
+    restart: always
+
+  web:
+    build: .
+    restart: always
+    command: >
+      sh -c "python manage.py migrate --noinput &&
+          python manage.py collectstatic --noinput &&
+          python manage.py setup_roles &&
+          daphne -b 0.0.0.0 -p 8000 avelon_healthcare.asgi:application"
     ports:
-      - "6379:6379"
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - media_data:/app/media
+      - static_data:/app/staticfiles
+    env_file:
+      - .env
+
+  worker:
+    build: .
+    restart: always
+    command: celery -A avelon_healthcare worker -l info
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    volumes:
+      - media_data:/app/media
+    env_file:
+      - .env
 
 volumes:
   postgres_data:
