@@ -1,26 +1,42 @@
 from __future__ import annotations
 
 from io import BytesIO
+from pathlib import Path
 
+from django.conf import settings
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 
 from orders.models import Order
 
 
+def _register_fonts() -> None:
+    fonts_dir = Path(settings.BASE_DIR) / "static" / "fonts"
+
+    regular_font_path = fonts_dir / "DejaVuSans.ttf"
+    bold_font_path = fonts_dir / "DejaVuSans-Bold.ttf"
+
+    pdfmetrics.registerFont(TTFont("DejaVuSans", str(regular_font_path)))
+    pdfmetrics.registerFont(TTFont("DejaVuSans-Bold", str(bold_font_path)))
+
+
 def generate_order_invoice_pdf(order: Order) -> bytes:
+    _register_fonts()
+
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
     _, height = A4
 
     y = int(height - 50)
 
-    pdf.setFont("Helvetica-Bold", 16)
+    pdf.setFont("DejaVuSans-Bold", 16)
     pdf.drawString(50, y, f"Рахунок на оплату #{order.id}")
     y -= 35
 
-    pdf.setFont("Helvetica", 11)
+    pdf.setFont("DejaVuSans", 11)
     pdf.drawString(50, y, "Клініка: Avelon Healthcare")
     y -= 20
     pdf.drawString(50, y, "ЄДРПОУ: 12345678")
@@ -34,11 +50,11 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
 
     payer_name = order.full_name or order.customer_name
 
-    pdf.setFont("Helvetica-Bold", 12)
+    pdf.setFont("DejaVuSans-Bold", 12)
     pdf.drawString(50, y, "Дані замовлення")
     y -= 25
 
-    pdf.setFont("Helvetica", 11)
+    pdf.setFont("DejaVuSans", 11)
     pdf.drawString(50, y, f"Платник: {payer_name}")
     y -= 20
     pdf.drawString(50, y, f"Телефон: {order.phone}")
@@ -52,11 +68,11 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
     pdf.drawString(50, y, f"Сума: {order.total_price} грн")
     y -= 35
 
-    pdf.setFont("Helvetica-Bold", 12)
+    pdf.setFont("DejaVuSans-Bold", 12)
     pdf.drawString(50, y, "Перелік аналізів")
     y -= 25
 
-    pdf.setFont("Helvetica-Bold", 10)
+    pdf.setFont("DejaVuSans-Bold", 10)
     pdf.drawString(50, y, "Назва аналізу")
     pdf.drawString(340, y, "Термін")
     pdf.drawString(440, y, "Ціна")
@@ -65,12 +81,12 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
     pdf.line(50, y, 550, y)
     y -= 20
 
-    pdf.setFont("Helvetica", 10)
+    pdf.setFont("DejaVuSans", 10)
 
     for item in order.items.all():
         if y < 80:
             pdf.showPage()
-            pdf.setFont("Helvetica", 10)
+            pdf.setFont("DejaVuSans", 10)
             y = int(height - 50)
 
         pdf.drawString(50, y, str(item.analysis.name)[:45])
@@ -82,7 +98,7 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
     pdf.line(50, y, 550, y)
     y -= 25
 
-    pdf.setFont("Helvetica-Bold", 12)
+    pdf.setFont("DejaVuSans-Bold", 12)
     pdf.drawString(340, y, "Разом:")
     pdf.drawString(440, y, f"{order.total_price} грн")
 
