@@ -59,14 +59,18 @@ def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0) -> Ca
     return decorator
 
 
-@retry()
 def _request_gemini_text(prompt: str) -> str:
-    client = genai.Client(api_key=settings.GEMINI_API_KEY)
+    if genai is None:
+        raise RuntimeError("Gemini library not installed")
 
-    response = client.models.generate_content(
-        model=settings.GEMINI_MODEL,
-        contents=prompt,
-    )
+    if not settings.GEMINI_API_KEY:
+        raise RuntimeError("Missing GEMINI_API_KEY")
+
+    genai.configure(api_key=settings.GEMINI_API_KEY)
+
+    model = genai.GenerativeModel(settings.GEMINI_MODEL)
+
+    response = model.generate_content(prompt)
 
     text = (response.text or "").strip()
     if not text:
