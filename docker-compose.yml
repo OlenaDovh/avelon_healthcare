@@ -9,7 +9,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -21,11 +21,7 @@ services:
   web:
     build: .
     restart: always
-    command: >
-      sh -c "python manage.py migrate --noinput &&
-          python manage.py collectstatic --noinput &&
-          python manage.py setup_roles &&
-          daphne -b 0.0.0.0 -p 8000 avelon_healthcare.asgi:application"
+    command: daphne -b 0.0.0.0 -p 8000 avelon_healthcare.asgi:application
     ports:
       - "8000:8000"
     depends_on:
@@ -42,7 +38,7 @@ services:
   worker:
     build: .
     restart: always
-    command: celery -A avelon_healthcare worker -l info
+    command: celery -A avelon_healthcare worker -l info --concurrency=1
     depends_on:
       db:
         condition: service_healthy
