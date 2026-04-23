@@ -7,7 +7,7 @@ from functools import wraps
 from typing import Any
 
 from django.conf import settings
-from google import genai
+import google.generativeai as genai
 
 logger = logging.getLogger(__name__)
 
