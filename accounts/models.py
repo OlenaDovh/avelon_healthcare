@@ -80,6 +80,10 @@ class User(AbstractUser):
         if not self.phone:
             self.phone = None
 
+        if self.is_superuser and self.email:
+            self.email_verified = True
+            self.pending_email = ""
+
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:

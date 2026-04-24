@@ -18,6 +18,7 @@ from doctors.views import (
     head_manager_schedule_list_view,
     head_manager_schedule_update_view,
 )
+from doctors.views.doctor import doctor_schedule_list_view
 
 app_name = "doctors"
 
@@ -59,5 +60,10 @@ urlpatterns = [
         "head-manager/ajax/load-doctor-directions/",
         head_manager_load_doctor_directions_view,
         name="head_manager_load_doctor_directions",
+    ),
+    path(
+        "doctor/schedule/",
+        doctor_schedule_list_view,
+        name="doctor_schedule_list"
     ),
 ]

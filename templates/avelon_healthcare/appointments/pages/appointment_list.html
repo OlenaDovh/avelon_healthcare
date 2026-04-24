@@ -30,9 +30,22 @@
                                 <a href="{% url 'appointments:appointment_detail' appointment.id %}" class="btn btn-sm btn-outline-primary">
                                     Деталі
                                 </a>
+
+                                {% if appointment.status == "completed" %}
+                                    {% if appointment.review %}
+                                        <a href="{% url 'reviews:review_list' %}" class="btn btn-sm btn-outline-secondary">
+                                            Відгук залишено
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'reviews:review_create' appointment.id %}" class="btn btn-sm btn-success">
+                                            Залишити відгук
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+
                                 {% if appointment.status == "planned" %}
                                     <a href="{% url 'appointments:appointment_cancel' appointment.id %}" class="btn btn-sm btn-outline-danger">
-                                        Відхилити
+                                        Скасувати
                                     </a>
                                 {% endif %}
                             </td>
