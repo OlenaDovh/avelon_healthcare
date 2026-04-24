@@ -11,6 +11,6 @@ def doctor_appointment_list_view(request):
         doctor=doctor
     ).select_related("patient", "direction").order_by("-appointment_date")
 
-    return render(request, "appointments/pages/doctor_appointment_list.html", {
+    return render(request, "avelon_healthcare/appointments/pages/doctor_appointment_list.html", {
         "appointments": appointments
     })

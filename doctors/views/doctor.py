@@ -11,6 +11,6 @@ def doctor_schedule_list_view(request):
         doctor=doctor
     ).prefetch_related("periods", "direction").order_by("-work_date")
 
-    return render(request, "doctors/pages/doctor_schedule_list.html", {
+    return render(request, "avelon_healthcare/doctors/pages/doctor_schedule_list.html", {
         "workdays": workdays
     })
