@@ -46,3 +46,10 @@ class CustomUserAdmin(UserAdmin):
     )
 
     search_fields = ("username", "email", "phone", "pending_email")
+
+    def save_model(self, request, obj, form, change):
+        if obj.email:
+            obj.email_verified = True
+            obj.pending_email = ""
+
+        super().save_model(request, obj, form, change)
