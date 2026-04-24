@@ -41,6 +41,15 @@ register(SupportChatMessageFactory)
 
 @pytest.fixture
 def user(db):
+    """
+    Виконує логіку `user`.
+
+    Args:
+        db: Вхідний параметр `db`.
+
+    Returns:
+        Any: Результат виконання.
+    """
     return User.objects.create_user(
         email="user@example.com",
         password="testpass123",
@@ -53,5 +62,15 @@ def user(db):
 
 @pytest.fixture
 def auth_client(client, user):
+    """
+    Виконує логіку `auth_client`.
+
+    Args:
+        client: Вхідний параметр `client`.
+        user: Вхідний параметр `user`.
+
+    Returns:
+        Any: Результат виконання.
+     """
     client.force_login(user)
     return client
