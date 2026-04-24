@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
@@ -39,6 +40,8 @@ class User(AbstractUser):
     phone = models.CharField(
         max_length=13,
         unique=True,
+        null=True,
+        blank=True,
         validators=[phone_validator],
         verbose_name="Номер телефону",
     )
@@ -66,6 +69,18 @@ class User(AbstractUser):
         blank=True,
         verbose_name="Пріоритетний канал зв’язку",
     )
+
+    def clean(self):
+        super().clean()
+
+        if not self.is_superuser and not self.phone:
+            raise ValidationError({"phone": "Телефон обовʼязковий для користувача."})
+
+    def save(self, *args, **kwargs):
+        if not self.phone:
+            self.phone = None
+
+        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.full_name or self.username
