@@ -65,10 +65,20 @@
 
         {% if is_doctor or is_superadmin %}
             <div class="col-md-6">
-                <div class="card h-100">
+                <div class="card h-100 border-primary">
                     <div class="card-body">
                         <h5 class="card-title">Кабінет лікаря</h5>
-                        <p class="card-text">Мої записи, мій графік, висновки.</p>
+                        <p class="card-text">
+                            Перегляд власних записів на прийом, робочого графіку та додавання висновків.
+                        </p>
+
+                        <a href="{% url 'appointments:doctor_appointment_list' %}" class="btn btn-primary">
+                            Мої прийоми
+                        </a>
+
+                        <a href="{% url 'doctors:doctor_schedule_list' %}" class="btn btn-primary">
+                            Мій графік
+                        </a>
                     </div>
                 </div>
             </div>

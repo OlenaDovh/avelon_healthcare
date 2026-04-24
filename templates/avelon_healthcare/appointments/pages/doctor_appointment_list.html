@@ -1,0 +1,26 @@
+{% extends "avelon_healthcare/base.html" %}
+
+{% block content %}
+<h1>Мої прийоми</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Пацієнт</th>
+            <th>Дата</th>
+            <th>Час</th>
+            <th>Статус</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for a in appointments %}
+        <tr>
+            <td>{{ a.patient.full_name }}</td>
+            <td>{{ a.appointment_date }}</td>
+            <td>{{ a.appointment_time_range }}</td>
+            <td>{{ a.get_status_display }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

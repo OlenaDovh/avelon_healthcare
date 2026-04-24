@@ -7,13 +7,14 @@ from functools import wraps
 from typing import Any
 
 from django.conf import settings
-import google.generativeai as genai
+from google import genai
 
 logger = logging.getLogger(__name__)
 
 FALLBACK_TEXT = (
     "Сьогодні хороший день, щоб подбати про свій внутрішній баланс. "
-    "Навіть кілька хвилин спокою, вода і м’який ритм дня допоможуть тобі відчути більше сил та наснаги для майбутніх звернень."
+    "Навіть кілька хвилин спокою, вода і м’який ритм дня допоможуть тобі "
+    "відчути більше сил та наснаги."
 )
 
 
@@ -59,18 +60,17 @@ def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0) -> Ca
     return decorator
 
 
+@retry()
 def _request_gemini_text(prompt: str) -> str:
-    if genai is None:
-        raise RuntimeError("Gemini library not installed")
-
     if not settings.GEMINI_API_KEY:
         raise RuntimeError("Missing GEMINI_API_KEY")
 
-    genai.configure(api_key=settings.GEMINI_API_KEY)
+    client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
-    model = genai.GenerativeModel(settings.GEMINI_MODEL)
-
-    response = model.generate_content(prompt)
+    response = client.models.generate_content(
+        model=settings.GEMINI_MODEL,
+        contents=prompt,
+    )
 
     text = (response.text or "").strip()
     if not text:

@@ -14,6 +14,7 @@ from appointments.views import (
     support_appointment_list_view,
     support_appointment_update_view,
 )
+from appointments.views.doctor import doctor_appointment_list_view
 
 app_name = "appointments"
 
@@ -31,5 +32,10 @@ urlpatterns = [
         "staff/<int:appointment_id>/edit/",
         support_appointment_update_view,
         name="support_appointment_update",
+    ),
+    path(
+        "doctor/",
+        doctor_appointment_list_view,
+        name="doctor_appointment_list"
     ),
 ]
