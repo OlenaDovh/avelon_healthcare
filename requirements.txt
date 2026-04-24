@@ -13,3 +13,4 @@ daphne>=4.0
 whitenoise>=6.0
 asgiref
 google-generativeai>=0.5,<1.0
+
