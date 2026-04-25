@@ -1,19 +1,16 @@
-from __future__ import annotations
+"""Модуль analysis/context_processors.py.
 
+Містить функціональність застосунку Avelon Healthcare."""
+from __future__ import annotations
 from django.http import HttpRequest
 
-
 def cart_items_count(request: HttpRequest) -> dict[str, int]:
-    """
-    Додає кількість елементів кошика в контекст шаблонів.
+    """Виконує логіку `cart_items_count`.
 
-    Args:
-        request (HttpRequest): HTTP-запит користувача.
+Args:
+    request: Вхідне значення для виконання операції.
 
-    Returns:
-        dict[str, int]: Кількість елементів кошика.
-    """
-    cart: dict[str, int] = request.session.get("cart", {})
-    return {
-        "cart_items_count": len(cart),
-    }
+Returns:
+    Результат виконання операції."""
+    cart: dict[str, int] = request.session.get('cart', {})
+    return {'cart_items_count': len(cart)}

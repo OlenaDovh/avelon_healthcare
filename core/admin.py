@@ -1,34 +1,29 @@
+"""Модуль core/admin.py.
+
+Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
-
 from django.contrib import admin
-
 from .models import ClinicInfo, ContactInfo, Promotion
-
 
 @admin.register(ClinicInfo)
 class ClinicInfoAdmin(admin.ModelAdmin):
-    """
-    Адмін-інтерфейс для сторінки "Про клініку".
-    """
+    """Клас ClinicInfoAdmin.
 
-    list_display = ("title",)
-
+Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    list_display = ('title',)
 
 @admin.register(ContactInfo)
 class ContactInfoAdmin(admin.ModelAdmin):
-    """
-    Адмін-інтерфейс для контактної інформації.
-    """
+    """Клас ContactInfoAdmin.
 
-    list_display = ("address", "work_schedule", "phone_1", "email")
-
+Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    list_display = ('address', 'work_schedule', 'phone_1', 'email')
 
 @admin.register(Promotion)
 class PromotionAdmin(admin.ModelAdmin):
-    """
-    Адмін-інтерфейс для акцій.
-    """
+    """Клас PromotionAdmin.
 
-    list_display = ("title", "end_date", "created_at")
-    list_filter = ("end_date",)
-    search_fields = ("title", "description")
+Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    list_display = ('title', 'end_date', 'created_at')
+    list_filter = ('end_date',)
+    search_fields = ('title', 'description')

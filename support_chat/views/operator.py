@@ -1,115 +1,73 @@
-from __future__ import annotations
+"""Модуль support_chat/views/operator.py.
 
+Містить функціональність застосунку Avelon Healthcare."""
+from __future__ import annotations
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
-
 from accounts.permissions import support_required
 from support_chat.models import SupportChatSession, SupportChatStatus
 from support_chat.services import assign_operator_to_chat
 
-
 @login_required
 @support_required
 def operator_dashboard_view(request: HttpRequest) -> HttpResponse:
-    waiting_sessions = SupportChatSession.objects.filter(
-        status=SupportChatStatus.WAITING
-    ).order_by("created_at")
+    """Виконує логіку `operator_dashboard_view`.
 
-    active_sessions = SupportChatSession.objects.filter(
-        operator=request.user,
-        status=SupportChatStatus.ACTIVE,
-    ).order_by("-connected_at")
+Args:
+    request: Вхідне значення для виконання операції.
 
-    return render(
-        request,
-        "avelon_healthcare/support_chat/pages/operator_dashboard.html",
-        {
-            "waiting_sessions": waiting_sessions,
-            "active_sessions": active_sessions,
-        },
-    )
-
+Returns:
+    Результат виконання операції."""
+    waiting_sessions = SupportChatSession.objects.filter(status=SupportChatStatus.WAITING).order_by('created_at')
+    active_sessions = SupportChatSession.objects.filter(operator=request.user, status=SupportChatStatus.ACTIVE).order_by('-connected_at')
+    return render(request, 'avelon_healthcare/support_chat/pages/operator_dashboard.html', {'waiting_sessions': waiting_sessions, 'active_sessions': active_sessions})
 
 @login_required
 @support_required
 def operator_dashboard_data_view(request: HttpRequest) -> JsonResponse:
-    waiting_sessions = SupportChatSession.objects.filter(
-        status=SupportChatStatus.WAITING
-    )
+    """Виконує логіку `operator_dashboard_data_view`.
 
-    active_sessions = SupportChatSession.objects.filter(
-        operator=request.user,
-        status=SupportChatStatus.ACTIVE,
-    )
+Args:
+    request: Вхідне значення для виконання операції.
 
-    return JsonResponse(
-        {
-            "waiting_sessions": [
-                {
-                    "id": s.id,
-                    "customer_display_name": s.customer_display_name,
-                    "topic_display": s.get_topic_display(),
-                    "initial_description": s.initial_description,
-                    "created_at": s.created_at.strftime("%d.%m.%Y %H:%M"),
-                }
-                for s in waiting_sessions
-            ],
-            "active_sessions": [
-                {
-                    "id": s.id,
-                    "customer_display_name": s.customer_display_name,
-                    "topic_display": s.get_topic_display(),
-                    "initial_description": s.initial_description,
-                    "connected_at": s.connected_at.strftime("%d.%m.%Y %H:%M")
-                    if s.connected_at else "",
-                }
-                for s in active_sessions
-            ],
-        }
-    )
-
+Returns:
+    Результат виконання операції."""
+    waiting_sessions = SupportChatSession.objects.filter(status=SupportChatStatus.WAITING)
+    active_sessions = SupportChatSession.objects.filter(operator=request.user, status=SupportChatStatus.ACTIVE)
+    return JsonResponse({'waiting_sessions': [{'id': s.id, 'customer_display_name': s.customer_display_name, 'topic_display': s.get_topic_display(), 'initial_description': s.initial_description, 'created_at': s.created_at.strftime('%d.%m.%Y %H:%M')} for s in waiting_sessions], 'active_sessions': [{'id': s.id, 'customer_display_name': s.customer_display_name, 'topic_display': s.get_topic_display(), 'initial_description': s.initial_description, 'connected_at': s.connected_at.strftime('%d.%m.%Y %H:%M') if s.connected_at else ''} for s in active_sessions]})
 
 @require_POST
 @login_required
 @support_required
 def claim_chat_view(request: HttpRequest, session_id: int) -> JsonResponse:
-    session = get_object_or_404(
-        SupportChatSession,
-        pk=session_id,
-        status=SupportChatStatus.WAITING,
-    )
+    """Виконує логіку `claim_chat_view`.
 
+Args:
+    request: Вхідне значення для виконання операції.
+    session_id: Вхідне значення для виконання операції.
+
+Returns:
+    Результат виконання операції."""
+    session = get_object_or_404(SupportChatSession, pk=session_id, status=SupportChatStatus.WAITING)
     session = assign_operator_to_chat(session=session, operator=request.user)
-
     channel_layer = get_channel_layer()
-    async_to_sync(channel_layer.group_send)(
-        f"support_chat_{session.id}",
-        {
-            "type": "chat.event",
-            "event_type": "operator_connected",
-            "sender_role": "system",
-            "sender_name": "",
-            "text": f"До чату підключився оператор {session.operator_display_name}.",
-        },
-    )
-
-    return JsonResponse({"ok": True, "session_id": session.id})
-
+    async_to_sync(channel_layer.group_send)(f'support_chat_{session.id}', {'type': 'chat.event', 'event_type': 'operator_connected', 'sender_role': 'system', 'sender_name': '', 'text': f'До чату підключився оператор {session.operator_display_name}.'})
+    return JsonResponse({'ok': True, 'session_id': session.id})
 
 @login_required
 @support_required
 def operator_chat_room_view(request: HttpRequest, session_id: int) -> HttpResponse:
-    session = get_object_or_404(SupportChatSession, pk=session_id)
+    """Виконує логіку `operator_chat_room_view`.
 
-    return render(
-        request,
-        "avelon_healthcare/support_chat/pages/operator_chat_room.html",
-        {
-            "chat_session": session,
-            "messages": session.messages.all(),
-        },
-    )
+Args:
+    request: Вхідне значення для виконання операції.
+    session_id: Вхідне значення для виконання операції.
+
+Returns:
+    Результат виконання операції."""
+    session = get_object_or_404(SupportChatSession, pk=session_id)
+    return render(request, 'avelon_healthcare/support_chat/pages/operator_chat_room.html', {'chat_session': session, 'messages': session.messages.all()})

@@ -1,3 +1,5 @@
-from django.test import TestCase
+"""Модуль reviews/tests.py.
 
-# Create your tests here.
+Містить функціональність застосунку Avelon Healthcare."""
+from __future__ import annotations
+from django.test import TestCase

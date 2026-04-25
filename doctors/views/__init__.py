@@ -1,18 +1,7 @@
+"""Модуль doctors/views/__init__.py.
+
+Містить функціональність застосунку Avelon Healthcare."""
+from __future__ import annotations
 from .ajax import head_manager_load_doctor_directions_view
-from .head_manager import (
-    head_manager_direction_create_view,
-    head_manager_direction_list_view,
-    head_manager_direction_update_view,
-    head_manager_doctor_create_view,
-    head_manager_doctor_list_view,
-    head_manager_doctor_update_view,
-    head_manager_schedule_create_view,
-    head_manager_schedule_list_view,
-    head_manager_schedule_update_view,
-)
-from .public import (
-    direction_detail_view,
-    direction_list_view,
-    doctor_detail_view,
-    doctor_list_view,
-)
+from .head_manager import head_manager_direction_create_view, head_manager_direction_list_view, head_manager_direction_update_view, head_manager_doctor_create_view, head_manager_doctor_list_view, head_manager_doctor_update_view, head_manager_schedule_create_view, head_manager_schedule_list_view, head_manager_schedule_update_view
+from .public import direction_detail_view, direction_list_view, doctor_detail_view, doctor_list_view
