@@ -1,14 +1,19 @@
+/**
+ * Функція для підключення до чату.
+ * Використовує точні шляхи з вашого urls.py
+ */
 async function claimChat(sessionId) {
     const card = document.querySelector(`div[data-session-id="${sessionId}"]`);
     const button = card ? card.querySelector('button') : null;
 
     if (button) {
         button.disabled = true;
-        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>...';
+        button.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
     }
 
     try {
-        const response = await fetch(`/support/operator/claim/${sessionId}/`, {
+        // Шлях згідно з вашим urls.py: operator/claim/<id>/
+        const response = await fetch(`/operator/claim/${sessionId}/`, {
             method: 'POST',
             headers: {
                 'X-CSRFToken': window.CSRF_TOKEN,
@@ -18,20 +23,18 @@ async function claimChat(sessionId) {
         });
 
         if (response.ok) {
-            window.location.href = `/support/operator/room/${sessionId}/`;
+            // Шлях згідно з вашим urls.py: operator/room/<id>/
+            window.location.href = `/operator/room/${sessionId}/`;
         } else {
             const data = await response.json();
             alert('Помилка: ' + (data.error || 'Не вдалося підключитися'));
-
             if (button) {
                 button.disabled = false;
                 button.innerText = 'Підключитися';
             }
         }
     } catch (error) {
-        console.error('Помилка запиту:', error);
-        alert('Сталася помилка на сервері.');
-
+        console.error('Помилка виконання:', error);
         if (button) {
             button.disabled = false;
             button.innerText = 'Підключитися';
@@ -40,5 +43,5 @@ async function claimChat(sessionId) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-    console.log("Панель оператора готова до роботи.");
+    console.log("Dashboard ready");
 });
