@@ -14,9 +14,13 @@
                     <p><strong>Користувач:</strong> {{ session.customer_display_name }}</p>
                     <p><strong>Тема:</strong> {{ session.get_topic_display }}</p>
                     <p><strong>Опис:</strong> {{ session.initial_description }}</p>
-                    <button class="btn btn-primary" onclick="claimChat({{ session.id }})">
-                        Підключитися
-                    </button>
+                    <form action="{% url 'support_chat:claim_chat' session.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary">
+                            Підключитися
+                            }
+                        </button>
+                    </form>
                 </div>
             </div>
             {% empty %}
