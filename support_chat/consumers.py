@@ -1,91 +1,159 @@
+"""Модуль `support_chat/consumers.py` застосунку `support_chat`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from __future__ import annotations
 from typing import Any
+
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
+
 from .models import SupportChatMessage, SupportChatSession, SupportChatStatus
 from .services import close_chat_session
 
+
 class SupportChatConsumer(AsyncJsonWebsocketConsumer):
-    """Описує клас `SupportChatConsumer`."""
+    """Клас `SupportChatConsumer` інкапсулює повʼязану логіку проєкту.
 
+    Базові класи: `AsyncJsonWebsocketConsumer`.
+    Використовується для опису доменної сутності, форми, адміністративної конфігурації, сервісу або представлення залежно від місця використання.
+    """
     async def connect(self) -> None:
-        """Виконує логіку `connect`.
+        """Виконує прикладну логіку функції `connect` у відповідному модулі проєкту.
 
-Returns:
-    Any: Результат виконання."""
-        self.session_id = self.scope['url_route']['kwargs']['session_id']
-        self.room_group_name = f'support_chat_{self.session_id}'
+        Повертає:
+            None: Функція виконує дію без явного значення результату.
+        """
+        self.session_id = self.scope["url_route"]["kwargs"]["session_id"]
+        self.room_group_name = f"support_chat_{self.session_id}"
+
         allowed = await self.is_allowed()
         if not allowed:
             await self.close()
             return
+
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, close_code: Any) -> None:
-        """Виконує логіку `disconnect`.
+        """Виконує прикладну логіку функції `disconnect` у відповідному модулі проєкту.
 
-Args:
-    close_code: Вхідний параметр `close_code`.
+        Параметри:
+            close_code: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+        Повертає:
+            None: Функція виконує дію без явного значення результату.
+        """
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
     async def receive_json(self, content: Any, **kwargs: Any) -> None:
-        """Виконує логіку `receive_json`.
+        """Виконує прикладну логіку функції `receive_json` у відповідному модулі проєкту.
 
-Args:
-    content: Вхідний параметр `content`.
-    **kwargs: Вхідний параметр `kwargs`.
+        Параметри:
+            content: Значення типу `Any`, яке передається для виконання логіки функції.
+            **kwargs: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
-        event_type = content.get('type')
-        if event_type == 'message':
-            text = (content.get('text') or '').strip()
-            sender_role = content.get('sender_role')
-            sender_name = content.get('sender_name') or ''
+        Повертає:
+            None: Функція виконує дію без явного значення результату.
+        """
+        event_type = content.get("type")
+
+        if event_type == "message":
+            text = (content.get("text") or "").strip()
+            sender_role = content.get("sender_role")
+            sender_name = content.get("sender_name") or ""
+
             if not text:
                 return
+
             is_closed = await self.is_closed()
             if is_closed:
                 return
+
             message = await self.save_message(sender_role, sender_name, text)
-            await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.event', 'event_type': 'message', 'message_id': message['id'], 'sender_role': sender_role, 'sender_name': sender_name, 'text': text, 'created_at': message['created_at']})
-        elif event_type == 'typing_start':
-            sender_role = content.get('sender_role')
-            sender_name = content.get('sender_name') or ''
-            await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.event', 'event_type': 'typing_start', 'sender_role': sender_role, 'sender_name': sender_name})
-        elif event_type == 'typing_stop':
-            sender_role = content.get('sender_role')
-            sender_name = content.get('sender_name') or ''
-            await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.event', 'event_type': 'typing_stop', 'sender_role': sender_role, 'sender_name': sender_name})
-        elif event_type == 'close_chat':
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "chat.event",
+                    "event_type": "message",
+                    "message_id": message["id"],
+                    "sender_role": sender_role,
+                    "sender_name": sender_name,
+                    "text": text,
+                    "created_at": message["created_at"],
+                },
+            )
+
+        elif event_type == "typing_start":
+            sender_role = content.get("sender_role")
+            sender_name = content.get("sender_name") or ""
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "chat.event",
+                    "event_type": "typing_start",
+                    "sender_role": sender_role,
+                    "sender_name": sender_name,
+                },
+            )
+
+        elif event_type == "typing_stop":
+            sender_role = content.get("sender_role")
+            sender_name = content.get("sender_name") or ""
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "chat.event",
+                    "event_type": "typing_stop",
+                    "sender_role": sender_role,
+                    "sender_name": sender_name,
+                },
+            )
+
+        elif event_type == "close_chat":
             await self.close_chat()
-            await self.channel_layer.group_send(self.room_group_name, {'type': 'chat.event', 'event_type': 'closed', 'message_id': None, 'sender_role': 'system', 'sender_name': '', 'text': 'Чат завершено.'})
+
+            await self.channel_layer.group_send(
+                self.room_group_name,
+                {
+                    "type": "chat.event",
+                    "event_type": "closed",
+                    "message_id": None,
+                    "sender_role": "system",
+                    "sender_name": "",
+                    "text": "Чат завершено.",
+                },
+            )
 
     async def chat_event(self, event: Any) -> None:
-        """Виконує логіку `chat_event`.
+        """Виконує прикладну логіку функції `chat_event` у відповідному модулі проєкту.
 
-Args:
-    event: Вхідний параметр `event`.
+        Параметри:
+            event: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+        Повертає:
+            None: Функція виконує дію без явного значення результату.
+        """
         await self.send_json(event)
 
     @database_sync_to_async
     def is_allowed(self) -> bool:
-        """Виконує логіку `is_allowed`.
+        """Виконує прикладну логіку функції `is_allowed` у відповідному модулі проєкту.
 
-Returns:
-    Any: Результат виконання."""
+        Повертає:
+            bool: Результат роботи функції або обʼєкт, сформований під час виконання.
+        """
         try:
             session = SupportChatSession.objects.get(pk=self.session_id)
         except SupportChatSession.DoesNotExist:
             return False
-        user = self.scope.get('user')
+
+        user = self.scope.get("user")
         if user and user.is_authenticated:
             if session.user_id == user.id:
                 return True
@@ -93,41 +161,59 @@ Returns:
                 return True
             if user.is_staff:
                 return True
+
         return True
 
     @database_sync_to_async
     def is_closed(self) -> bool:
-        """Виконує логіку `is_closed`.
+        """Виконує прикладну логіку функції `is_closed` у відповідному модулі проєкту.
 
-Returns:
-    Any: Результат виконання."""
-        return SupportChatSession.objects.filter(pk=self.session_id, status=SupportChatStatus.CLOSED).exists()
+        Повертає:
+            bool: Результат роботи функції або обʼєкт, сформований під час виконання.
+        """
+        return SupportChatSession.objects.filter(
+            pk=self.session_id,
+            status=SupportChatStatus.CLOSED,
+        ).exists()
 
     @database_sync_to_async
     def save_message(self, sender_role: str, sender_name: str, text: str) -> dict:
-        """Виконує логіку `save_message`.
+        """Виконує прикладну логіку функції `save_message` у відповідному модулі проєкту.
 
-Args:
-    sender_role: Вхідний параметр `sender_role`.
-    sender_name: Вхідний параметр `sender_name`.
-    text: Вхідний параметр `text`.
+        Параметри:
+            sender_role: Значення типу `str`, яке передається для виконання логіки функції.
+            sender_name: Значення типу `str`, яке передається для виконання логіки функції.
+            text: Значення типу `str`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+        Повертає:
+            dict: Результат роботи функції або обʼєкт, сформований під час виконання.
+        """
         session = SupportChatSession.objects.get(pk=self.session_id)
+
         author_type = SupportChatMessage.AuthorType.USER
-        if sender_role == 'operator':
+        if sender_role == "operator":
             author_type = SupportChatMessage.AuthorType.OPERATOR
-        elif sender_role == 'system':
+        elif sender_role == "system":
             author_type = SupportChatMessage.AuthorType.SYSTEM
-        message = SupportChatMessage.objects.create(session=session, author_type=author_type, author_name=sender_name, text=text)
-        return {'id': message.id, 'created_at': message.created_at.isoformat()}
+
+        message = SupportChatMessage.objects.create(
+            session=session,
+            author_type=author_type,
+            author_name=sender_name,
+            text=text,
+        )
+
+        return {
+            "id": message.id,
+            "created_at": message.created_at.isoformat(),
+        }
 
     @database_sync_to_async
     def close_chat(self) -> None:
-        """Виконує логіку `close_chat`.
+        """Виконує прикладну логіку функції `close_chat` у відповідному модулі проєкту.
 
-Returns:
-    Any: Результат виконання."""
+        Повертає:
+            None: Функція виконує дію без явного значення результату.
+        """
         session = SupportChatSession.objects.get(pk=self.session_id)
         close_chat_session(session=session)

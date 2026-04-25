@@ -1,9 +1,34 @@
+"""Модуль `conftest.py` застосунку `conftest.py`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from typing import Any
 import pytest
 from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
-from avelon_healthcare.tests.factories import UserFactory, AnalysisFactory, ClinicInfoFactory, ContactInfoFactory, PromotionFactory, DirectionFactory, DoctorFactory, DoctorWorkDayFactory, DoctorWorkPeriodFactory, AppointmentFactory, OrderFactory, OrderItemFactory, ReviewFactory, SupportChatSessionFactory, SupportChatMessageFactory
+
+from avelon_healthcare.tests.factories import (
+    UserFactory,
+    AnalysisFactory,
+    ClinicInfoFactory,
+    ContactInfoFactory,
+    PromotionFactory,
+    DirectionFactory,
+    DoctorFactory,
+    DoctorWorkDayFactory,
+    DoctorWorkPeriodFactory,
+    AppointmentFactory,
+    OrderFactory,
+    OrderItemFactory,
+    ReviewFactory,
+    SupportChatSessionFactory,
+    SupportChatMessageFactory,
+)
+
 User = get_user_model()
+
 register(UserFactory)
 register(AnalysisFactory)
 register(ClinicInfoFactory)
@@ -20,26 +45,37 @@ register(ReviewFactory)
 register(SupportChatSessionFactory)
 register(SupportChatMessageFactory)
 
+
 @pytest.fixture
 def user(db: Any) -> Any:
-    """Виконує логіку `user`.
+    """Виконує прикладну логіку функції `user` у відповідному модулі проєкту.
 
-Args:
-    db: Вхідний параметр `db`.
+    Параметри:
+        db: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
-    return User.objects.create_user(email='user@example.com', password='testpass123', username='testuser', phone='+380991234567', first_name='Іван', last_name='Петренко')
+    Повертає:
+        Any: Результат роботи функції або обʼєкт, сформований під час виконання.
+    """
+    return User.objects.create_user(
+        email="user@example.com",
+        password="testpass123",
+        username="testuser",
+        phone="+380991234567",
+        first_name="Іван",
+        last_name="Петренко",
+    )
+
 
 @pytest.fixture
 def auth_client(client: Any, user: Any) -> Any:
-    """Виконує логіку `auth_client`.
+    """Виконує прикладну логіку функції `auth_client` у відповідному модулі проєкту.
 
-Args:
-    client: Вхідний параметр `client`.
-    user: Вхідний параметр `user`.
+    Параметри:
+        client: Значення типу `Any`, яке передається для виконання логіки функції.
+        user: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+    Повертає:
+        Any: Результат роботи функції або обʼєкт, сформований під час виконання.
+    """
     client.force_login(user)
     return client

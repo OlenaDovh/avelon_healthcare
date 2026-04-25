@@ -1,3 +1,9 @@
+"""Модуль `orders/services/__init__.py` застосунку `orders`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from .checkout import create_order_from_analyses
 from .forms import get_order_form
 from .invoice_pdf import build_order_invoice_response, generate_order_invoice_pdf

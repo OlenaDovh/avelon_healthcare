@@ -1,3 +1,9 @@
+"""Модуль `doctors/views/__init__.py` застосунку `doctors`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from .ajax import head_manager_load_doctor_directions_view
 from .head_manager import (
     head_manager_direction_create_view,

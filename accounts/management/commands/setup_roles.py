@@ -1,3 +1,9 @@
+"""Модуль `accounts/management/commands/setup_roles.py` застосунку `accounts`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from __future__ import annotations
 
 from django.core.management.base import BaseCommand

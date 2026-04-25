@@ -1,51 +1,92 @@
+"""Модуль `support_chat/services.py` застосунку `support_chat`.
+
+Містить код проєкту Avelon Healthcare та відповідає за частину бізнес-логіки, налаштувань, форм, моделей, представлень або допоміжних сервісів.
+Документація в модулі додана українською мовою для полегшення підтримки, читання коду та генерації технічної документації.
+"""
+
 from __future__ import annotations
 from typing import Any
+
 from django.utils import timezone
+
 from .models import SupportChatMessage, SupportChatSession, SupportChatStatus
 
+
 def create_support_chat_session(*, user: Any, guest_name: str, guest_email: str, topic: str, initial_description: str) -> SupportChatSession:
-    """Виконує логіку `create_support_chat_session`.
+    """Виконує прикладну логіку функції `create_support_chat_session` у відповідному модулі проєкту.
 
-Args:
-    user: Вхідний параметр `user`.
-    guest_name: Вхідний параметр `guest_name`.
-    guest_email: Вхідний параметр `guest_email`.
-    topic: Вхідний параметр `topic`.
-    initial_description: Вхідний параметр `initial_description`.
+    Параметри:
+        user: Значення типу `Any`, яке передається для виконання логіки функції.
+        guest_name: Значення типу `str`, яке передається для виконання логіки функції.
+        guest_email: Значення типу `str`, яке передається для виконання логіки функції.
+        topic: Значення типу `str`, яке передається для виконання логіки функції.
+        initial_description: Значення типу `str`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
-    session = SupportChatSession.objects.create(user=user, guest_name=guest_name, guest_email=guest_email, topic=topic, initial_description=initial_description)
-    SupportChatMessage.objects.create(session=session, author_type=SupportChatMessage.AuthorType.SYSTEM, author_name='', text='Звернення створено. Очікуємо підключення оператора.')
+    Повертає:
+        SupportChatSession: Результат роботи функції або обʼєкт, сформований під час виконання.
+    """
+    session = SupportChatSession.objects.create(
+        user=user,
+        guest_name=guest_name,
+        guest_email=guest_email,
+        topic=topic,
+        initial_description=initial_description,
+    )
+
+    SupportChatMessage.objects.create(
+        session=session,
+        author_type=SupportChatMessage.AuthorType.SYSTEM,
+        author_name="",
+        text="Звернення створено. Очікуємо підключення оператора.",
+    )
+
     return session
 
+
 def assign_operator_to_chat(*, session: SupportChatSession, operator: Any) -> SupportChatSession:
-    """Виконує логіку `assign_operator_to_chat`.
+    """Виконує прикладну логіку функції `assign_operator_to_chat` у відповідному модулі проєкту.
 
-Args:
-    session: Вхідний параметр `session`.
-    operator: Вхідний параметр `operator`.
+    Параметри:
+        session: Значення типу `SupportChatSession`, яке передається для виконання логіки функції.
+        operator: Значення типу `Any`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+    Повертає:
+        SupportChatSession: Результат роботи функції або обʼєкт, сформований під час виконання.
+    """
     session.operator = operator
     session.status = SupportChatStatus.ACTIVE
     session.connected_at = timezone.now()
-    session.save(update_fields=['operator', 'status', 'connected_at'])
-    SupportChatMessage.objects.create(session=session, author_type=SupportChatMessage.AuthorType.SYSTEM, author_name='', text=f'До чату підключився оператор {session.operator_display_name}.')
+    session.save(update_fields=["operator", "status", "connected_at"])
+
+    SupportChatMessage.objects.create(
+        session=session,
+        author_type=SupportChatMessage.AuthorType.SYSTEM,
+        author_name="",
+        text=f"До чату підключився оператор {session.operator_display_name}.",
+    )
+
     return session
 
+
 def close_chat_session(*, session: SupportChatSession) -> SupportChatSession:
-    """Виконує логіку `close_chat_session`.
+    """Виконує прикладну логіку функції `close_chat_session` у відповідному модулі проєкту.
 
-Args:
-    session: Вхідний параметр `session`.
+    Параметри:
+        session: Значення типу `SupportChatSession`, яке передається для виконання логіки функції.
 
-Returns:
-    Any: Результат виконання."""
+    Повертає:
+        SupportChatSession: Результат роботи функції або обʼєкт, сформований під час виконання.
+    """
     if session.status != SupportChatStatus.CLOSED:
         session.status = SupportChatStatus.CLOSED
         session.closed_at = timezone.now()
-        session.save(update_fields=['status', 'closed_at'])
-        SupportChatMessage.objects.create(session=session, author_type=SupportChatMessage.AuthorType.SYSTEM, author_name='', text='Чат завершено.')
+        session.save(update_fields=["status", "closed_at"])
+
+        SupportChatMessage.objects.create(
+            session=session,
+            author_type=SupportChatMessage.AuthorType.SYSTEM,
+            author_name="",
+            text="Чат завершено.",
+        )
+
     return session
