@@ -1,10 +1,6 @@
-from __future__ import annotations
-
 from datetime import datetime
-
 from django.http import HttpRequest, JsonResponse
 from django.views.decorators.http import require_GET
-
 from doctors.models import Direction, Doctor
 from appointments.services import (
     get_available_dates_for_doctor_direction,
@@ -14,6 +10,15 @@ from appointments.services import (
 
 @require_GET
 def available_slots(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає доступні часові слоти для лікаря, напряму та дати.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь зі списком доступних слотів.
+    """
     doctor_id = request.GET.get("doctor_id")
     direction_id = request.GET.get("direction_id")
     appointment_date = request.GET.get("date")
@@ -51,6 +56,15 @@ def available_slots(request: HttpRequest) -> JsonResponse:
 
 @require_GET
 def available_doctors(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає доступних лікарів для обраного напряму.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь зі списком лікарів.
+    """
     direction_id = request.GET.get("direction_id")
 
     if not direction_id:
@@ -75,6 +89,15 @@ def available_doctors(request: HttpRequest) -> JsonResponse:
 
 @require_GET
 def available_dates(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає доступні дати для лікаря та напряму.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь зі списком доступних дат.
+    """
     doctor_id = request.GET.get("doctor_id")
     direction_id = request.GET.get("direction_id")
     exclude_appointment_id = request.GET.get("exclude_appointment_id")

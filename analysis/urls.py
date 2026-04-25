@@ -1,7 +1,10 @@
-from __future__ import annotations
+"""
+Маршрути URL для застосунку analysis.
+
+Містять шляхи для перегляду аналізів, кошика та управління аналізами.
+"""
 
 from django.urls import path
-
 from analysis.views import (
     add_to_cart_view,
     analysis_list_view,

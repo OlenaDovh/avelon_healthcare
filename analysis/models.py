@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from django.db import models
 
 
@@ -51,6 +50,8 @@ class Analysis(models.Model):
     class Meta:
         """
         Метадані моделі аналізу.
+
+        Визначає відображення та сортування моделі.
         """
 
         verbose_name = "Аналіз"

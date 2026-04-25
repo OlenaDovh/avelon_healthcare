@@ -1,13 +1,10 @@
 from __future__ import annotations
-
 from django.contrib import messages
 from django.db.models import Count
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
-
 from doctors.models import Direction
 from appointments.forms import AppointmentCreateForm, GuestAppointmentCreateForm
-from appointments.models import Appointment
 from appointments.services import (
     fill_appointment_from_guest_data,
     fill_appointment_from_user,
@@ -16,13 +13,22 @@ from appointments.services import (
 
 
 def appointment_create_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє створення запису до лікаря.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     form_class = AppointmentCreateForm if request.user.is_authenticated else GuestAppointmentCreateForm
 
     if request.method == "POST":
         form = form_class(request.POST)
 
         if form.is_valid():
-            appointment: Appointment = form.save(commit=False)
+            appointment = form.save(commit=False)
 
             if request.user.is_authenticated:
                 appointment = fill_appointment_from_user(

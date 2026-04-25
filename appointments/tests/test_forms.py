@@ -1,6 +1,8 @@
+from __future__ import annotations
+
 import pytest
-from datetime import timedelta
 from django.utils import timezone
+from datetime import timedelta
 
 from appointments.forms import (
     AppointmentCreateForm,
@@ -11,8 +13,14 @@ from appointments.forms import (
 from appointments.models import AppointmentStatus
 
 
-def get_appointment_create_data(direction, doctor, **overrides):
-    data = {
+def get_appointment_create_data(direction, doctor, **overrides) -> dict:
+    """
+    Формує дані для створення запису на прийом.
+
+    Returns:
+        dict: Дані форми.
+    """
+    data: dict = {
         "direction": direction.id,
         "doctor": doctor.id,
         "appointment_date": (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d"),
@@ -23,8 +31,14 @@ def get_appointment_create_data(direction, doctor, **overrides):
     return data
 
 
-def get_guest_appointment_data(direction, doctor, **overrides):
-    data = {
+def get_guest_appointment_data(direction, doctor, **overrides) -> dict:
+    """
+    Формує дані для гостьового запису.
+
+    Returns:
+        dict: Дані форми.
+    """
+    data: dict = {
         "last_name": "Гість",
         "first_name": "Іван",
         "middle_name": "",
@@ -37,8 +51,11 @@ def get_guest_appointment_data(direction, doctor, **overrides):
 
 
 @pytest.mark.django_db
-def test_appointment_create_form_valid(direction, doctor, monkeypatch):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+def test_appointment_create_form_valid(direction, doctor, monkeypatch) -> None:
+    """
+    Перевіряє валідність форми створення запису.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.forms.create.get_available_dates_for_doctor_direction",
@@ -50,14 +67,20 @@ def test_appointment_create_form_valid(direction, doctor, monkeypatch):
             {"value": "10:00", "label": "10:00 - 10:30"}
         ],
     )
+
     doctor.directions.add(direction)
-    form = AppointmentCreateForm(data=get_appointment_create_data(direction, doctor))
+    form: AppointmentCreateForm = AppointmentCreateForm(
+        data=get_appointment_create_data(direction, doctor)
+    )
     assert form.is_valid()
 
 
 @pytest.mark.django_db
-def test_guest_appointment_create_form_valid(direction, doctor, monkeypatch):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+def test_guest_appointment_create_form_valid(direction, doctor, monkeypatch) -> None:
+    """
+    Перевіряє валідність гостьової форми запису.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.forms.create.get_available_dates_for_doctor_direction",
@@ -69,16 +92,22 @@ def test_guest_appointment_create_form_valid(direction, doctor, monkeypatch):
             {"value": "10:00", "label": "10:00 - 10:30"}
         ],
     )
+
     doctor.directions.add(direction)
-    form = GuestAppointmentCreateForm(data=get_guest_appointment_data(direction, doctor))
+    form: GuestAppointmentCreateForm = GuestAppointmentCreateForm(
+        data=get_guest_appointment_data(direction, doctor)
+    )
     assert form.is_valid()
 
 
 @pytest.mark.django_db
 def test_support_appointment_create_form_valid_for_registered_user(
     user, direction, doctor, monkeypatch
-):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+) -> None:
+    """
+    Перевіряє форму створення запису для зареєстрованого користувача.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.forms.create.get_available_dates_for_doctor_direction",
@@ -90,8 +119,10 @@ def test_support_appointment_create_form_valid_for_registered_user(
             {"value": "10:00", "label": "10:00 - 10:30"}
         ],
     )
+
     doctor.directions.add(direction)
-    form = SupportAppointmentCreateForm(
+
+    form: SupportAppointmentCreateForm = SupportAppointmentCreateForm(
         data={
             "user": user.id,
             "last_name": "",
@@ -106,8 +137,11 @@ def test_support_appointment_create_form_valid_for_registered_user(
 
 
 @pytest.mark.django_db
-def test_support_appointment_create_form_valid_for_guest(direction, doctor, monkeypatch):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+def test_support_appointment_create_form_valid_for_guest(direction, doctor, monkeypatch) -> None:
+    """
+    Перевіряє форму створення запису для гостя.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.forms.create.get_available_dates_for_doctor_direction",
@@ -119,8 +153,10 @@ def test_support_appointment_create_form_valid_for_guest(direction, doctor, monk
             {"value": "10:00", "label": "10:00 - 10:30"}
         ],
     )
+
     doctor.directions.add(direction)
-    form = SupportAppointmentCreateForm(
+
+    form: SupportAppointmentCreateForm = SupportAppointmentCreateForm(
         data={
             "user": "",
             "last_name": "Гість",
@@ -135,8 +171,11 @@ def test_support_appointment_create_form_valid_for_guest(direction, doctor, monk
 
 
 @pytest.mark.django_db
-def test_support_appointment_update_form_valid(appointment, monkeypatch):
-    date_str = appointment.appointment_date.strftime("%Y-%m-%d")
+def test_support_appointment_update_form_valid(appointment, monkeypatch) -> None:
+    """
+    Перевіряє валідність форми оновлення запису.
+    """
+    date_str: str = appointment.appointment_date.strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.forms.update.get_available_dates_for_doctor_direction",
@@ -148,8 +187,10 @@ def test_support_appointment_update_form_valid(appointment, monkeypatch):
             {"value": "10:00", "label": "10:00 - 10:30"}
         ],
     )
+
     appointment.doctor.directions.add(appointment.direction)
-    form = SupportAppointmentUpdateForm(
+
+    form: SupportAppointmentUpdateForm = SupportAppointmentUpdateForm(
         instance=appointment,
         data={
             "direction": appointment.direction.id,

@@ -1,11 +1,9 @@
 from __future__ import annotations
-
 import logging
 import time
 from collections.abc import Callable
 from functools import wraps
 from typing import Any
-
 from django.conf import settings
 from google import genai
 
@@ -19,9 +17,44 @@ FALLBACK_TEXT = (
 
 
 def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0) -> Callable:
+    """
+    Декоратор для повторного виконання функції у разі тимчасових помилок.
+
+    Args:
+        max_attempts: Максимальна кількість спроб.
+        delay: Початкова затримка між спробами.
+        backoff: Коефіцієнт збільшення затримки.
+
+    Returns:
+        Callable: Обгорнута функція з логікою повторних спроб.
+    """
+
     def decorator(func: Callable) -> Callable:
+        """
+        Обгортає функцію логікою retry.
+
+        Args:
+            func: Функція для обгортання.
+
+        Returns:
+            Callable: Обгорнута функція.
+        """
+
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
+            """
+            Виконує функцію з повторними спробами у разі помилки.
+
+            Args:
+                *args: Позиційні аргументи.
+                **kwargs: Іменовані аргументи.
+
+            Returns:
+                Any: Результат виконання функції.
+
+            Raises:
+                Exception: Якщо всі спроби вичерпані або помилка неретраєбельна.
+            """
             current_delay = delay
 
             for attempt in range(1, max_attempts + 1):
@@ -62,6 +95,19 @@ def retry(max_attempts: int = 4, delay: float = 1.5, backoff: float = 2.0) -> Ca
 
 @retry()
 def _request_gemini_text(prompt: str) -> str:
+    """
+    Виконує запит до Gemini API для генерації тексту.
+
+    Args:
+        prompt: Текст запиту.
+
+    Returns:
+        str: Згенерований текст.
+
+    Raises:
+        RuntimeError: Якщо відсутній API ключ.
+        ValueError: Якщо відповідь порожня.
+    """
     if not settings.GEMINI_API_KEY:
         raise RuntimeError("Missing GEMINI_API_KEY")
 
@@ -80,6 +126,16 @@ def _request_gemini_text(prompt: str) -> str:
 
 
 def generate_horoscope_text(theme: str, weekday: str) -> str:
+    """
+    Генерує wellness-прогноз на день за допомогою Gemini API.
+
+    Args:
+        theme: Тема дня.
+        weekday: День тижня.
+
+    Returns:
+        str: Згенерований або fallback текст.
+    """
     if not settings.GEMINI_API_KEY:
         return FALLBACK_TEXT
 

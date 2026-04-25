@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 app_name = "support_chat"
@@ -10,7 +9,13 @@ urlpatterns = [
     path("session/<int:session_id>/", views.get_chat_session_view, name="get_session"),
 
     path("operator/dashboard/", views.operator_dashboard_view, name="operator_dashboard"),
-    path("operator/dashboard-data/", views.operator_dashboard_data_view, name="operator_dashboard_data"),
+    path("operator/dashboard-data/",
+         views.operator_dashboard_data_view,
+         name="operator_dashboard_data"
+         ),
     path("operator/claim/<int:session_id>/", views.claim_chat_view, name="claim_chat"),
-    path("operator/room/<int:session_id>/", views.operator_chat_room_view, name="operator_chat_room"),
+    path("operator/room/<int:session_id>/",
+         views.operator_chat_room_view,
+         name="operator_chat_room"
+         ),
 ]

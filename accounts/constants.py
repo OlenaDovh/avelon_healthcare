@@ -1,5 +1,8 @@
-from __future__ import annotations
+"""
+Константи назв груп користувачів.
 
+Використовуються для перевірки ролей та призначення прав доступу.
+"""
 
 PATIENT_GROUP: str = "patient"
 SUPPORT_GROUP: str = "support"

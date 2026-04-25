@@ -1,33 +1,27 @@
 from __future__ import annotations
-
 import logging
-
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.db.models import QuerySet, Q
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, render, redirect
-
-from accounts.permissions import head_manager_required
-from doctors.forms import DoctorWorkDayForm, DoctorWorkPeriodFormSet, DirectionForm, DoctorForm
-from doctors.models import Direction, Doctor, DoctorWorkDay
+from django.db.models import Q
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import get_object_or_404, render
+from doctors.models import Direction, Doctor
 
 logger = logging.getLogger(__name__)
+
 
 def doctor_list_view(request: HttpRequest) -> HttpResponse:
     """
     Відображає список лікарів з пошуком і фільтром.
 
     Args:
-        request (HttpRequest): HTTP-запит користувача.
+        request: HTTP-запит користувача.
 
     Returns:
         HttpResponse: HTML-відповідь зі списком лікарів.
     """
-    query: str = request.GET.get("q", "").strip()
-    position: str = request.GET.get("position", "").strip()
+    query = request.GET.get("q", "").strip()
+    position = request.GET.get("position", "").strip()
 
-    doctors: QuerySet[Doctor] = Doctor.objects.prefetch_related("directions").all()
+    doctors = Doctor.objects.prefetch_related("directions").all()
 
     if query:
         doctors = doctors.filter(
@@ -39,7 +33,7 @@ def doctor_list_view(request: HttpRequest) -> HttpResponse:
     if position:
         doctors = doctors.filter(position__icontains=position)
 
-    positions: QuerySet[Doctor] = Doctor.objects.order_by("position").values_list(
+    positions = Doctor.objects.order_by("position").values_list(
         "position",
         flat=True,
     ).distinct()
@@ -63,13 +57,13 @@ def doctor_detail_view(request: HttpRequest, doctor_id: int) -> HttpResponse:
     Відображає детальну інформацію про лікаря.
 
     Args:
-        request (HttpRequest): HTTP-запит користувача.
-        doctor_id (int): Ідентифікатор лікаря.
+        request: HTTP-запит користувача.
+        doctor_id: Ідентифікатор лікаря.
 
     Returns:
         HttpResponse: HTML-відповідь зі сторінкою лікаря.
     """
-    doctor: Doctor = get_object_or_404(
+    doctor = get_object_or_404(
         Doctor.objects.prefetch_related("directions"),
         id=doctor_id,
     )
@@ -88,12 +82,12 @@ def direction_list_view(request: HttpRequest) -> HttpResponse:
     Відображає список напрямів клініки.
 
     Args:
-        request (HttpRequest): HTTP-запит користувача.
+        request: HTTP-запит користувача.
 
     Returns:
         HttpResponse: HTML-відповідь зі списком напрямів.
     """
-    directions: QuerySet[Direction] = Direction.objects.all()
+    directions = Direction.objects.all()
 
     logger.info("Відкрито сторінку списку напрямів.")
 
@@ -109,18 +103,18 @@ def direction_detail_view(request: HttpRequest, direction_id: int) -> HttpRespon
     Відображає детальну інформацію про напрям і список лікарів цього напряму.
 
     Args:
-        request (HttpRequest): HTTP-запит користувача.
-        direction_id (int): Ідентифікатор напряму.
+        request: HTTP-запит користувача.
+        direction_id: Ідентифікатор напряму.
 
     Returns:
         HttpResponse: HTML-відповідь зі сторінкою напряму.
     """
-    direction: Direction = get_object_or_404(
+    direction = get_object_or_404(
         Direction.objects.prefetch_related("doctors"),
         id=direction_id,
     )
 
-    doctors: QuerySet[Doctor] = direction.doctors.all()
+    doctors = direction.doctors.all()
 
     logger.info("Відкрито сторінку напряму: %s", direction.name)
 

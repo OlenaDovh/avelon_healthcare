@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from django.urls import path
-
 from .views import review_create_view, review_list_view, support_review_reply_view, support_review_list_view
 
 app_name = "reviews"

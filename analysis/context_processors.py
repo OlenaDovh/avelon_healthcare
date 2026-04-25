@@ -5,15 +5,15 @@ from django.http import HttpRequest
 
 def cart_items_count(request: HttpRequest) -> dict[str, int]:
     """
-    Додає кількість елементів кошика в контекст шаблонів.
+    Повертає кількість елементів кошика для контексту шаблонів.
 
     Args:
-        request (HttpRequest): HTTP-запит користувача.
+        request: HTTP-запит.
 
     Returns:
-        dict[str, int]: Кількість елементів кошика.
+        dict[str, int]: Словник з кількістю елементів кошика.
     """
-    cart: dict[str, int] = request.session.get("cart", {})
+    cart = request.session.get("cart", {})
     return {
         "cart_items_count": len(cart),
     }

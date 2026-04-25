@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
-
 from accounts.permissions import head_manager_required
 from doctors.models import Direction
 
@@ -10,6 +8,15 @@ from doctors.models import Direction
 @login_required
 @head_manager_required
 def head_manager_load_doctor_directions_view(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає список напрямів для вибраного лікаря.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь зі списком напрямів.
+    """
     doctor_id = request.GET.get("doctor_id")
 
     directions_data: list[dict[str, str | int]] = []

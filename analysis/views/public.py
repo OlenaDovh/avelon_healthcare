@@ -1,11 +1,7 @@
 from __future__ import annotations
-
 from decimal import Decimal
-
-from django.db.models import QuerySet
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from analysis.models import Analysis
 from analysis.selectors import analysis_filter_values, filtered_analyses_queryset
 from analysis.services.cart import add_analysis_to_cart, get_cart, remove_analysis_from_cart
@@ -13,6 +9,15 @@ from orders.forms import AuthenticatedOrderForm, GuestOrderForm
 
 
 def analysis_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список аналізів з урахуванням фільтрів.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку аналізів.
+    """
     what_to_check = request.GET.get("what_to_check", "").strip()
     disease = request.GET.get("disease", "").strip()
     for_whom = request.GET.get("for_whom", "").strip()
@@ -44,22 +49,51 @@ def analysis_list_view(request: HttpRequest) -> HttpResponse:
 
 
 def add_to_cart_view(request: HttpRequest, analysis_id: int) -> HttpResponse:
+    """
+    Додає аналіз до кошика.
+
+    Args:
+        request: HTTP-запит.
+        analysis_id: Ідентифікатор аналізу.
+
+    Returns:
+        HttpResponse: Перенаправлення на список аналізів.
+    """
     analysis = get_object_or_404(Analysis, id=analysis_id, is_active=True)
     add_analysis_to_cart(request, analysis.id)
     return redirect("analysis:analysis_list")
 
 
 def remove_from_cart_view(request: HttpRequest, analysis_id: int) -> HttpResponse:
+    """
+    Видаляє аналіз із кошика.
+
+    Args:
+        request: HTTP-запит.
+        analysis_id: Ідентифікатор аналізу.
+
+    Returns:
+        HttpResponse: Перенаправлення на наступну сторінку або список аналізів.
+    """
     remove_analysis_from_cart(request, analysis_id)
     next_url = request.GET.get("next", "analysis:analysis_list")
     return redirect(next_url)
 
 
 def cart_detail_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає деталі кошика користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою кошика.
+    """
     cart = get_cart(request)
     analysis_ids = [int(item_id) for item_id in cart.keys()]
-    analyses: QuerySet[Analysis] = Analysis.objects.filter(id__in=analysis_ids)
-    total_price: Decimal = sum((analysis.price for analysis in analyses), Decimal("0.00"))
+    analyses = Analysis.objects.filter(id__in=analysis_ids)
+    total_price = sum((analysis.price for analysis in analyses), Decimal("0.00"))
 
     recommended_analyses = Analysis.objects.filter(is_active=True).exclude(id__in=analysis_ids)[:3]
     order_form = AuthenticatedOrderForm() if request.user.is_authenticated else GuestOrderForm()

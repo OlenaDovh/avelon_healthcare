@@ -1,10 +1,8 @@
 from __future__ import annotations
-
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.db.models.signals import m2m_changed, post_save
 from django.dispatch import receiver
-
 from accounts.constants import (
     CONTENT_MANAGER_GROUP,
     DOCTOR_GROUP,
@@ -24,7 +22,16 @@ STAFF_GROUPS = {
 
 
 @receiver(post_save, sender=User)
-def add_user_to_patient_group(sender, instance: User, created: bool, **kwargs) -> None:
+def add_user_to_patient_group(sender: object, instance: User, created: bool, **kwargs: object) -> None:
+    """
+    Додає нового користувача до групи пацієнтів.
+
+    Args:
+        sender: Клас моделі, який надіслав сигнал.
+        instance: Створений або оновлений користувач.
+        created: Ознака створення нового користувача.
+        **kwargs: Додаткові параметри сигналу.
+    """
     if not created:
         return
 
@@ -33,7 +40,16 @@ def add_user_to_patient_group(sender, instance: User, created: bool, **kwargs) -
 
 
 @receiver(m2m_changed, sender=User.groups.through)
-def sync_staff_status_by_groups(sender, instance: User, action: str, **kwargs) -> None:
+def sync_staff_status_by_groups(sender: object, instance: User, action: str, **kwargs: object) -> None:
+    """
+    Синхронізує статус персоналу користувача відповідно до його груп.
+
+    Args:
+        sender: Проміжна модель many-to-many зв'язку груп користувача.
+        instance: Користувач, для якого змінено групи.
+        action: Тип зміни many-to-many зв'язку.
+        **kwargs: Додаткові параметри сигналу.
+    """
     if action not in {"post_add", "post_remove", "post_clear"}:
         return
 

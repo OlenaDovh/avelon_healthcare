@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from django.contrib import admin
-
 from .models import Appointment, AppointmentStatus
 
 
@@ -9,6 +7,8 @@ from .models import Appointment, AppointmentStatus
 class AppointmentAdmin(admin.ModelAdmin):
     """
     Адмін-інтерфейс для моделі запису до лікаря.
+
+    Налаштовує відображення, фільтри та редагування записів у адмін-панелі.
     """
 
     list_display = (

@@ -1,21 +1,24 @@
 from __future__ import annotations
-
 from datetime import datetime
 from typing import Any
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils import timezone
-
 from appointments.models import Appointment, AppointmentStatus
 from doctors.models import Direction, Doctor
-
 from appointments.services import (
     get_available_dates_for_doctor_direction,
     get_available_slots_for_doctor_on_date,
 )
 
+
 class SupportAppointmentUpdateForm(forms.ModelForm):
+    """
+    Форма оновлення запису на прийом для support-користувача.
+
+    Дозволяє змінювати дані запису, статус, причину відхилення та фінальний висновок.
+    """
+
     appointment_date = forms.DateField(
         required=True,
         label="Дата прийому",
@@ -63,6 +66,13 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Ініціалізує форму та налаштовує доступні поля й часові слоти.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+        """
         super().__init__(*args, **kwargs)
 
         is_rejected = self.instance and self.instance.status == AppointmentStatus.REJECTED
@@ -110,7 +120,8 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
                     else None
                 )
 
-                if current_time_value and current_time_value not in [value for value, _ in self.fields["appointment_time"].choices]:
+                if current_time_value and current_time_value not in [value for value, _ in
+                                                                     self.fields["appointment_time"].choices]:
                     self.fields["appointment_time"].choices.append(
                         (current_time_value, f"{current_time_value} - поточний слот")
                     )
@@ -120,32 +131,41 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
 
         if is_rejected:
             for field_name in (
-                "direction",
-                "doctor",
-                "appointment_date",
-                "appointment_time",
-                "description",
-                "status",
-                "rejection_reason",
-                "final_conclusion",
+                    "direction",
+                    "doctor",
+                    "appointment_date",
+                    "appointment_time",
+                    "description",
+                    "status",
+                    "rejection_reason",
+                    "final_conclusion",
             ):
                 if field_name in self.fields:
                     self.fields[field_name].disabled = True
 
         if is_completed:
             for field_name in (
-                "direction",
-                "doctor",
-                "appointment_date",
-                "appointment_time",
-                "description",
-                "status",
-                "rejection_reason",
+                    "direction",
+                    "doctor",
+                    "appointment_date",
+                    "appointment_time",
+                    "description",
+                    "status",
+                    "rejection_reason",
             ):
                 if field_name in self.fields:
                     self.fields[field_name].disabled = True
 
     def clean(self) -> dict[str, Any]:
+        """
+        Виконує валідацію оновлення запису на прийом.
+
+        Returns:
+            dict[str, Any]: Очищені дані форми.
+
+        Raises:
+            ValidationError: Якщо обрана дата, лікар або часовий слот недоступні.
+        """
         cleaned_data = super().clean()
 
         if self.instance and self.instance.status == AppointmentStatus.REJECTED:
@@ -194,10 +214,10 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
 
             if selected_date_str not in available_dates:
                 same_current_slot = (
-                    self.instance
-                    and selected_date_str == current_instance_date
-                    and doctor == self.instance.doctor
-                    and direction == self.instance.direction
+                        self.instance
+                        and selected_date_str == current_instance_date
+                        and doctor == self.instance.doctor
+                        and direction == self.instance.direction
                 )
                 if not same_current_slot:
                     raise ValidationError("На цю дату запис недоступний.")
@@ -226,11 +246,11 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
             current_instance_direction = self.instance.direction if self.instance else None
 
             same_current_slot = (
-                self.instance
-                and appointment_time == current_instance_time
-                and appointment_date == current_instance_date
-                and doctor == current_instance_doctor
-                and direction == current_instance_direction
+                    self.instance
+                    and appointment_time == current_instance_time
+                    and appointment_date == current_instance_date
+                    and doctor == current_instance_doctor
+                    and direction == current_instance_direction
             )
 
             if appointment_time not in available_values and not same_current_slot:

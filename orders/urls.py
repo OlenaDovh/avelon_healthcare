@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from django.urls import path
-
 from orders.views import (
     order_cancel_view,
     order_create_view,

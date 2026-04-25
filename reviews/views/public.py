@@ -1,13 +1,10 @@
 from __future__ import annotations
-
 import logging
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from appointments.models import Appointment, AppointmentStatus
 from reviews.forms import ReviewCreateForm
 from reviews.models import Review
@@ -16,6 +13,15 @@ logger = logging.getLogger(__name__)
 
 
 def review_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список відгуків з пагінацією.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку відгуків.
+    """
     reviews_qs = Review.objects.select_related("user", "appointment")
 
     paginator = Paginator(reviews_qs, 5)
@@ -31,6 +37,16 @@ def review_list_view(request: HttpRequest) -> HttpResponse:
 
 @login_required
 def review_create_view(request: HttpRequest, appointment_id: int) -> HttpResponse:
+    """
+    Обробляє створення відгуку для завершеного прийому.
+
+    Args:
+        request: HTTP-запит.
+        appointment_id: Ідентифікатор прийому.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     appointment = get_object_or_404(
         Appointment,
         id=appointment_id,

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from django.test import RequestFactory
 
@@ -7,7 +9,10 @@ from accounts.services import build_email_verification_url, send_verification_em
 
 
 @pytest.mark.django_db
-def test_build_email_verification_url_returns_absolute_url(user):
+def test_build_email_verification_url_returns_absolute_url(user) -> None:
+    """
+    Перевіряє формування абсолютного URL для верифікації email.
+    """
     request = RequestFactory().get("/")
     request.META["HTTP_HOST"] = "testserver"
 
@@ -19,7 +24,10 @@ def test_build_email_verification_url_returns_absolute_url(user):
 
 @pytest.mark.django_db
 @patch("accounts.services.email_verification.send_html_email")
-def test_send_verification_email_calls_send_html_email(mock_send_html_email, user):
+def test_send_verification_email_calls_send_html_email(mock_send_html_email, user) -> None:
+    """
+    Перевіряє виклик send_html_email при відправці листа верифікації.
+    """
     request = RequestFactory().get("/")
     request.META["HTTP_HOST"] = "testserver"
 

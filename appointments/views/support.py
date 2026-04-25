@@ -1,12 +1,10 @@
 from __future__ import annotations
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from accounts.constants import PATIENT_GROUP
 from accounts.permissions import support_required
 from accounts.selectors import patient_users_queryset
@@ -19,6 +17,15 @@ User = get_user_model()
 @login_required
 @support_required
 def support_appointment_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список записів пацієнтів для support-користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку записів.
+    """
     appointments = (
         Appointment.objects.select_related("doctor", "direction", "user")
         .filter(Q(user__isnull=True) | Q(user__groups__name=PATIENT_GROUP))
@@ -36,12 +43,21 @@ def support_appointment_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @support_required
 def support_appointment_create_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє створення запису до лікаря support-користувачем.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     if request.method == "POST":
         form = SupportAppointmentCreateForm(request.POST)
 
         if form.is_valid():
-            appointment: Appointment = form.save(commit=False)
-            user: User | None = form.cleaned_data.get("user")
+            appointment = form.save(commit=False)
+            user = form.cleaned_data.get("user")
 
             if user and not user.groups.filter(name=PATIENT_GROUP).exists():
                 messages.error(request, "Можна обирати тільки користувачів із групою patient.")
@@ -91,6 +107,16 @@ def support_appointment_create_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @support_required
 def support_appointment_update_view(request: HttpRequest, appointment_id: int) -> HttpResponse:
+    """
+    Обробляє оновлення запису до лікаря support-користувачем.
+
+    Args:
+        request: HTTP-запит.
+        appointment_id: Ідентифікатор запису.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою редагування запису або перенаправленням.
+    """
     appointment = get_object_or_404(
         Appointment.objects.select_related("user", "doctor", "direction"),
         Q(id=appointment_id) & (Q(user__isnull=True) | Q(user__groups__name=PATIENT_GROUP)),

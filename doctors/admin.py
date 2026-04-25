@@ -1,15 +1,25 @@
 from __future__ import annotations
-
 from django import forms
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms.models import BaseInlineFormSet
-
 from .models import Direction, Doctor, DoctorWorkDay, DoctorWorkPeriod
 
 
 class DoctorWorkPeriodInlineFormSet(BaseInlineFormSet):
-    def clean(self):
+    """
+    Formset для валідації робочих періодів лікаря.
+
+    Перевіряє коректність часу та відсутність перетинів між періодами.
+    """
+
+    def clean(self) -> None:
+        """
+        Валідує робочі періоди лікаря.
+
+        Raises:
+            ValidationError: Якщо час періоду некоректний або періоди перетинаються.
+        """
         super().clean()
 
         periods = []
@@ -41,17 +51,36 @@ class DoctorWorkPeriodInlineFormSet(BaseInlineFormSet):
 
 
 class DoctorWorkPeriodInline(admin.TabularInline):
+    """
+    Inline-форма робочих періодів лікаря.
+
+    Дозволяє редагувати періоди роботи в адмін-панелі.
+    """
+
     model = DoctorWorkPeriod
     extra = 1
     formset = DoctorWorkPeriodInlineFormSet
 
 
 class DoctorWorkDayInlineForm(forms.ModelForm):
+    """
+    Inline-форма робочого дня лікаря.
+
+    Обмежує вибір напряму напрямами вибраного лікаря.
+    """
+
     class Meta:
         model = DoctorWorkDay
         fields = "__all__"
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Ініціалізує форму та налаштовує queryset напрямів.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+        """
         super().__init__(*args, **kwargs)
 
         if self.instance and self.instance.pk and self.instance.doctor_id:
@@ -64,6 +93,12 @@ class DoctorWorkDayInlineForm(forms.ModelForm):
 
 
 class DoctorWorkDayInline(admin.StackedInline):
+    """
+    Inline-форма робочих днів лікаря.
+
+    Дозволяє редагувати робочі дні лікаря в адмін-панелі.
+    """
+
     model = DoctorWorkDay
     extra = 0
     form = DoctorWorkDayInlineForm
@@ -72,12 +107,24 @@ class DoctorWorkDayInline(admin.StackedInline):
 
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
+    """
+    Адмін-інтерфейс для напрямів.
+
+    Налаштовує відображення та пошук напрямів у адмін-панелі.
+    """
+
     list_display = ("name",)
     search_fields = ("name",)
 
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
+    """
+    Адмін-інтерфейс для лікарів.
+
+    Налаштовує відображення, фільтри, пошук і робочі дні лікарів.
+    """
+
     list_display = (
         "full_name",
         "position",
@@ -94,6 +141,12 @@ class DoctorAdmin(admin.ModelAdmin):
 
 @admin.register(DoctorWorkDay)
 class DoctorWorkDayAdmin(admin.ModelAdmin):
+    """
+    Адмін-інтерфейс для робочих днів лікарів.
+
+    Налаштовує відображення, фільтри, пошук і робочі періоди.
+    """
+
     list_display = (
         "doctor",
         "direction",

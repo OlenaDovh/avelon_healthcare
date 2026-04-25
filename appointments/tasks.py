@@ -1,14 +1,21 @@
 from __future__ import annotations
-
 from celery import shared_task
 from django.template.loader import render_to_string
-
 from core.utils.email import send_html_email
 from appointments.models import Appointment
 
 
 @shared_task
 def send_appointment_email_task(appointment_id: int) -> None:
+    """
+    Celery-задача для надсилання email про запис до лікаря.
+
+    Args:
+        appointment_id: Ідентифікатор запису.
+
+    Returns:
+        None
+    """
     try:
         appointment = Appointment.objects.get(id=appointment_id)
     except Appointment.DoesNotExist:

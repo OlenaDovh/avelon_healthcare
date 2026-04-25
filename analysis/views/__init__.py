@@ -1,4 +1,3 @@
-# analysis/views/__init__.py
 from .head_manager import (
     head_manager_analysis_create_view,
     head_manager_analysis_list_view,

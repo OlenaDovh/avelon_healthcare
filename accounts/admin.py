@@ -6,6 +6,12 @@ from accounts.models import User
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    """
+    Кастомна адмін-конфігурація для моделі користувача.
+
+    Додає додаткові поля до відображення та редагування в адміністративній панелі.
+    """
+
     model = User
 
     fieldsets = UserAdmin.fieldsets + (
@@ -47,7 +53,19 @@ class CustomUserAdmin(UserAdmin):
 
     search_fields = ("username", "email", "phone", "pending_email")
 
-    def save_model(self, request, obj, form, change):
+    def save_model(self, request, obj, form, change) -> None:
+        """
+        Зберігає модель користувача з додатковою логікою.
+
+        Args:
+            request: HTTP-запит.
+            obj: Об'єкт користувача.
+            form: Форма адміністративної панелі.
+            change: Ознака редагування існуючого об'єкта.
+
+        Returns:
+            None
+        """
         if obj.email:
             obj.email_verified = True
             obj.pending_email = ""

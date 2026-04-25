@@ -13,3 +13,4 @@ daphne>=4.0
 whitenoise>=6.0
 asgiref
 google-genai>=1.0.0
+pytest

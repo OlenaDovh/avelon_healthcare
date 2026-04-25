@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 from django import forms
 from django.contrib.auth import get_user_model
-
 from accounts.constants import DOCTOR_GROUP
 from doctors.models import Doctor
 
@@ -10,6 +8,12 @@ User = get_user_model()
 
 
 class DoctorForm(forms.ModelForm):
+    """
+    Форма для створення та редагування лікаря.
+
+    Використовується для керування об'єктами моделі Doctor.
+    """
+
     class Meta:
         model = Doctor
         fields = (
@@ -47,7 +51,17 @@ class DoctorForm(forms.ModelForm):
             "licenses": forms.ClearableFileInput(attrs={"class": "form-control"}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Ініціалізує форму та налаштовує queryset для користувачів.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["user"].queryset = User.objects.filter(

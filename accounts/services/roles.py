@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 from django.contrib.auth.models import Group, Permission
 from django.db.utils import IntegrityError
-
 from accounts.constants import (
     CONTENT_MANAGER_GROUP,
     DOCTOR_GROUP,
@@ -13,17 +11,29 @@ from accounts.constants import (
 
 
 def setup_roles() -> None:
+    """
+    Створює базові групи користувачів.
+
+    Returns:
+        None
+    """
     for group_name in (
-        PATIENT_GROUP,
-        SUPPORT_GROUP,
-        HEAD_MANAGER_GROUP,
-        CONTENT_MANAGER_GROUP,
-        DOCTOR_GROUP,
+            PATIENT_GROUP,
+            SUPPORT_GROUP,
+            HEAD_MANAGER_GROUP,
+            CONTENT_MANAGER_GROUP,
+            DOCTOR_GROUP,
     ):
         Group.objects.get_or_create(name=group_name)
 
 
 def assign_group_permissions() -> None:
+    """
+    Призначає дозволи групам користувачів.
+
+    Returns:
+        None
+    """
     setup_roles()
 
     support_group = Group.objects.get(name=SUPPORT_GROUP)
@@ -96,7 +106,16 @@ def assign_group_permissions() -> None:
 
 
 def _get_permissions(items: list[tuple[str, str]]) -> list[Permission]:
-    permissions: list[Permission] = []
+    """
+    Отримує об'єкти дозволів за списком app_label та codename.
+
+    Args:
+        items: Список пар app_label і codename дозволів.
+
+    Returns:
+        list[Permission]: Список знайдених дозволів.
+    """
+    permissions = []
 
     for app_label, codename in items:
         try:

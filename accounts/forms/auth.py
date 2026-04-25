@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from typing import Any
-
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
@@ -11,7 +9,11 @@ User = get_user_model()
 
 
 class RegisterForm(UserCreationForm):
-    """Форма для реєстрації нового користувача."""
+    """
+    Форма для реєстрації нового користувача.
+
+    Використовується для створення акаунта з перевіркою email і номера телефону.
+    """
 
     email = forms.EmailField(
         label="Електронна пошта",
@@ -53,9 +55,6 @@ class RegisterForm(UserCreationForm):
         Args:
             *args: Позиційні аргументи.
             **kwargs: Іменовані аргументи.
-
-        Returns:
-            None
         """
         super().__init__(*args, **kwargs)
 
@@ -98,12 +97,12 @@ class RegisterForm(UserCreationForm):
         Перевіряє унікальність email та нормалізує його.
 
         Returns:
-            str: Валідований email.
+            str: Валідований email у нижньому регістрі.
 
         Raises:
             ValidationError: Якщо email вже існує або очікує підтвердження.
         """
-        email: str = self.cleaned_data["email"].lower().strip()
+        email = self.cleaned_data["email"].lower().strip()
 
         if User.objects.filter(email__iexact=email).exists():
             raise ValidationError("Користувач із такою електронною поштою вже існує.")
@@ -125,7 +124,7 @@ class RegisterForm(UserCreationForm):
         Raises:
             ValidationError: Якщо номер вже використовується.
         """
-        phone: str = self.cleaned_data["phone"].strip()
+        phone = self.cleaned_data["phone"].strip()
 
         if User.objects.filter(phone=phone).exists():
             raise ValidationError("Користувач із таким номером телефону вже існує.")
@@ -134,7 +133,11 @@ class RegisterForm(UserCreationForm):
 
 
 class LoginForm(forms.Form):
-    """Форма для входу користувача."""
+    """
+    Форма для аутентифікації користувача.
+
+    Приймає логін або email і пароль та перевіряє їх валідність.
+    """
 
     login = forms.CharField(
         label="Логін або Email",
@@ -157,17 +160,17 @@ class LoginForm(forms.Form):
 
     def clean(self) -> dict[str, Any]:
         """
-        Аутентифікує користувача та додає його в cleaned_data.
+        Аутентифікує користувача та додає його в очищені дані.
 
         Returns:
-            dict[str, Any]: Очищені дані форми з ключем 'user'.
+            dict[str, Any]: Очищені дані форми з доданим ключем 'user'.
 
         Raises:
-            ValidationError: Якщо дані невірні або email не підтверджений.
+            ValidationError: Якщо облікові дані невірні або email не підтверджений.
         """
-        cleaned_data: dict[str, Any] = super().clean()
-        login_value: str | None = cleaned_data.get("login")
-        password: str | None = cleaned_data.get("password")
+        cleaned_data = super().clean()
+        login_value = cleaned_data.get("login")
+        password = cleaned_data.get("password")
 
         user = authenticate(username=login_value, password=password)
 

@@ -1,11 +1,15 @@
 from __future__ import annotations
-
 from django import forms
-
 from orders.models import PaymentMethod
 
 
 class GuestOrderForm(forms.Form):
+    """
+    Форма оформлення замовлення для незареєстрованого користувача.
+
+    Збирає персональні дані та спосіб оплати.
+    """
+
     last_name = forms.CharField(
         label="Прізвище",
         max_length=150,
@@ -39,6 +43,12 @@ class GuestOrderForm(forms.Form):
 
 
 class AuthenticatedOrderForm(forms.Form):
+    """
+    Форма оформлення замовлення для авторизованого користувача.
+
+    Дозволяє обрати лише спосіб оплати.
+    """
+
     payment_method = forms.ChoiceField(
         label="Спосіб оплати",
         choices=PaymentMethod.choices,

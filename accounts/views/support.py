@@ -1,12 +1,10 @@
 from __future__ import annotations
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from accounts.constants import PATIENT_GROUP
 from accounts.forms import SupportPatientUpdateForm
 from accounts.permissions import support_required
@@ -17,12 +15,21 @@ User = get_user_model()
 @login_required
 @support_required
 def support_patient_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список пацієнтів для support-користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку пацієнтів.
+    """
     patients = User.objects.filter(
         groups__name=PATIENT_GROUP,
     ).order_by("last_name", "first_name", "username").distinct()
 
     paginator = Paginator(patients, 20)
-    page_number: str | None = request.GET.get("page")
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
     return render(
@@ -35,6 +42,16 @@ def support_patient_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @support_required
 def support_patient_update_view(request: HttpRequest, user_id: int) -> HttpResponse:
+    """
+    Обробляє редагування даних пацієнта support-користувачем.
+
+    Args:
+        request: HTTP-запит.
+        user_id: Ідентифікатор пацієнта.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою редагування пацієнта або перенаправленням.
+    """
     patient = get_object_or_404(
         User.objects.filter(groups__name=PATIENT_GROUP).distinct(),
         id=user_id,

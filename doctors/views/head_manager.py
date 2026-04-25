@@ -1,21 +1,28 @@
 from __future__ import annotations
-
 import logging
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect
-
 from accounts.permissions import head_manager_required
 from doctors.forms import DoctorForm, DirectionForm, DoctorWorkDayForm, DoctorWorkPeriodFormSet
 from doctors.models import Direction, Doctor, DoctorWorkDay
 
 logger = logging.getLogger(__name__)
 
+
 @login_required
 @head_manager_required
 def head_manager_doctor_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список лікарів для головного менеджера.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку лікарів.
+    """
     doctors = Doctor.objects.prefetch_related("directions").all()
 
     return render(
@@ -28,6 +35,15 @@ def head_manager_doctor_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_doctor_create_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє створення лікаря головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     if request.method == "POST":
         form = DoctorForm(request.POST, request.FILES)
         if form.is_valid():
@@ -47,6 +63,16 @@ def head_manager_doctor_create_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_doctor_update_view(request: HttpRequest, pk: int) -> HttpResponse:
+    """
+    Обробляє редагування лікаря головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+        pk: Ідентифікатор лікаря.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     doctor = get_object_or_404(Doctor, pk=pk)
 
     if request.method == "POST":
@@ -71,6 +97,15 @@ def head_manager_doctor_update_view(request: HttpRequest, pk: int) -> HttpRespon
 @login_required
 @head_manager_required
 def head_manager_direction_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список напрямів для головного менеджера.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку напрямів.
+    """
     directions = Direction.objects.all()
 
     return render(
@@ -83,6 +118,15 @@ def head_manager_direction_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_direction_create_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє створення напряму головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     if request.method == "POST":
         form = DirectionForm(request.POST)
         if form.is_valid():
@@ -102,6 +146,16 @@ def head_manager_direction_create_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_direction_update_view(request: HttpRequest, pk: int) -> HttpResponse:
+    """
+    Обробляє редагування напряму головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+        pk: Ідентифікатор напряму.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     direction = get_object_or_404(Direction, pk=pk)
 
     if request.method == "POST":
@@ -126,6 +180,15 @@ def head_manager_direction_update_view(request: HttpRequest, pk: int) -> HttpRes
 @login_required
 @head_manager_required
 def head_manager_schedule_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список графіків лікарів для головного менеджера.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку графіків.
+    """
     schedules = (
         DoctorWorkDay.objects.select_related("doctor", "direction")
         .prefetch_related("periods")
@@ -142,6 +205,15 @@ def head_manager_schedule_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_schedule_create_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє створення графіка лікаря головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     if request.method == "POST":
         form = DoctorWorkDayForm(request.POST)
         formset = DoctorWorkPeriodFormSet(request.POST)
@@ -174,6 +246,16 @@ def head_manager_schedule_create_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @head_manager_required
 def head_manager_schedule_update_view(request: HttpRequest, pk: int) -> HttpResponse:
+    """
+    Обробляє редагування графіка лікаря головним менеджером.
+
+    Args:
+        request: HTTP-запит.
+        pk: Ідентифікатор графіка.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     schedule = get_object_or_404(DoctorWorkDay, pk=pk)
 
     if request.method == "POST":
