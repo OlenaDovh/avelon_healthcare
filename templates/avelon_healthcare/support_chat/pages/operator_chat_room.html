@@ -9,24 +9,21 @@
 
     <div
         id="operator-chat-messages"
-        class="border rounded p-3 mb-2 bg-white"
+        class="border rounded p-3 mb-3 bg-white"
         style="height: 450px; overflow-y: auto;"
     >
         {% for message in messages %}
-            <div class="mb-2 d-flex {% if message.author_type == 'operator' %}justify-content-end{% elif message.author_type == 'user' %}justify-content-start{% else %}justify-content-center{% endif %}"
-                 data-message-id="{{ message.id }}">
-                <div class="p-2 rounded {% if message.author_type == 'operator' %}bg-success-subtle{% elif message.author_type == 'user' %}bg-light{% else %}bg-warning-subtle{% endif %}"
-                     style="max-width: 75%;">
-                    {% if message.author_type != 'system' %}
-                        <div class="small text-muted mb-1">
-                            {{ message.author_name }}
-                        </div>
-                    {% endif %}
-                    <div>{{ message.text }}</div>
+            {% if message.author_type != "system" %}
+                <div class="mb-2 d-flex {% if message.author_type == 'operator' %}justify-content-end{% else %}justify-content-start{% endif %}"
+                     data-message-id="{{ message.id }}">
+                    <div class="p-2 px-3 rounded-3 shadow-sm {% if message.author_type == 'operator' %}bg-success-subtle{% else %}bg-light{% endif %}"
+                         style="max-width: 70%;">
+                        <div>{{ message.text }}</div>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         {% empty %}
-            <div class="text-muted">Повідомлень ще немає.</div>
+            <div class="text-muted text-center">Повідомлень ще немає</div>
         {% endfor %}
     </div>
 
