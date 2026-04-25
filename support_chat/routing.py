@@ -1,3 +1,7 @@
+"""Модуль support_chat/routing.py.
+
+Містить функціональність застосунку Avelon Healthcare."""
+
 from django.urls import path
 
 from .consumers import SupportChatConsumer

@@ -1,3 +1,7 @@
+"""
+Модуль support_chat/services.py.
+Містить функціональність застосунку Avelon Healthcare.
+"""
 from __future__ import annotations
 
 from django.utils import timezone
@@ -5,7 +9,19 @@ from django.utils import timezone
 from .models import SupportChatMessage, SupportChatSession, SupportChatStatus
 
 
-def create_support_chat_session(*, user, guest_name: str, guest_email: str, topic: str, initial_description: str) -> SupportChatSession:
+def create_support_chat_session(*, user, guest_name: str, guest_email: str, topic: str,
+                                initial_description: str) -> SupportChatSession:
+    """Виконує логіку `create_support_chat_session`.
+
+Args:
+    user: Вхідний параметр `user`.
+    guest_name: Вхідний параметр `guest_name`.
+    guest_email: Вхідний параметр `guest_email`.
+    topic: Вхідний параметр `topic`.
+    initial_description: Вхідний параметр `initial_description`.
+
+Returns:
+    Any: Результат виконання."""
     session = SupportChatSession.objects.create(
         user=user,
         guest_name=guest_name,
@@ -25,6 +41,14 @@ def create_support_chat_session(*, user, guest_name: str, guest_email: str, topi
 
 
 def assign_operator_to_chat(*, session: SupportChatSession, operator) -> SupportChatSession:
+    """Виконує логіку `assign_operator_to_chat`.
+
+Args:
+    session: Вхідний параметр `session`.
+    operator: Вхідний параметр `operator`.
+
+Returns:
+    Any: Результат виконання."""
     session.operator = operator
     session.status = SupportChatStatus.ACTIVE
     session.connected_at = timezone.now()
@@ -41,6 +65,13 @@ def assign_operator_to_chat(*, session: SupportChatSession, operator) -> Support
 
 
 def close_chat_session(*, session: SupportChatSession) -> SupportChatSession:
+    """Виконує логіку `close_chat_session`.
+
+Args:
+    session: Вхідний параметр `session`.
+
+Returns:
+    Any: Результат виконання."""
     if session.status != SupportChatStatus.CLOSED:
         session.status = SupportChatStatus.CLOSED
         session.closed_at = timezone.now()

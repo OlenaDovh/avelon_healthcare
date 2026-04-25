@@ -1,3 +1,7 @@
+"""
+Модуль conftest.py.
+Містить функціональність застосунку Avelon Healthcare.
+"""
 import pytest
 from django.contrib.auth import get_user_model
 from pytest_factoryboy import register
