@@ -6,7 +6,9 @@ from typing import Any
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
 User = get_user_model()
+
 
 class ProfileUpdateForm(forms.ModelForm):
     """Клас ProfileUpdateForm.
@@ -19,8 +21,16 @@ class ProfileUpdateForm(forms.ModelForm):
 Відповідає за поведінку, описану в цьому компоненті застосунку."""
         model = User
         fields = ('email', 'phone', 'first_name', 'last_name', 'middle_name', 'birth_date', 'preferred_contact_channel')
-        widgets = {'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}), 'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@email.com'}), 'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 'preferred_contact_channel': forms.Select(attrs={'class': 'form-select'}), 'first_name': forms.TextInput(attrs={'class': 'form-control'}), 'last_name': forms.TextInput(attrs={'class': 'form-control'}), 'middle_name': forms.TextInput(attrs={'class': 'form-control'})}
-        labels = {'email': 'Електронна пошта', 'birth_date': 'Дата народження', 'preferred_contact_channel': "Пріоритетний канал зв'язку", 'phone': 'Номер телефону', 'first_name': "Ім'я", 'last_name': 'Прізвище', 'middle_name': 'По батькові'}
+        widgets = {'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}),
+                   'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@email.com'}),
+                   'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                   'preferred_contact_channel': forms.Select(attrs={'class': 'form-select'}),
+                   'first_name': forms.TextInput(attrs={'class': 'form-control'}),
+                   'last_name': forms.TextInput(attrs={'class': 'form-control'}),
+                   'middle_name': forms.TextInput(attrs={'class': 'form-control'})}
+        labels = {'email': 'Електронна пошта', 'birth_date': 'Дата народження',
+                  'preferred_contact_channel': "Пріоритетний канал зв'язку", 'phone': 'Номер телефону',
+                  'first_name': "Ім'я", 'last_name': 'Прізвище', 'middle_name': 'По батькові'}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Виконує логіку `__init__`.

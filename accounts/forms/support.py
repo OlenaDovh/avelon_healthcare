@@ -6,7 +6,9 @@ from typing import Any
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+
 User = get_user_model()
+
 
 class SupportPatientUpdateForm(forms.ModelForm):
     """Клас SupportPatientUpdateForm.
@@ -18,8 +20,15 @@ class SupportPatientUpdateForm(forms.ModelForm):
 
 Відповідає за поведінку, описану в цьому компоненті застосунку."""
         model = User
-        fields = ('first_name', 'last_name', 'middle_name', 'phone', 'birth_date', 'preferred_contact_channel', 'discount')
-        widgets = {'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Ім'я"}), 'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Прізвище'}), 'middle_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'По батькові'}), 'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}), 'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 'preferred_contact_channel': forms.Select(attrs={'class': 'form-select'}), 'discount': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100})}
+        fields = ('first_name', 'last_name', 'middle_name', 'phone', 'birth_date', 'preferred_contact_channel',
+                  'discount')
+        widgets = {'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': "Ім'я"}),
+                   'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Прізвище'}),
+                   'middle_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'По батькові'}),
+                   'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}),
+                   'birth_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+                   'preferred_contact_channel': forms.Select(attrs={'class': 'form-select'}),
+                   'discount': forms.NumberInput(attrs={'class': 'form-control', 'min': 0, 'max': 100})}
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         """Виконує логіку `__init__`.

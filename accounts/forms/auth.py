@@ -7,14 +7,18 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
+
 User = get_user_model()
+
 
 class RegisterForm(UserCreationForm):
     """Клас RegisterForm.
 
 Відповідає за поведінку, описану в цьому компоненті застосунку."""
-    email = forms.EmailField(label='Електронна пошта', widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@email.com'}))
-    phone = forms.CharField(label='Номер телефону', help_text='Формат: +380XXXXXXXXX', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}))
+    email = forms.EmailField(label='Електронна пошта', widget=forms.EmailInput(
+        attrs={'class': 'form-control', 'placeholder': 'example@email.com'}))
+    phone = forms.CharField(label='Номер телефону', help_text='Формат: +380XXXXXXXXX',
+                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}))
 
     class Meta:
         """Клас Meta.
@@ -69,12 +73,15 @@ Returns:
             raise ValidationError('Користувач із таким номером телефону вже існує.')
         return phone
 
+
 class LoginForm(forms.Form):
     """Клас LoginForm.
 
 Відповідає за поведінку, описану в цьому компоненті застосунку."""
-    login = forms.CharField(label='Логін або Email', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть логін або email'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Введіть пароль'}))
+    login = forms.CharField(label='Логін або Email', widget=forms.TextInput(
+        attrs={'class': 'form-control', 'placeholder': 'Введіть логін або email'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(
+        attrs={'class': 'form-control', 'placeholder': 'Введіть пароль'}))
 
     def clean(self) -> dict[str, Any]:
         """Виконує логіку `clean`.

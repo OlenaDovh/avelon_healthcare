@@ -5,6 +5,7 @@ from __future__ import annotations
 from django.core.management.base import BaseCommand
 from accounts.services import assign_group_permissions
 
+
 class Command(BaseCommand):
     """Клас Command.
 

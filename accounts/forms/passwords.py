@@ -7,6 +7,7 @@ from django.contrib.auth.forms import PasswordChangeForm, PasswordResetForm, Set
 from accounts.tasks import send_password_reset_email_task
 from django.template.loader import render_to_string
 
+
 class UserPasswordChangeForm(PasswordChangeForm):
     """Клас UserPasswordChangeForm.
 
@@ -23,11 +24,15 @@ Returns:
     None."""
         super().__init__(*args, **kwargs)
         self.fields['old_password'].label = 'Поточний пароль'
-        self.fields['old_password'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введіть поточний пароль'})
+        self.fields['old_password'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Введіть поточний пароль'})
         self.fields['new_password1'].label = 'Новий пароль'
-        self.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введіть новий пароль'})
+        self.fields['new_password1'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Введіть новий пароль'})
         self.fields['new_password2'].label = 'Підтвердження нового пароля'
-        self.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Повторіть новий пароль'})
+        self.fields['new_password2'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Повторіть новий пароль'})
+
 
 class UserPasswordResetForm(PasswordResetForm):
     """Клас UserPasswordResetForm.
@@ -45,9 +50,11 @@ Returns:
     None."""
         super().__init__(*args, **kwargs)
         self.fields['email'].label = 'Електронна пошта'
-        self.fields['email'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введіть вашу електронну пошту'})
+        self.fields['email'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Введіть вашу електронну пошту'})
 
-    def send_mail(self, subject_template_name: Any, email_template_name: Any, context: Any, from_email: Any, to_email: Any, html_email_template_name: Any=None) -> None:
+    def send_mail(self, subject_template_name: Any, email_template_name: Any, context: Any, from_email: Any,
+                  to_email: Any, html_email_template_name: Any = None) -> None:
         """Виконує логіку `send_mail`.
 
 Args:
@@ -66,7 +73,9 @@ Returns:
         html_email = None
         if html_email_template_name:
             html_email = render_to_string(html_email_template_name, context)
-        send_password_reset_email_task.delay(subject=subject, body=body, from_email=from_email, to_email=to_email, html_email=html_email)
+        send_password_reset_email_task.delay(subject=subject, body=body, from_email=from_email, to_email=to_email,
+                                             html_email=html_email)
+
 
 class UserSetPasswordForm(SetPasswordForm):
     """Клас UserSetPasswordForm.
@@ -84,6 +93,8 @@ Returns:
     None."""
         super().__init__(*args, **kwargs)
         self.fields['new_password1'].label = 'Новий пароль'
-        self.fields['new_password1'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введіть новий пароль'})
+        self.fields['new_password1'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Введіть новий пароль'})
         self.fields['new_password2'].label = 'Підтвердження нового пароля'
-        self.fields['new_password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Повторіть новий пароль'})
+        self.fields['new_password2'].widget.attrs.update(
+            {'class': 'form-control', 'placeholder': 'Повторіть новий пароль'})
