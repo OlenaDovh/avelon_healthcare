@@ -1,26 +1,37 @@
 {% extends "avelon_healthcare/base.html" %}
 
 {% block content %}
-<h1>Мої прийоми</h1>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Пацієнт</th>
-            <th>Дата</th>
-            <th>Час</th>
-            <th>Статус</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for a in appointments %}
-        <tr>
-            <td>{{ a.user.last_name }} {{ a.user.first_name }} {{ a.user.middle_name }}</td>
-            <td>{{ a.appointment_date }}</td>
-            <td>{{ a.appointment_time_range }}</td>
-            <td>{{ a.get_status_display }}</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container mt-4">
+    <h1>Мої прийоми</h1>
+    <table class="table mt-3">
+        <thead>
+            <tr>
+                <th>Пацієнт</th>
+                <th>Дата</th>
+                <th>Час</th>
+                <th>Статус</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for a in appointments %}
+            <tr>
+                <td>{{ a.user.get_full_name|default:a.user.username }}</td>
+                <td>{{ a.appointment_date }}</td>
+                <td>{{ a.appointment_time_range }}</td>
+                <td>
+                    <span class="badge {% if a.status == 'completed' %}bg-success{% elif a.status == 'rejected' %}bg-danger{% else %}bg-primary{% endif %}">
+                        {{ a.get_status_display }}
+                    </span>
+                </td>
+                <td>
+                    <a href="{% url 'appointments:doctor_appointment_update' a.id %}" class="btn btn-sm btn-outline-primary">
+                        Обробити
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

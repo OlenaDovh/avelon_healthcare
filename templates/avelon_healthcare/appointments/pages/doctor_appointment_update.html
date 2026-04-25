@@ -1,0 +1,40 @@
+{% extends "avelon_healthcare/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'appointments:doctor_appointment_list' %}">Мої прийоми</a></li>
+            <li class="breadcrumb-item active">Обробка запису</li>
+        </ol>
+    </nav>
+
+    <h2>Обробка запису: {{ appointment.user.get_full_name }}</h2>
+    <hr>
+
+    <div class="row">
+        <div class="col-md-8">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Зберегти зміни</button>
+                    <a href="{% url 'appointments:doctor_appointment_list' %}" class="btn btn-secondary">Скасувати</a>
+                </div>
+            </form>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">Інформація про запис</div>
+                <div class="card-body">
+                    <p><strong>Дата:</strong> {{ appointment.appointment_date }}</p>
+                    <p><strong>Час:</strong> {{ appointment.appointment_time }}</p>
+                    <p><strong>Скарги:</strong> {{ appointment.description|default:"—" }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
