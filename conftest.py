@@ -1,7 +1,3 @@
-"""Модуль conftest.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth import get_user_model
@@ -29,10 +25,10 @@ def user(db: Any) -> Any:
     """Виконує логіку `user`.
 
 Args:
-    db: Вхідне значення для виконання операції.
+    db: Вхідний параметр `db`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return User.objects.create_user(email='user@example.com', password='testpass123', username='testuser', phone='+380991234567', first_name='Іван', last_name='Петренко')
 
 @pytest.fixture
@@ -40,10 +36,10 @@ def auth_client(client: Any, user: Any) -> Any:
     """Виконує логіку `auth_client`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     client.force_login(user)
     return client

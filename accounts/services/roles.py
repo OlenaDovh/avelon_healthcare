@@ -1,6 +1,3 @@
-"""Модуль accounts/services/roles.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib.auth.models import Group, Permission
 from django.db.utils import IntegrityError
@@ -10,7 +7,7 @@ def setup_roles() -> None:
     """Виконує логіку `setup_roles`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     for group_name in (PATIENT_GROUP, SUPPORT_GROUP, HEAD_MANAGER_GROUP, CONTENT_MANAGER_GROUP, DOCTOR_GROUP):
         Group.objects.get_or_create(name=group_name)
 
@@ -18,7 +15,7 @@ def assign_group_permissions() -> None:
     """Виконує логіку `assign_group_permissions`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     setup_roles()
     support_group = Group.objects.get(name=SUPPORT_GROUP)
     head_manager_group = Group.objects.get(name=HEAD_MANAGER_GROUP)
@@ -37,10 +34,10 @@ def _get_permissions(items: list[tuple[str, str]]) -> list[Permission]:
     """Виконує логіку `_get_permissions`.
 
 Args:
-    items: Вхідне значення для виконання операції.
+    items: Вхідний параметр `items`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     permissions: list[Permission] = []
     for app_label, codename in items:
         try:

@@ -1,11 +1,5 @@
-"""Модуль analysis/apps.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from django.apps import AppConfig
 
 class AnalysisConfig(AppConfig):
-    """Клас AnalysisConfig.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `AnalysisConfig`."""
     name = 'analysis'

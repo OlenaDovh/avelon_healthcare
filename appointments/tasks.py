@@ -1,6 +1,3 @@
-"""Модуль appointments/tasks.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from celery import shared_task
 from django.template.loader import render_to_string
@@ -12,10 +9,10 @@ def send_appointment_email_task(appointment_id: int) -> None:
     """Виконує логіку `send_appointment_email_task`.
 
 Args:
-    appointment_id: Вхідне значення для виконання операції.
+    appointment_id: Вхідний параметр `appointment_id`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     try:
         appointment = Appointment.objects.get(id=appointment_id)
     except Appointment.DoesNotExist:

@@ -1,7 +1,3 @@
-"""Модуль avelon_healthcare/tests/factories.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import factory
 from decimal import Decimal
@@ -17,14 +13,10 @@ from support_chat.models import SupportChatSession, SupportChatMessage, SupportC
 User = get_user_model()
 
 class UserFactory(factory.django.DjangoModelFactory):
-    """Клас UserFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `UserFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = User
         skip_postgeneration_save = True
     username = factory.Sequence(lambda n: f'user{n}')
@@ -44,26 +36,22 @@ class UserFactory(factory.django.DjangoModelFactory):
         """Виконує логіку `password`.
 
 Args:
-    create: Вхідне значення для виконання операції.
-    extracted: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    create: Вхідний параметр `create`.
+    extracted: Вхідний параметр `extracted`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         password = extracted or 'testpass123'
         self.set_password(password)
         if create:
             self.save()
 
 class AnalysisFactory(factory.django.DjangoModelFactory):
-    """Клас AnalysisFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `AnalysisFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Analysis
     name = factory.Sequence(lambda n: f'Аналіз {n}')
     what_to_check = 'Загальні показники'
@@ -75,14 +63,10 @@ class AnalysisFactory(factory.django.DjangoModelFactory):
     is_active = True
 
 class ClinicInfoFactory(factory.django.DjangoModelFactory):
-    """Клас ClinicInfoFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `ClinicInfoFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = ClinicInfo
     title = 'Про клініку Avelon Healthcare'
     description = 'Сучасна багатопрофільна клініка.'
@@ -92,14 +76,10 @@ class ClinicInfoFactory(factory.django.DjangoModelFactory):
     image = None
 
 class ContactInfoFactory(factory.django.DjangoModelFactory):
-    """Клас ContactInfoFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `ContactInfoFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = ContactInfo
     address = 'м. Київ, вул. Хрещатик, 1'
     work_schedule = 'Пн-Пт 08:00-20:00'
@@ -112,14 +92,10 @@ class ContactInfoFactory(factory.django.DjangoModelFactory):
     youtube_url = 'https://youtube.com/@avelon'
 
 class PromotionFactory(factory.django.DjangoModelFactory):
-    """Клас PromotionFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `PromotionFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Promotion
     title = factory.Sequence(lambda n: f'Акція {n}')
     image = None
@@ -127,27 +103,19 @@ class PromotionFactory(factory.django.DjangoModelFactory):
     end_date = factory.LazyFunction(lambda: date.today() + timedelta(days=30))
 
 class DirectionFactory(factory.django.DjangoModelFactory):
-    """Клас DirectionFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DirectionFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Direction
     name = factory.Sequence(lambda n: f'Напрям {n}')
     description = 'Опис медичного напряму'
 
 class DoctorFactory(factory.django.DjangoModelFactory):
-    """Клас DoctorFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Doctor
     user = None
     last_name = factory.Sequence(lambda n: f'Лікаренко{n}')
@@ -169,12 +137,12 @@ class DoctorFactory(factory.django.DjangoModelFactory):
         """Виконує логіку `directions`.
 
 Args:
-    create: Вхідне значення для виконання операції.
-    extracted: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    create: Вхідний параметр `create`.
+    extracted: Вхідний параметр `extracted`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         if not create:
             return
         if extracted:
@@ -184,14 +152,10 @@ Returns:
             self.directions.add(DirectionFactory())
 
 class DoctorWorkDayFactory(factory.django.DjangoModelFactory):
-    """Клас DoctorWorkDayFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkDayFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = DoctorWorkDay
     doctor = factory.SubFactory(DoctorFactory)
     work_date = factory.LazyFunction(lambda: date.today() + timedelta(days=1))
@@ -203,39 +167,31 @@ class DoctorWorkDayFactory(factory.django.DjangoModelFactory):
         """Виконує логіку `sync_doctor_direction`.
 
 Args:
-    create: Вхідне значення для виконання операції.
-    extracted: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    create: Вхідний параметр `create`.
+    extracted: Вхідний параметр `extracted`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         if not create:
             return
         self.doctor.directions.add(self.direction)
 
 class DoctorWorkPeriodFactory(factory.django.DjangoModelFactory):
-    """Клас DoctorWorkPeriodFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkPeriodFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = DoctorWorkPeriod
     workday = factory.SubFactory(DoctorWorkDayFactory)
     start_time = time(9, 0)
     end_time = time(12, 0)
 
 class AppointmentFactory(factory.django.DjangoModelFactory):
-    """Клас AppointmentFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `AppointmentFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Appointment
     user = factory.SubFactory(UserFactory)
     last_name = 'Петренко'
@@ -257,25 +213,21 @@ class AppointmentFactory(factory.django.DjangoModelFactory):
         """Виконує логіку `sync_doctor_direction`.
 
 Args:
-    create: Вхідне значення для виконання операції.
-    extracted: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    create: Вхідний параметр `create`.
+    extracted: Вхідний параметр `extracted`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         if not create:
             return
         self.doctor.directions.add(self.direction)
 
 class OrderFactory(factory.django.DjangoModelFactory):
-    """Клас OrderFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `OrderFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Order
     user = factory.SubFactory(UserFactory)
     last_name = 'Петренко'
@@ -291,28 +243,20 @@ class OrderFactory(factory.django.DjangoModelFactory):
     rejection_reason = ''
 
 class OrderItemFactory(factory.django.DjangoModelFactory):
-    """Клас OrderItemFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `OrderItemFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = OrderItem
     order = factory.SubFactory(OrderFactory)
     analysis = factory.SubFactory(AnalysisFactory)
     price = Decimal('450.00')
 
 class ReviewFactory(factory.django.DjangoModelFactory):
-    """Клас ReviewFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `ReviewFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Review
     user = factory.SubFactory(UserFactory)
     text = 'Все було чудово, лікар допоміг.'
@@ -323,18 +267,14 @@ class ReviewFactory(factory.django.DjangoModelFactory):
         """Виконує логіку `appointment`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         return AppointmentFactory(user=self.user, status=AppointmentStatus.COMPLETED)
 
 class SupportChatSessionFactory(factory.django.DjangoModelFactory):
-    """Клас SupportChatSessionFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `SupportChatSessionFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = SupportChatSession
     user = factory.SubFactory(UserFactory)
     guest_name = ''
@@ -347,14 +287,10 @@ class SupportChatSessionFactory(factory.django.DjangoModelFactory):
     closed_at = None
 
 class SupportChatMessageFactory(factory.django.DjangoModelFactory):
-    """Клас SupportChatMessageFactory.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `SupportChatMessageFactory`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = SupportChatMessage
     session = factory.SubFactory(SupportChatSessionFactory)
     author_type = SupportChatMessage.AuthorType.USER

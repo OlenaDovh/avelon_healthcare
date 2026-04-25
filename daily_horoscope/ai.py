@@ -1,6 +1,3 @@
-"""Модуль daily_horoscope/ai.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 import time
@@ -16,32 +13,32 @@ def retry(max_attempts: int=4, delay: float=1.5, backoff: float=2.0) -> Callable
     """Виконує логіку `retry`.
 
 Args:
-    max_attempts: Вхідне значення для виконання операції.
-    delay: Вхідне значення для виконання операції.
-    backoff: Вхідне значення для виконання операції.
+    max_attempts: Вхідний параметр `max_attempts`.
+    delay: Вхідний параметр `delay`.
+    backoff: Вхідний параметр `backoff`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
 
     def decorator(func: Callable) -> Callable:
         """Виконує логіку `decorator`.
 
 Args:
-    func: Вхідне значення для виконання операції.
+    func: Вхідний параметр `func`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
 
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             """Виконує логіку `wrapper`.
 
 Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    *args: Вхідний параметр `args`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
             current_delay = delay
             for attempt in range(1, max_attempts + 1):
                 try:
@@ -62,10 +59,10 @@ def _request_gemini_text(prompt: str) -> str:
     """Виконує логіку `_request_gemini_text`.
 
 Args:
-    prompt: Вхідне значення для виконання операції.
+    prompt: Вхідний параметр `prompt`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if genai is None:
         raise RuntimeError('Gemini library not installed')
     if not settings.GEMINI_API_KEY:
@@ -82,11 +79,11 @@ def generate_horoscope_text(theme: str, weekday: str) -> str:
     """Виконує логіку `generate_horoscope_text`.
 
 Args:
-    theme: Вхідне значення для виконання операції.
-    weekday: Вхідне значення для виконання операції.
+    theme: Вхідний параметр `theme`.
+    weekday: Вхідний параметр `weekday`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if not settings.GEMINI_API_KEY:
         return FALLBACK_TEXT
     prompt = f'\nЗгенеруй короткий позитивний wellness-прогноз на день українською мовою.\n\nКонтекст:\n- день тижня: {weekday}\n- тема дня: {theme}\n\nВимоги:\n- стиль теплий, м’який, підтримуючий\n- 2-3 речення\n- звертайся до читача на "ти"\n- без містики\n- без діагнозів\n- без згадок про хвороби\n- без медичних порад і лікування\n- без залякування\n- без негативних прогнозів\n- акцент на самопочутті, балансі, турботі про себе, спокої, ресурсі\n\nПоверни тільки готовий текст без заголовка і без лапок.\n'

@@ -1,13 +1,7 @@
-"""Модуль doctors/migrations/0002_doctorworkday_doctorworkperiod_and_more.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 import django.db.models.deletion
 from django.db import migrations, models
 
 class Migration(migrations.Migration):
-    """Клас Migration.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `Migration`."""
     dependencies = [('doctors', '0001_initial')]
     operations = [migrations.CreateModel(name='DoctorWorkDay', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('work_date', models.DateField(verbose_name='Дата роботи')), ('appointment_duration_minutes', models.PositiveSmallIntegerField(choices=[(15, '15 хв'), (30, '30 хв'), (60, '60 хв')], default=30, verbose_name='Тривалість 1 прийому')), ('direction', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='doctor_workdays', to='doctors.direction', verbose_name='Напрям')), ('doctor', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='workdays', to='doctors.doctor', verbose_name='Лікар'))], options={'verbose_name': 'Розклад лікаря на дату', 'verbose_name_plural': 'Розклад лікарів на дати', 'ordering': ['-work_date', 'doctor__full_name']}), migrations.CreateModel(name='DoctorWorkPeriod', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('start_time', models.TimeField(verbose_name='Початок періоду')), ('end_time', models.TimeField(verbose_name='Кінець періоду')), ('workday', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='periods', to='doctors.doctorworkday', verbose_name='Робочий день'))], options={'verbose_name': 'Робочий період', 'verbose_name_plural': 'Робочі періоди', 'ordering': ['start_time']}), migrations.AddConstraint(model_name='doctorworkday', constraint=models.UniqueConstraint(fields=('doctor', 'direction', 'work_date'), name='unique_doctor_direction_work_date'))]

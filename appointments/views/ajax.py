@@ -1,6 +1,3 @@
-"""Модуль appointments/views/ajax.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from datetime import datetime
 from django.http import HttpRequest, JsonResponse
@@ -13,10 +10,10 @@ def available_slots(request: HttpRequest) -> JsonResponse:
     """Виконує логіку `available_slots`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     doctor_id = request.GET.get('doctor_id')
     direction_id = request.GET.get('direction_id')
     appointment_date = request.GET.get('date')
@@ -46,10 +43,10 @@ def available_doctors(request: HttpRequest) -> JsonResponse:
     """Виконує логіку `available_doctors`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     direction_id = request.GET.get('direction_id')
     if not direction_id:
         return JsonResponse({'doctors': []})
@@ -61,10 +58,10 @@ def available_dates(request: HttpRequest) -> JsonResponse:
     """Виконує логіку `available_dates`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     doctor_id = request.GET.get('doctor_id')
     direction_id = request.GET.get('direction_id')
     exclude_appointment_id = request.GET.get('exclude_appointment_id')

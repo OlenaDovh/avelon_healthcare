@@ -1,25 +1,27 @@
-"""Модуль accounts/management/commands/setup_roles.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
+
 from django.core.management.base import BaseCommand
+
 from accounts.services import assign_group_permissions
 
 
 class Command(BaseCommand):
-    """Клас Command.
+    """
+    Команда створення ролей і призначення дозволів.
+    """
 
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
-    help = 'Create groups and assign permissions'
+    help = "Create groups and assign permissions"
 
     def handle(self, *args: object, **options: object) -> None:
-        """Виконує логіку `handle`.
+        """
+        Виконує команду.
 
-Args:
-    args: Вхідне значення для виконання операції.
-    options: Вхідне значення для виконання операції.
+        Args:
+            *args (object): Позиційні аргументи.
+            **options (object): Іменовані аргументи.
 
-Returns:
-    None."""
+        Returns:
+            None
+        """
         assign_group_permissions()
-        self.stdout.write(self.style.SUCCESS('Roles created successfully'))
+        self.stdout.write(self.style.SUCCESS("Roles created successfully"))

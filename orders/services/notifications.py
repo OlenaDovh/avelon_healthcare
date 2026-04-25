@@ -1,6 +1,3 @@
-"""Модуль orders/services/notifications.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.template.loader import render_to_string
 from core.utils.email import send_html_email
@@ -11,10 +8,10 @@ def send_order_email(order: Order) -> None:
     """Виконує логіку `send_order_email`.
 
 Args:
-    order: Вхідне значення для виконання операції.
+    order: Вхідний параметр `order`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     context = {'order': order, 'online_payment_links': {'Portmone': 'https://www.portmone.com.ua/', 'EasyPay': 'https://easypay.ua/ua', 'iPay': 'https://ipay.ua/', 'Masterpass': 'https://www.mastercard.ua/'}}
     html_body = render_to_string('avelon_healthcare/orders/emails/order_email.html', context)
     attachments = []

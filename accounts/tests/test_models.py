@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_models.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 
@@ -10,10 +6,10 @@ def test_user_factory_creates_user(user: Any) -> None:
     """Виконує логіку `test_user_factory_creates_user`.
 
 Args:
-    user: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     assert user.id is not None
     assert user.email
     assert user.phone
@@ -24,10 +20,10 @@ def test_user_full_name_property(user: Any) -> None:
     """Виконує логіку `test_user_full_name_property`.
 
 Args:
-    user: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     expected = ' '.join(filter(None, [user.last_name, user.first_name, user.middle_name]))
     assert user.full_name == expected
 
@@ -36,8 +32,8 @@ def test_user_str_returns_full_name(user: Any) -> None:
     """Виконує логіку `test_user_str_returns_full_name`.
 
 Args:
-    user: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     assert str(user) == user.full_name

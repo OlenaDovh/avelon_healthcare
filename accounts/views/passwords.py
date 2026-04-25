@@ -1,6 +1,3 @@
-"""Модуль accounts/views/passwords.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 from django.contrib import messages
@@ -14,9 +11,7 @@ from accounts.forms import UserPasswordChangeForm, UserPasswordResetForm
 logger = logging.getLogger(__name__)
 
 class UserPasswordResetView(PasswordResetView):
-    """Клас UserPasswordResetView.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `UserPasswordResetView`."""
     form_class = UserPasswordResetForm
     template_name = 'avelon_healthcare/accounts/pages/password_reset_form.html'
     email_template_name = 'avelon_healthcare/accounts/emails/password_reset_email.txt'
@@ -27,10 +22,10 @@ class UserPasswordResetView(PasswordResetView):
         """Виконує логіку `form_valid`.
 
 Args:
-    form: Вхідне значення для виконання операції.
+    form: Вхідний параметр `form`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         logger.info('Запит на відновлення пароля для email=%s', form.cleaned_data.get('email'))
         return super().form_valid(form)
 
@@ -39,10 +34,10 @@ def password_change_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `password_change_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = UserPasswordChangeForm(user=request.user, data=request.POST)
         if form.is_valid():

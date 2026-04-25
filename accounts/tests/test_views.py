@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_views.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.urls import reverse
@@ -11,12 +7,12 @@ def login_request(client: Any, login_value: str, password: str='testpass123') ->
     """Виконує логіку `login_request`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    login_value: Вхідне значення для виконання операції.
-    password: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    login_value: Вхідний параметр `login_value`.
+    password: Вхідний параметр `password`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return client.post(reverse('accounts:login'), {'username': login_value, 'password': password}, follow=True)
 
 @pytest.mark.django_db
@@ -25,12 +21,12 @@ def test_page_opens(request: Any, url_name: Any, client_fixture: Any) -> None:
     """Виконує логіку `test_page_opens`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    url_name: Вхідне значення для виконання операції.
-    client_fixture: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    url_name: Вхідний параметр `url_name`.
+    client_fixture: Вхідний параметр `client_fixture`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     client = request.getfixturevalue(client_fixture)
     response = client.get(reverse(url_name))
     assert response.status_code == 200
@@ -40,10 +36,10 @@ def test_logout_redirects(auth_client: Any) -> None:
     """Виконує логіку `test_logout_redirects`.
 
 Args:
-    auth_client: Вхідне значення для виконання операції.
+    auth_client: Вхідний параметр `auth_client`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     response = auth_client.get(reverse('accounts:logout'))
     assert response.status_code in (302, 301)
 
@@ -53,11 +49,11 @@ def test_user_can_login(client: Any, user: Any, login_attr: Any) -> None:
     """Виконує логіку `test_user_can_login`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    login_attr: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    login_attr: Вхідний параметр `login_attr`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     response = login_request(client, getattr(user, login_attr))
     assert response.status_code == 200

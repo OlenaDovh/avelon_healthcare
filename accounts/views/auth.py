@@ -1,6 +1,3 @@
-"""Модуль accounts/views/auth.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 from django.contrib import messages
@@ -20,10 +17,10 @@ def register_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `register_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.user.is_authenticated:
         return redirect('accounts:profile')
     if request.method == 'POST':
@@ -46,12 +43,12 @@ def verify_email_view(request: HttpRequest, uidb64: str, token: str) -> HttpResp
     """Виконує логіку `verify_email_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    uidb64: Вхідне значення для виконання операції.
-    token: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    uidb64: Вхідний параметр `uidb64`.
+    token: Вхідний параметр `token`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     try:
         uid: str = force_str(urlsafe_base64_decode(uidb64))
         user: User | None = User.objects.get(pk=uid)
@@ -72,10 +69,10 @@ def login_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `login_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.user.is_authenticated:
         if is_staff_role(request.user):
             return redirect('accounts:staff_dashboard')
@@ -99,10 +96,10 @@ def logout_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `logout_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     username: str = request.user.username if request.user.is_authenticated else 'anonymous'
     logger.info('Користувач вийшов із системи: %s', username)
     logout(request)
@@ -113,10 +110,10 @@ def resend_verification_email_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `resend_verification_email_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     user = request.user
     if not user.is_authenticated:
         return redirect('accounts:login')

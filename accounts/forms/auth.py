@@ -1,41 +1,32 @@
-"""Модуль accounts/forms/auth.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.exceptions import ValidationError
-
 User = get_user_model()
 
-
 class RegisterForm(UserCreationForm):
-    """Клас RegisterForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
-    email = forms.EmailField(label='Електронна пошта', widget=forms.EmailInput(
-        attrs={'class': 'form-control', 'placeholder': 'example@email.com'}))
-    phone = forms.CharField(label='Номер телефону', help_text='Формат: +380XXXXXXXXX',
-                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}))
+    """Форма для реєстрації нового користувача."""
+    email = forms.EmailField(label='Електронна пошта', widget=forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'example@email.com'}))
+    phone = forms.CharField(label='Номер телефону', help_text='Формат: +380XXXXXXXXX', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '+380XXXXXXXXX'}))
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = User
         fields = ('username', 'email', 'phone', 'first_name', 'last_name', 'middle_name', 'password1', 'password2')
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
-        """Виконує логіку `__init__`.
+        """
+        Ініціалізує форму та налаштовує поля.
 
-Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
 
-Returns:
-    None."""
+        Returns:
+            None
+        """
         super().__init__(*args, **kwargs)
         self.fields['username'].label = 'Логін'
         self.fields['username'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Введіть логін'})
@@ -52,10 +43,15 @@ Returns:
         self.fields['password2'].widget.attrs.update({'class': 'form-control', 'placeholder': 'Повторіть пароль'})
 
     def clean_email(self) -> str:
-        """Виконує логіку `clean_email`.
+        """
+        Перевіряє унікальність email та нормалізує його.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            str: Валідований email.
+
+        Raises:
+            ValidationError: Якщо email вже існує або очікує підтвердження.
+        """
         email: str = self.cleaned_data['email'].lower().strip()
         if User.objects.filter(email__iexact=email).exists():
             raise ValidationError('Користувач із такою електронною поштою вже існує.')
@@ -64,30 +60,35 @@ Returns:
         return email
 
     def clean_phone(self) -> str:
-        """Виконує логіку `clean_phone`.
+        """
+        Перевіряє унікальність номера телефону.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            str: Валідований номер телефону.
+
+        Raises:
+            ValidationError: Якщо номер вже використовується.
+        """
         phone: str = self.cleaned_data['phone'].strip()
         if User.objects.filter(phone=phone).exists():
             raise ValidationError('Користувач із таким номером телефону вже існує.')
         return phone
 
-
 class LoginForm(forms.Form):
-    """Клас LoginForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
-    login = forms.CharField(label='Логін або Email', widget=forms.TextInput(
-        attrs={'class': 'form-control', 'placeholder': 'Введіть логін або email'}))
-    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(
-        attrs={'class': 'form-control', 'placeholder': 'Введіть пароль'}))
+    """Форма для входу користувача."""
+    login = forms.CharField(label='Логін або Email', widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Введіть логін або email'}))
+    password = forms.CharField(label='Пароль', widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Введіть пароль'}))
 
     def clean(self) -> dict[str, Any]:
-        """Виконує логіку `clean`.
+        """
+        Аутентифікує користувача та додає його в cleaned_data.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            dict[str, Any]: Очищені дані форми з ключем 'user'.
+
+        Raises:
+            ValidationError: Якщо дані невірні або email не підтверджений.
+        """
         cleaned_data: dict[str, Any] = super().clean()
         login_value: str | None = cleaned_data.get('login')
         password: str | None = cleaned_data.get('password')

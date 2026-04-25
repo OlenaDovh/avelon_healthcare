@@ -1,6 +1,3 @@
-"""Модуль accounts/backends.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django.contrib.auth import get_user_model
@@ -10,21 +7,19 @@ from django.http import HttpRequest
 UserModel = get_user_model()
 
 class EmailOrUsernameBackend(ModelBackend):
-    """Клас EmailOrUsernameBackend.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `EmailOrUsernameBackend`."""
 
     def authenticate(self, request: HttpRequest | None, username: str | None=None, password: str | None=None, **kwargs: Any) -> UserModel | None:
         """Виконує логіку `authenticate`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    username: Вхідне значення для виконання операції.
-    password: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    username: Вхідний параметр `username`.
+    password: Вхідний параметр `password`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         login_value: str | None = username or kwargs.get('email')
         if not login_value or not password:
             return None

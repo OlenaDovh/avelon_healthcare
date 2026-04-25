@@ -1,7 +1,3 @@
-"""Модуль appointments/tests/test_views.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth.models import Group
@@ -13,10 +9,10 @@ def make_support(user: Any) -> Any:
     """Виконує логіку `make_support`.
 
 Args:
-    user: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     group, _ = Group.objects.get_or_create(name=SUPPORT_GROUP)
     user.groups.add(group)
     return user
@@ -26,10 +22,10 @@ def test_appointment_list_view_opens_for_logged_user(auth_client: Any) -> None:
     """Виконує логіку `test_appointment_list_view_opens_for_logged_user`.
 
 Args:
-    auth_client: Вхідне значення для виконання операції.
+    auth_client: Вхідний параметр `auth_client`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     response = auth_client.get(reverse('appointments:appointment_list'))
     assert response.status_code == 200
 
@@ -38,12 +34,12 @@ def test_appointment_detail_view_opens_for_owner(client: Any, user: Any, appoint
     """Виконує логіку `test_appointment_detail_view_opens_for_owner`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    appointment: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     appointment.user = user
     appointment.save()
     client.force_login(user)
@@ -55,12 +51,12 @@ def test_appointment_cancel_view_changes_status_to_rejected(client: Any, user: A
     """Виконує логіку `test_appointment_cancel_view_changes_status_to_rejected`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    appointment: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     appointment.user = user
     appointment.status = AppointmentStatus.PLANNED
     appointment.save()
@@ -75,11 +71,11 @@ def test_support_appointment_list_view_opens_for_support(client: Any, user: Any)
     """Виконує логіку `test_support_appointment_list_view_opens_for_support`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     make_support(user)
     client.force_login(user)
     response = client.get(reverse('appointments:support_appointment_list'))
@@ -90,11 +86,11 @@ def test_support_appointment_create_view_get_opens_for_support(client: Any, user
     """Виконує логіку `test_support_appointment_create_view_get_opens_for_support`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     make_support(user)
     client.force_login(user)
     response = client.get(reverse('appointments:support_appointment_create'))
@@ -105,12 +101,12 @@ def test_support_appointment_update_view_get_opens_for_support(client: Any, user
     """Виконує логіку `test_support_appointment_update_view_get_opens_for_support`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    appointment: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     make_support(user)
     client.force_login(user)
     response = client.get(reverse('appointments:support_appointment_update', args=[appointment.id]))

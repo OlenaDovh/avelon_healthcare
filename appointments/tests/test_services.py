@@ -1,7 +1,3 @@
-"""Модуль appointments/tests/test_services.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from unittest.mock import patch
@@ -13,11 +9,11 @@ def test_fill_appointment_from_user(appointment: Any, user: Any) -> None:
     """Виконує логіку `test_fill_appointment_from_user`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     result = fill_appointment_from_user(appointment=appointment, user=user)
     assert result.user == user
     assert result.last_name == user.last_name
@@ -30,10 +26,10 @@ def test_fill_appointment_from_guest_data(appointment: Any) -> None:
     """Виконує логіку `test_fill_appointment_from_guest_data`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     cleaned_data = {'last_name': 'Гість', 'first_name': 'Іван', 'middle_name': 'Іванович', 'phone': '+380991111111', 'email': 'guest@example.com'}
     result = fill_appointment_from_guest_data(appointment=appointment, cleaned_data=cleaned_data)
     assert result.user is None
@@ -48,11 +44,11 @@ def test_save_new_appointment_saves_and_sends_email(mock_send_appointment_email:
     """Виконує логіку `test_save_new_appointment_saves_and_sends_email`.
 
 Args:
-    mock_send_appointment_email: Вхідне значення для виконання операції.
-    appointment: Вхідне значення для виконання операції.
+    mock_send_appointment_email: Вхідний параметр `mock_send_appointment_email`.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     appointment.id = None
     appointment.appointment_time = time(11, 0)
     saved = save_new_appointment(appointment=appointment)

@@ -1,6 +1,3 @@
-"""Модуль reviews/views/support.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,10 +13,10 @@ def support_review_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_review_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     reviews = Review.objects.select_related('user', 'appointment').order_by('-created_at')
     return render(request, 'avelon_healthcare/reviews/pages/support_review_list.html', {'reviews': reviews})
 
@@ -29,11 +26,11 @@ def support_review_reply_view(request: HttpRequest, review_id: int) -> HttpRespo
     """Виконує логіку `support_review_reply_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    review_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    review_id: Вхідний параметр `review_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     review = get_object_or_404(Review, id=review_id)
     if request.method == 'POST':
         form = ReviewReplyForm(request.POST, instance=review)

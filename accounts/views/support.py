@@ -1,6 +1,3 @@
-"""Модуль accounts/views/support.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -19,10 +16,10 @@ def support_patient_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_patient_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     patients = User.objects.filter(groups__name=PATIENT_GROUP).order_by('last_name', 'first_name', 'username').distinct()
     paginator = Paginator(patients, 20)
     page_number: str | None = request.GET.get('page')
@@ -35,11 +32,11 @@ def support_patient_update_view(request: HttpRequest, user_id: int) -> HttpRespo
     """Виконує логіку `support_patient_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    user_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    user_id: Вхідний параметр `user_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     patient = get_object_or_404(User.objects.filter(groups__name=PATIENT_GROUP).distinct(), id=user_id)
     if request.method == 'POST':
         form = SupportPatientUpdateForm(request.POST, instance=patient)

@@ -1,6 +1,3 @@
-"""Модуль appointments/forms/create.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from datetime import datetime
 from typing import Any
@@ -13,16 +10,12 @@ from appointments.models import Appointment
 from appointments.services import get_available_dates_for_doctor_direction, get_available_slots_for_doctor_on_date
 
 class AppointmentCreateForm(forms.ModelForm):
-    """Клас AppointmentCreateForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `AppointmentCreateForm`."""
     appointment_date = forms.DateField(required=True, label='Дата прийому', widget=forms.DateInput(attrs={'class': 'form-control', 'autocomplete': 'off', 'placeholder': 'Оберіть дату'}))
     appointment_time = forms.ChoiceField(required=True, label='Час прийому', widget=forms.Select(attrs={'class': 'form-select'}), choices=[('', 'Оберіть час')])
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Appointment
         fields = ('direction', 'doctor', 'appointment_date', 'appointment_time', 'description')
         widgets = {'direction': forms.Select(attrs={'class': 'form-select'}), 'doctor': forms.Select(attrs={'class': 'form-select'}), 'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 4, 'placeholder': 'Опишіть причину звернення до лікаря'})}
@@ -31,11 +24,11 @@ class AppointmentCreateForm(forms.ModelForm):
         """Виконує логіку `__init__`.
 
 Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    *args: Вхідний параметр `args`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         super().__init__(*args, **kwargs)
         self.fields['direction'].queryset = Direction.objects.annotate(doctors_count=Count('doctors')).filter(doctors_count__gt=0).order_by('name')
         self.fields['doctor'].queryset = Doctor.objects.none()
@@ -59,7 +52,7 @@ Returns:
         """Виконує логіку `clean`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         cleaned_data = super().clean()
         direction = cleaned_data.get('direction')
         doctor = cleaned_data.get('doctor')
@@ -83,9 +76,7 @@ Returns:
         return cleaned_data
 
 class GuestAppointmentCreateForm(AppointmentCreateForm):
-    """Клас GuestAppointmentCreateForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `GuestAppointmentCreateForm`."""
     last_name = forms.CharField(label='Прізвище', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(label='Імʼя', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     middle_name = forms.CharField(label='По батькові', required=False, max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -93,7 +84,5 @@ class GuestAppointmentCreateForm(AppointmentCreateForm):
     email = forms.EmailField(label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     class Meta(AppointmentCreateForm.Meta):
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         fields = ('last_name', 'first_name', 'middle_name', 'phone', 'email', 'direction', 'doctor', 'appointment_date', 'appointment_time', 'description')

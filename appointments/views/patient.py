@@ -1,6 +1,3 @@
-"""Модуль appointments/views/patient.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -13,10 +10,10 @@ def appointment_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `appointment_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointments = Appointment.objects.select_related('doctor', 'direction').filter(user=request.user).order_by('-appointment_date', '-appointment_time')
     return render(request, 'avelon_healthcare/appointments/pages/appointment_list.html', {'appointments': appointments})
 
@@ -25,11 +22,11 @@ def appointment_detail_view(request: HttpRequest, appointment_id: int) -> HttpRe
     """Виконує логіку `appointment_detail_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    appointment_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    appointment_id: Вхідний параметр `appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment = get_object_or_404(Appointment.objects.select_related('doctor', 'direction', 'user'), id=appointment_id, user=request.user)
     return render(request, 'avelon_healthcare/appointments/pages/appointment_detail.html', {'appointment': appointment})
 
@@ -38,11 +35,11 @@ def appointment_cancel_view(request: HttpRequest, appointment_id: int) -> HttpRe
     """Виконує логіку `appointment_cancel_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    appointment_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    appointment_id: Вхідний параметр `appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user)
     if appointment.status == AppointmentStatus.PLANNED:
         appointment.status = AppointmentStatus.REJECTED

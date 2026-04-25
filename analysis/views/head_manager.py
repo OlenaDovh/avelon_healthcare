@@ -1,6 +1,3 @@
-"""Модуль analysis/views/head_manager.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -16,10 +13,10 @@ def head_manager_analysis_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_analysis_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     analyses = Analysis.objects.all().order_by('name')
     return render(request, 'avelon_healthcare/analysis/pages/head_manager_analysis_list.html', {'analyses': analyses})
 
@@ -29,10 +26,10 @@ def head_manager_analysis_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_analysis_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = AnalysisForm(request.POST)
         if form.is_valid():
@@ -49,11 +46,11 @@ def head_manager_analysis_update_view(request: HttpRequest, pk: int) -> HttpResp
     """Виконує логіку `head_manager_analysis_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    pk: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    pk: Вхідний параметр `pk`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     analysis = get_object_or_404(Analysis, pk=pk)
     if request.method == 'POST':
         form = AnalysisForm(request.POST, instance=analysis)

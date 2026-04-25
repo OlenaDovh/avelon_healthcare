@@ -1,6 +1,3 @@
-"""Модуль doctors/forms/schedule.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django import forms
@@ -8,14 +5,10 @@ from django.forms import inlineformset_factory
 from doctors.models import Direction, Doctor, DoctorWorkDay, DoctorWorkPeriod
 
 class DoctorWorkDayForm(forms.ModelForm):
-    """Клас DoctorWorkDayForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkDayForm`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = DoctorWorkDay
         fields = ('doctor', 'direction', 'work_date', 'appointment_duration_minutes')
         widgets = {'doctor': forms.Select(attrs={'class': 'form-select'}), 'direction': forms.Select(attrs={'class': 'form-select'}), 'work_date': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}), 'appointment_duration_minutes': forms.Select(attrs={'class': 'form-select'})}
@@ -24,11 +17,11 @@ class DoctorWorkDayForm(forms.ModelForm):
         """Виконує логіку `__init__`.
 
 Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    *args: Вхідний параметр `args`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         super().__init__(*args, **kwargs)
         self.fields['doctor'].queryset = Doctor.objects.prefetch_related('directions').order_by('last_name', 'first_name')
         self.fields['direction'].queryset = Direction.objects.none()
@@ -39,14 +32,10 @@ Returns:
             self.fields['direction'].queryset = self.instance.doctor.directions.all().order_by('name')
 
 class DoctorWorkPeriodForm(forms.ModelForm):
-    """Клас DoctorWorkPeriodForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkPeriodForm`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = DoctorWorkPeriod
         fields = ('start_time', 'end_time')
         widgets = {'start_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'}), 'end_time': forms.TimeInput(attrs={'class': 'form-control', 'type': 'time'})}

@@ -1,15 +1,9 @@
-"""Модуль reviews/migrations/0001_initial.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
 class Migration(migrations.Migration):
-    """Клас Migration.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `Migration`."""
     initial = True
     dependencies = [('appointments', '0001_initial'), migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
     operations = [migrations.CreateModel(name='Review', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('text', models.TextField(verbose_name='Текст відгуку')), ('clinic_reply', models.TextField(blank=True, verbose_name='Відповідь представника клініки')), ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='Дата створення')), ('appointment', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='review', to='appointments.appointment', verbose_name='Запис до лікаря')), ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to=settings.AUTH_USER_MODEL, verbose_name='Користувач'))], options={'verbose_name': 'Відгук', 'verbose_name_plural': 'Відгуки', 'ordering': ['-created_at']})]

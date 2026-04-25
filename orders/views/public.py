@@ -1,6 +1,3 @@
-"""Модуль orders/views/public.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.db import transaction
@@ -17,20 +14,20 @@ def _get_cart(request: HttpRequest) -> dict[str, int]:
     """Виконує логіку `_get_cart`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return request.session.get('cart', {})
 
 def _clear_cart(request: HttpRequest) -> None:
     """Виконує логіку `_clear_cart`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     request.session['cart'] = {}
     request.session.modified = True
 
@@ -39,10 +36,10 @@ def order_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `order_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method != 'POST':
         messages.warning(request, 'Некоректний спосіб запиту.')
         return redirect('analysis:cart_detail')

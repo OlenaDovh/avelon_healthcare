@@ -1,6 +1,3 @@
-"""Модуль orders/services/checkout.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from decimal import Decimal
@@ -12,17 +9,17 @@ def create_order_from_analyses(*, analyses: QuerySet[Analysis], payment_method: 
     """Виконує логіку `create_order_from_analyses`.
 
 Args:
-    analyses: Вхідне значення для виконання операції.
-    payment_method: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    last_name: Вхідне значення для виконання операції.
-    first_name: Вхідне значення для виконання операції.
-    middle_name: Вхідне значення для виконання операції.
-    phone: Вхідне значення для виконання операції.
-    email: Вхідне значення для виконання операції.
+    analyses: Вхідний параметр `analyses`.
+    payment_method: Вхідний параметр `payment_method`.
+    user: Вхідний параметр `user`.
+    last_name: Вхідний параметр `last_name`.
+    first_name: Вхідний параметр `first_name`.
+    middle_name: Вхідний параметр `middle_name`.
+    phone: Вхідний параметр `phone`.
+    email: Вхідний параметр `email`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     total_price: Decimal = sum((analysis.price for analysis in analyses), Decimal('0.00'))
     order = Order.objects.create(user=user, last_name=last_name, first_name=first_name, middle_name=middle_name, phone=phone, email=email, total_price=total_price, payment_method=payment_method, status=OrderStatus.NEW)
     OrderItem.objects.bulk_create([OrderItem(order=order, analysis=analysis, price=analysis.price) for analysis in analyses])

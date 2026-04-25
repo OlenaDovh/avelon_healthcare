@@ -1,6 +1,3 @@
-"""Модуль doctors/admin.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django import forms
@@ -10,15 +7,13 @@ from django.forms.models import BaseInlineFormSet
 from .models import Direction, Doctor, DoctorWorkDay, DoctorWorkPeriod
 
 class DoctorWorkPeriodInlineFormSet(BaseInlineFormSet):
-    """Клас DoctorWorkPeriodInlineFormSet.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkPeriodInlineFormSet`."""
 
     def clean(self) -> None:
         """Виконує логіку `clean`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         super().clean()
         periods = []
         for form in self.forms:
@@ -38,22 +33,16 @@ Returns:
             periods.append((start_time, end_time))
 
 class DoctorWorkPeriodInline(admin.TabularInline):
-    """Клас DoctorWorkPeriodInline.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkPeriodInline`."""
     model = DoctorWorkPeriod
     extra = 1
     formset = DoctorWorkPeriodInlineFormSet
 
 class DoctorWorkDayInlineForm(forms.ModelForm):
-    """Клас DoctorWorkDayInlineForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkDayInlineForm`."""
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = DoctorWorkDay
         fields = '__all__'
 
@@ -61,11 +50,11 @@ class DoctorWorkDayInlineForm(forms.ModelForm):
         """Виконує логіку `__init__`.
 
 Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    *args: Вхідний параметр `args`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk and self.instance.doctor_id:
             self.fields['direction'].queryset = self.instance.doctor.directions.all().order_by('name')
@@ -76,9 +65,7 @@ Returns:
             self.fields['direction'].queryset = Direction.objects.none()
 
 class DoctorWorkDayInline(admin.StackedInline):
-    """Клас DoctorWorkDayInline.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkDayInline`."""
     model = DoctorWorkDay
     extra = 0
     form = DoctorWorkDayInlineForm
@@ -86,17 +73,13 @@ class DoctorWorkDayInline(admin.StackedInline):
 
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
-    """Клас DirectionAdmin.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DirectionAdmin`."""
     list_display = ('name',)
     search_fields = ('name',)
 
 @admin.register(Doctor)
 class DoctorAdmin(admin.ModelAdmin):
-    """Клас DoctorAdmin.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorAdmin`."""
     list_display = ('full_name', 'position', 'qualification_category', 'experience_years', 'price_from', 'price_to')
     search_fields = ('full_name', 'position')
     list_filter = ('position', 'qualification_category', 'directions')
@@ -105,9 +88,7 @@ class DoctorAdmin(admin.ModelAdmin):
 
 @admin.register(DoctorWorkDay)
 class DoctorWorkDayAdmin(admin.ModelAdmin):
-    """Клас DoctorWorkDayAdmin.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `DoctorWorkDayAdmin`."""
     list_display = ('doctor', 'direction', 'work_date', 'appointment_duration_minutes')
     list_filter = ('work_date', 'direction', 'appointment_duration_minutes', 'doctor')
     search_fields = ('doctor__full_name', 'direction__name')

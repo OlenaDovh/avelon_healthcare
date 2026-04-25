@@ -1,7 +1,3 @@
-"""Модуль analysis/tests/test_views.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth.models import Group
@@ -12,10 +8,10 @@ def create_head_manager(user: Any) -> Any:
     """Виконує логіку `create_head_manager`.
 
 Args:
-    user: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     group, _ = Group.objects.get_or_create(name=HEAD_MANAGER_GROUP)
     user.groups.add(group)
     return user
@@ -25,11 +21,11 @@ def test_analysis_list_view_opens(client: Any, analysis_factory: Any) -> None:
     """Виконує логіку `test_analysis_list_view_opens`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    analysis_factory: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    analysis_factory: Вхідний параметр `analysis_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     analysis_factory(is_active=True)
     response = client.get(reverse('analysis:analysis_list'))
     assert response.status_code == 200
@@ -39,11 +35,11 @@ def test_add_to_cart_view_redirects_and_adds_item(client: Any, analysis: Any) ->
     """Виконує логіку `test_add_to_cart_view_redirects_and_adds_item`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    analysis: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     session = client.session
     session['cart'] = {}
     session.save()
@@ -57,11 +53,11 @@ def test_remove_from_cart_view_redirects_and_removes_item(client: Any, analysis:
     """Виконує логіку `test_remove_from_cart_view_redirects_and_removes_item`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    analysis: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     session = client.session
     session['cart'] = {str(analysis.id): 1}
     session.save()
@@ -75,11 +71,11 @@ def test_cart_detail_view_opens(client: Any, analysis: Any) -> None:
     """Виконує логіку `test_cart_detail_view_opens`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    analysis: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     session = client.session
     session['cart'] = {str(analysis.id): 1}
     session.save()
@@ -91,12 +87,12 @@ def test_head_manager_analysis_list_view_opens_for_head_manager(client: Any, use
     """Виконує логіку `test_head_manager_analysis_list_view_opens_for_head_manager`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    analysis_factory: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    analysis_factory: Вхідний параметр `analysis_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     create_head_manager(user)
     client.force_login(user)
     analysis_factory()
@@ -108,11 +104,11 @@ def test_head_manager_analysis_create_view_get_opens_for_head_manager(client: An
     """Виконує логіку `test_head_manager_analysis_create_view_get_opens_for_head_manager`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     create_head_manager(user)
     client.force_login(user)
     response = client.get(reverse('analysis:head_manager_analysis_create'))
@@ -123,11 +119,11 @@ def test_head_manager_analysis_create_view_post_creates_analysis(client: Any, us
     """Виконує логіку `test_head_manager_analysis_create_view_post_creates_analysis`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     create_head_manager(user)
     client.force_login(user)
     response = client.post(reverse('analysis:head_manager_analysis_create'), {'name': 'Новий аналіз', 'what_to_check': 'Гемоглобін', 'disease': 'Анемія', 'for_whom': 'Для дорослих', 'biomaterial': 'Кров', 'duration_days': 2, 'price': '500.00', 'is_active': True}, follow=True)
@@ -138,12 +134,12 @@ def test_head_manager_analysis_update_view_get_opens_for_head_manager(client: An
     """Виконує логіку `test_head_manager_analysis_update_view_get_opens_for_head_manager`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    analysis: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     create_head_manager(user)
     client.force_login(user)
     response = client.get(reverse('analysis:head_manager_analysis_update', args=[analysis.pk]))
@@ -154,12 +150,12 @@ def test_head_manager_analysis_update_view_post_updates_analysis(client: Any, us
     """Виконує логіку `test_head_manager_analysis_update_view_post_updates_analysis`.
 
 Args:
-    client: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
-    analysis: Вхідне значення для виконання операції.
+    client: Вхідний параметр `client`.
+    user: Вхідний параметр `user`.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     create_head_manager(user)
     client.force_login(user)
     response = client.post(reverse('analysis:head_manager_analysis_update', args=[analysis.pk]), {'name': 'Оновлений аналіз', 'what_to_check': analysis.what_to_check, 'disease': analysis.disease, 'for_whom': analysis.for_whom, 'biomaterial': analysis.biomaterial, 'duration_days': analysis.duration_days, 'price': analysis.price, 'is_active': analysis.is_active}, follow=True)

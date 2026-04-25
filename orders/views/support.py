@@ -1,6 +1,3 @@
-"""Модуль orders/views/support.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from decimal import Decimal
 from django.contrib import messages
@@ -23,10 +20,10 @@ def support_order_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_order_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     orders = Order.objects.prefetch_related('items__analysis').select_related('user').filter(Q(user__isnull=True) | Q(user__in=patient_users_queryset())).distinct().order_by('-created_at')
     return render(request, 'avelon_healthcare/orders/pages/support_order_list.html', {'orders': orders})
 
@@ -37,10 +34,10 @@ def support_order_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_order_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = SupportOrderCreateForm(request.POST)
         if form.is_valid():
@@ -76,11 +73,11 @@ def support_order_update_view(request: HttpRequest, order_id: int) -> HttpRespon
     """Виконує логіку `support_order_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    order_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    order_id: Вхідний параметр `order_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     order: Order = get_object_or_404(Order.objects.prefetch_related('items__analysis').select_related('user'), Q(id=order_id) & (Q(user__isnull=True) | Q(user__in=patient_users_queryset())))
     if request.method == 'POST':
         form = SupportOrderUpdateForm(request.POST, request.FILES, instance=order)

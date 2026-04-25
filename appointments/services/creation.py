@@ -1,6 +1,3 @@
-"""Модуль appointments/services/creation.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django.db import transaction
@@ -11,11 +8,11 @@ def fill_appointment_from_user(*, appointment: Appointment, user: Any) -> Appoin
     """Виконує логіку `fill_appointment_from_user`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
-    user: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
+    user: Вхідний параметр `user`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment.user = user
     appointment.last_name = user.last_name
     appointment.first_name = user.first_name
@@ -28,11 +25,11 @@ def fill_appointment_from_guest_data(*, appointment: Appointment, cleaned_data: 
     """Виконує логіку `fill_appointment_from_guest_data`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
-    cleaned_data: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
+    cleaned_data: Вхідний параметр `cleaned_data`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment.user = None
     appointment.last_name = cleaned_data['last_name']
     appointment.first_name = cleaned_data['first_name']
@@ -45,10 +42,10 @@ def save_new_appointment(*, appointment: Appointment) -> Appointment:
     """Виконує логіку `save_new_appointment`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment.save()
     transaction.on_commit(lambda: send_appointment_email_task.delay(appointment.id))
     return appointment

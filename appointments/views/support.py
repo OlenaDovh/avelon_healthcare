@@ -1,6 +1,3 @@
-"""Модуль appointments/views/support.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -21,10 +18,10 @@ def support_appointment_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_appointment_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointments = Appointment.objects.select_related('doctor', 'direction', 'user').filter(Q(user__isnull=True) | Q(user__groups__name=PATIENT_GROUP)).distinct().order_by('-appointment_date', '-appointment_time')
     return render(request, 'avelon_healthcare/appointments/pages/support_appointment_list.html', {'appointments': appointments})
 
@@ -34,10 +31,10 @@ def support_appointment_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `support_appointment_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = SupportAppointmentCreateForm(request.POST)
         if form.is_valid():
@@ -74,11 +71,11 @@ def support_appointment_update_view(request: HttpRequest, appointment_id: int) -
     """Виконує логіку `support_appointment_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    appointment_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    appointment_id: Вхідний параметр `appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment = get_object_or_404(Appointment.objects.select_related('user', 'doctor', 'direction'), Q(id=appointment_id) & (Q(user__isnull=True) | Q(user__groups__name=PATIENT_GROUP)))
     if request.method == 'POST':
         form = SupportAppointmentUpdateForm(request.POST, request.FILES, instance=appointment)

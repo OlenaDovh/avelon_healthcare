@@ -1,6 +1,3 @@
-"""Модуль appointments/views/public.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib import messages
 from django.db.models import Count
@@ -15,10 +12,10 @@ def appointment_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `appointment_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     form_class = AppointmentCreateForm if request.user.is_authenticated else GuestAppointmentCreateForm
     if request.method == 'POST':
         form = form_class(request.POST)

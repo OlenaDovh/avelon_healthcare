@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_permissions.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth.models import Group
@@ -12,11 +8,11 @@ def create_user_with_group(user_factory: Any, group_name: str) -> Any:
     """Виконує логіку `create_user_with_group`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
-    group_name: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
+    group_name: Вхідний параметр `group_name`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     group, _ = Group.objects.get_or_create(name=group_name)
     user = user_factory()
     user.groups.add(group)
@@ -27,10 +23,10 @@ def test_has_group_returns_true(user_factory: Any) -> None:
     """Виконує логіку `test_has_group_returns_true`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, PATIENT_GROUP)
     assert has_group(user, PATIENT_GROUP) is True
 
@@ -39,10 +35,10 @@ def test_has_group_returns_true_for_default_patient(user_factory: Any) -> None:
     """Виконує логіку `test_has_group_returns_true_for_default_patient`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory()
     assert has_group(user, PATIENT_GROUP) is True
 
@@ -50,12 +46,10 @@ def test_has_group_returns_false_for_anonymous() -> None:
     """Виконує логіку `test_has_group_returns_false_for_anonymous`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
 
     class AnonymousUser:
-        """Клас AnonymousUser.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `AnonymousUser`."""
         is_authenticated = False
     assert has_group(AnonymousUser(), PATIENT_GROUP) is False
 
@@ -64,10 +58,10 @@ def test_is_patient(user_factory: Any) -> None:
     """Виконує логіку `test_is_patient`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, PATIENT_GROUP)
     assert is_patient(user) is True
 
@@ -76,10 +70,10 @@ def test_is_support(user_factory: Any) -> None:
     """Виконує логіку `test_is_support`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, SUPPORT_GROUP)
     assert is_support(user) is True
 
@@ -88,10 +82,10 @@ def test_is_doctor(user_factory: Any) -> None:
     """Виконує логіку `test_is_doctor`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, DOCTOR_GROUP)
     assert is_doctor(user) is True
 
@@ -100,10 +94,10 @@ def test_is_head_manager(user_factory: Any) -> None:
     """Виконує логіку `test_is_head_manager`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, HEAD_MANAGER_GROUP)
     assert is_head_manager(user) is True
 
@@ -112,10 +106,10 @@ def test_is_content_manager(user_factory: Any) -> None:
     """Виконує логіку `test_is_content_manager`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, CONTENT_MANAGER_GROUP)
     assert is_content_manager(user) is True
 
@@ -124,10 +118,10 @@ def test_is_staff_role_returns_true_for_staff_group(user_factory: Any) -> None:
     """Виконує логіку `test_is_staff_role_returns_true_for_staff_group`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = create_user_with_group(user_factory, SUPPORT_GROUP)
     assert is_staff_role(user) is True
 
@@ -136,10 +130,10 @@ def test_is_staff_role_returns_true_for_superuser(user_factory: Any) -> None:
     """Виконує логіку `test_is_staff_role_returns_true_for_superuser`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory(is_superuser=True)
     assert is_staff_role(user) is True
 
@@ -148,10 +142,10 @@ def test_is_staff_role_returns_false_for_regular_user(user_factory: Any) -> None
     """Виконує логіку `test_is_staff_role_returns_false_for_regular_user`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory()
     user.groups.clear()
     assert is_staff_role(user) is False

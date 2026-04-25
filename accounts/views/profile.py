@@ -1,6 +1,3 @@
-"""Модуль accounts/views/profile.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 from django.contrib import messages
@@ -17,10 +14,10 @@ def profile_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `profile_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return render(request, 'avelon_healthcare/accounts/pages/profile.html')
 
 @login_required
@@ -28,10 +25,10 @@ def profile_update_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `profile_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         current_email: str = request.user.email
         form = ProfileUpdateForm(request.POST, instance=request.user)
@@ -64,10 +61,10 @@ def staff_dashboard_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `staff_dashboard_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if not is_staff_role(request.user):
         return redirect('accounts:profile')
     return render(request, 'avelon_healthcare/accounts/pages/staff_dashboard.html')

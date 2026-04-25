@@ -1,7 +1,3 @@
-"""Модуль appointments/tests/test_forms.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from datetime import timedelta
@@ -13,12 +9,12 @@ def get_appointment_create_data(direction: Any, doctor: Any, **overrides: Any) -
     """Виконує логіку `get_appointment_create_data`.
 
 Args:
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    overrides: Вхідне значення для виконання операції.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    **overrides: Вхідний параметр `overrides`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     data = {'direction': direction.id, 'doctor': doctor.id, 'appointment_date': (timezone.localdate() + timedelta(days=1)).strftime('%Y-%m-%d'), 'appointment_time': '10:00', 'description': 'Первинна консультація'}
     data.update(overrides)
     return data
@@ -27,12 +23,12 @@ def get_guest_appointment_data(direction: Any, doctor: Any, **overrides: Any) ->
     """Виконує логіку `get_guest_appointment_data`.
 
 Args:
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    overrides: Вхідне значення для виконання операції.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    **overrides: Вхідний параметр `overrides`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     data = {'last_name': 'Гість', 'first_name': 'Іван', 'middle_name': '', 'phone': '+380991111111', 'email': 'guest@example.com', **get_appointment_create_data(direction, doctor)}
     data.update(overrides)
     return data
@@ -42,12 +38,12 @@ def test_appointment_create_form_valid(direction: Any, doctor: Any, monkeypatch:
     """Виконує логіку `test_appointment_create_form_valid`.
 
 Args:
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    monkeypatch: Вхідне значення для виконання операції.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    monkeypatch: Вхідний параметр `monkeypatch`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     target_date = (timezone.localdate() + timedelta(days=1)).strftime('%Y-%m-%d')
     monkeypatch.setattr('appointments.forms.create.get_available_dates_for_doctor_direction', lambda doctor, direction: [target_date])
     monkeypatch.setattr('appointments.forms.create.get_available_slots_for_doctor_on_date', lambda doctor, direction, target_date: [{'value': '10:00', 'label': '10:00 - 10:30'}])
@@ -60,12 +56,12 @@ def test_guest_appointment_create_form_valid(direction: Any, doctor: Any, monkey
     """Виконує логіку `test_guest_appointment_create_form_valid`.
 
 Args:
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    monkeypatch: Вхідне значення для виконання операції.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    monkeypatch: Вхідний параметр `monkeypatch`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     target_date = (timezone.localdate() + timedelta(days=1)).strftime('%Y-%m-%d')
     monkeypatch.setattr('appointments.forms.create.get_available_dates_for_doctor_direction', lambda doctor, direction: [target_date])
     monkeypatch.setattr('appointments.forms.create.get_available_slots_for_doctor_on_date', lambda doctor, direction, target_date: [{'value': '10:00', 'label': '10:00 - 10:30'}])
@@ -78,13 +74,13 @@ def test_support_appointment_create_form_valid_for_registered_user(user: Any, di
     """Виконує логіку `test_support_appointment_create_form_valid_for_registered_user`.
 
 Args:
-    user: Вхідне значення для виконання операції.
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    monkeypatch: Вхідне значення для виконання операції.
+    user: Вхідний параметр `user`.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    monkeypatch: Вхідний параметр `monkeypatch`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     target_date = (timezone.localdate() + timedelta(days=1)).strftime('%Y-%m-%d')
     monkeypatch.setattr('appointments.forms.create.get_available_dates_for_doctor_direction', lambda doctor, direction: [target_date])
     monkeypatch.setattr('appointments.forms.create.get_available_slots_for_doctor_on_date', lambda doctor, direction, target_date: [{'value': '10:00', 'label': '10:00 - 10:30'}])
@@ -97,12 +93,12 @@ def test_support_appointment_create_form_valid_for_guest(direction: Any, doctor:
     """Виконує логіку `test_support_appointment_create_form_valid_for_guest`.
 
 Args:
-    direction: Вхідне значення для виконання операції.
-    doctor: Вхідне значення для виконання операції.
-    monkeypatch: Вхідне значення для виконання операції.
+    direction: Вхідний параметр `direction`.
+    doctor: Вхідний параметр `doctor`.
+    monkeypatch: Вхідний параметр `monkeypatch`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     target_date = (timezone.localdate() + timedelta(days=1)).strftime('%Y-%m-%d')
     monkeypatch.setattr('appointments.forms.create.get_available_dates_for_doctor_direction', lambda doctor, direction: [target_date])
     monkeypatch.setattr('appointments.forms.create.get_available_slots_for_doctor_on_date', lambda doctor, direction, target_date: [{'value': '10:00', 'label': '10:00 - 10:30'}])
@@ -115,11 +111,11 @@ def test_support_appointment_update_form_valid(appointment: Any, monkeypatch: An
     """Виконує логіку `test_support_appointment_update_form_valid`.
 
 Args:
-    appointment: Вхідне значення для виконання операції.
-    monkeypatch: Вхідне значення для виконання операції.
+    appointment: Вхідний параметр `appointment`.
+    monkeypatch: Вхідний параметр `monkeypatch`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     date_str = appointment.appointment_date.strftime('%Y-%m-%d')
     monkeypatch.setattr('appointments.forms.update.get_available_dates_for_doctor_direction', lambda doctor, direction, exclude_appointment_id=None: [date_str])
     monkeypatch.setattr('appointments.forms.update.get_available_slots_for_doctor_on_date', lambda doctor, direction, appointment_date, exclude_appointment_id=None: [{'value': '10:00', 'label': '10:00 - 10:30'}])

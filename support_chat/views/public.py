@@ -1,6 +1,3 @@
-"""Модуль support_chat/views/public.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
@@ -13,10 +10,10 @@ def get_current_chat_session_view(request: HttpRequest) -> JsonResponse:
     """Виконує логіку `get_current_chat_session_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     session_id = request.session.get('support_chat_session_id')
     if not session_id:
         return JsonResponse({'ok': True, 'session': None})
@@ -37,10 +34,10 @@ def create_chat_session_view(request: HttpRequest) -> JsonResponse:
     """Виконує логіку `create_chat_session_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     existing_session_id = request.session.get('support_chat_session_id')
     if existing_session_id:
         try:
@@ -65,10 +62,10 @@ def get_chat_session_view(request: HttpRequest, session_id: int) -> JsonResponse
     """Виконує логіку `get_chat_session_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    session_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    session_id: Вхідний параметр `session_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     session = get_object_or_404(SupportChatSession, pk=session_id)
     return JsonResponse({'id': session.id, 'status': session.status, 'operator_name': session.operator_display_name, 'messages': [{'id': m.id, 'author_type': m.author_type, 'author_name': m.author_name, 'text': m.text, 'created_at': m.created_at.isoformat()} for m in session.messages.all()]})

@@ -1,7 +1,3 @@
-"""Модуль analysis/tests/test_models.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 
@@ -10,10 +6,10 @@ def test_analysis_factory_creates_analysis(analysis: Any) -> None:
     """Виконує логіку `test_analysis_factory_creates_analysis`.
 
 Args:
-    analysis: Вхідне значення для виконання операції.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     assert analysis.id is not None
     assert analysis.name
     assert analysis.price is not None
@@ -23,8 +19,8 @@ def test_analysis_str_returns_name(analysis: Any) -> None:
     """Виконує логіку `test_analysis_str_returns_name`.
 
 Args:
-    analysis: Вхідне значення для виконання операції.
+    analysis: Вхідний параметр `analysis`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     assert str(analysis) == analysis.name

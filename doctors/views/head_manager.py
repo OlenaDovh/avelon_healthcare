@@ -1,6 +1,3 @@
-"""Модуль doctors/views/head_manager.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 from django.contrib import messages
@@ -18,10 +15,10 @@ def head_manager_doctor_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_doctor_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     doctors = Doctor.objects.prefetch_related('directions').all()
     return render(request, 'avelon_healthcare/doctors/pages/head_manager_doctor_list.html', {'doctors': doctors})
 
@@ -31,10 +28,10 @@ def head_manager_doctor_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_doctor_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = DoctorForm(request.POST, request.FILES)
         if form.is_valid():
@@ -51,11 +48,11 @@ def head_manager_doctor_update_view(request: HttpRequest, pk: int) -> HttpRespon
     """Виконує логіку `head_manager_doctor_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    pk: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    pk: Вхідний параметр `pk`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     doctor = get_object_or_404(Doctor, pk=pk)
     if request.method == 'POST':
         form = DoctorForm(request.POST, request.FILES, instance=doctor)
@@ -73,10 +70,10 @@ def head_manager_direction_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_direction_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     directions = Direction.objects.all()
     return render(request, 'avelon_healthcare/doctors/pages/head_manager_direction_list.html', {'directions': directions})
 
@@ -86,10 +83,10 @@ def head_manager_direction_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_direction_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = DirectionForm(request.POST)
         if form.is_valid():
@@ -106,11 +103,11 @@ def head_manager_direction_update_view(request: HttpRequest, pk: int) -> HttpRes
     """Виконує логіку `head_manager_direction_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    pk: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    pk: Вхідний параметр `pk`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     direction = get_object_or_404(Direction, pk=pk)
     if request.method == 'POST':
         form = DirectionForm(request.POST, instance=direction)
@@ -128,10 +125,10 @@ def head_manager_schedule_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_schedule_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     schedules = DoctorWorkDay.objects.select_related('doctor', 'direction').prefetch_related('periods').order_by('-work_date', 'doctor__last_name', 'doctor__first_name')
     return render(request, 'avelon_healthcare/doctors/pages/head_manager_schedule_list.html', {'schedules': schedules})
 
@@ -141,10 +138,10 @@ def head_manager_schedule_create_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `head_manager_schedule_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     if request.method == 'POST':
         form = DoctorWorkDayForm(request.POST)
         formset = DoctorWorkPeriodFormSet(request.POST)
@@ -169,11 +166,11 @@ def head_manager_schedule_update_view(request: HttpRequest, pk: int) -> HttpResp
     """Виконує логіку `head_manager_schedule_update_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    pk: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    pk: Вхідний параметр `pk`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     schedule = get_object_or_404(DoctorWorkDay, pk=pk)
     if request.method == 'POST':
         form = DoctorWorkDayForm(request.POST, instance=schedule)

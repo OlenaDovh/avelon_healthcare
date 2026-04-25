@@ -1,6 +1,3 @@
-"""Модуль orders/models.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from decimal import Decimal
 from django.conf import settings
@@ -10,26 +7,26 @@ from django.utils import timezone
 from analysis.models import Analysis
 
 class OrderStatus(models.TextChoices):
-    """Клас OrderStatus.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Перелік статусів замовлення аналізів.
+    """
     NEW = ('new', 'Нове')
     PAID = ('paid', 'Сплачено')
     COMPLETED = ('completed', 'Завершено')
     REJECTED = ('rejected', 'Відхилено')
 
 class PaymentMethod(models.TextChoices):
-    """Клас PaymentMethod.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Перелік способів оплати.
+    """
     ONLINE = ('online', 'Онлайн')
     BANK_TRANSFER = ('bank_transfer', 'На рахунок')
     CASH = ('cash', 'На касі')
 
 class Order(models.Model):
-    """Клас Order.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Модель замовлення аналізів.
+    """
     user: models.ForeignKey = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='orders', verbose_name='Користувач', blank=True, null=True)
     last_name = models.CharField(max_length=150, blank=True, default='', verbose_name='Прізвище')
     first_name = models.CharField(max_length=150, blank=True, default='', verbose_name="Ім'я")
@@ -45,42 +42,50 @@ class Order(models.Model):
     rejection_reason: models.TextField = models.TextField(blank=True, verbose_name='Причина відхилення')
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """
+        Метадані моделі замовлення.
+        """
         verbose_name = 'Замовлення'
         verbose_name_plural = 'Замовлення'
         ordering = ['-created_at']
 
     def __str__(self) -> str:
-        """Виконує логіку `__str__`.
+        """
+        Повертає строкове представлення замовлення.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            str: Рядок з ідентифікатором замовлення.
+        """
         return f'Замовлення #{self.id}'
 
     def clean(self) -> None:
-        """Виконує логіку `clean`.
+        """
+        Перевіряє коректність замовлення.
 
-Returns:
-    None."""
+        Raises:
+            ValidationError: Якщо для відхиленого замовлення не вказана причина.
+        """
         if self.status == OrderStatus.REJECTED and (not self.rejection_reason.strip()):
             raise ValidationError({'rejection_reason': 'Вкажіть причину відхилення.'})
 
     @property
     def analyses_count(self) -> int:
-        """Виконує логіку `analyses_count`.
+        """
+        Повертає кількість аналізів у замовленні.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            int: Кількість елементів замовлення.
+        """
         return self.items.count()
 
     @property
     def customer_name(self) -> str:
-        """Виконує логіку `customer_name`.
+        """
+        Повертає ім'я замовника.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            str: Ім'я замовника.
+        """
         if self.last_name or self.first_name:
             return self.full_name
         if self.user:
@@ -88,10 +93,12 @@ Returns:
         return ''
 
     def mark_as_paid(self) -> None:
-        """Виконує логіку `mark_as_paid`.
+        """
+        Позначає замовлення як сплачене.
 
-Returns:
-    None."""
+        Returns:
+            None
+        """
         self.status = OrderStatus.PAID
         self.paid_at = timezone.now()
         self.save(update_fields=['status', 'paid_at'])
@@ -101,27 +108,29 @@ Returns:
         """Виконує логіку `full_name`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         return ' '.join(filter(None, [self.last_name, self.first_name, self.middle_name]))
 
 class OrderItem(models.Model):
-    """Клас OrderItem.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Модель елемента замовлення.
+    """
     order: models.ForeignKey = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items', verbose_name='Замовлення')
     analysis: models.ForeignKey = models.ForeignKey(Analysis, on_delete=models.PROTECT, related_name='order_items', verbose_name='Аналіз')
     price: models.DecimalField = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Ціна')
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """
+        Метадані моделі елемента замовлення.
+        """
         verbose_name = 'Елемент замовлення'
         verbose_name_plural = 'Елементи замовлення'
 
     def __str__(self) -> str:
-        """Виконує логіку `__str__`.
+        """
+        Повертає строкове представлення елемента замовлення.
 
-Returns:
-    Результат виконання операції."""
+        Returns:
+            str: Рядок із назвою аналізу.
+        """
         return f'{self.analysis.name} — {self.order}'

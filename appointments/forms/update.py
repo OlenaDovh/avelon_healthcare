@@ -1,6 +1,3 @@
-"""Модуль appointments/forms/update.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from datetime import datetime
 from typing import Any
@@ -12,16 +9,12 @@ from doctors.models import Direction, Doctor
 from appointments.services import get_available_dates_for_doctor_direction, get_available_slots_for_doctor_on_date
 
 class SupportAppointmentUpdateForm(forms.ModelForm):
-    """Клас SupportAppointmentUpdateForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `SupportAppointmentUpdateForm`."""
     appointment_date = forms.DateField(required=True, label='Дата прийому', widget=forms.DateInput(attrs={'class': 'form-control', 'autocomplete': 'off', 'placeholder': 'Оберіть дату'}))
     appointment_time = forms.ChoiceField(required=True, label='Час прийому', widget=forms.Select(attrs={'class': 'form-select'}), choices=[('', 'Оберіть час')])
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         model = Appointment
         fields = ('direction', 'doctor', 'appointment_date', 'appointment_time', 'description', 'status', 'rejection_reason', 'final_conclusion')
         widgets = {'direction': forms.Select(attrs={'class': 'form-select'}), 'doctor': forms.Select(attrs={'class': 'form-select'}), 'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), 'status': forms.Select(attrs={'class': 'form-select'}), 'rejection_reason': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}), 'final_conclusion': forms.ClearableFileInput(attrs={'class': 'form-control'})}
@@ -30,11 +23,11 @@ class SupportAppointmentUpdateForm(forms.ModelForm):
         """Виконує логіку `__init__`.
 
 Args:
-    args: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    *args: Вхідний параметр `args`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
         super().__init__(*args, **kwargs)
         is_rejected = self.instance and self.instance.status == AppointmentStatus.REJECTED
         is_completed = self.instance and self.instance.status == AppointmentStatus.COMPLETED
@@ -70,7 +63,7 @@ Returns:
         """Виконує логіку `clean`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         cleaned_data = super().clean()
         if self.instance and self.instance.status == AppointmentStatus.REJECTED:
             return cleaned_data

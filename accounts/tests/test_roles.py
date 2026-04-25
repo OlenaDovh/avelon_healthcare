@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_roles.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 import pytest
 from django.contrib.auth.models import Group
 from accounts.constants import CONTENT_MANAGER_GROUP, DOCTOR_GROUP, HEAD_MANAGER_GROUP, PATIENT_GROUP, SUPPORT_GROUP
@@ -12,7 +8,7 @@ def test_setup_roles_creates_all_groups() -> None:
     """Виконує логіку `test_setup_roles_creates_all_groups`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     setup_roles()
     assert Group.objects.filter(name=PATIENT_GROUP).exists()
     assert Group.objects.filter(name=SUPPORT_GROUP).exists()
@@ -25,7 +21,7 @@ def test_assign_group_permissions_assigns_some_permissions() -> None:
     """Виконує логіку `test_assign_group_permissions_assigns_some_permissions`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     assign_group_permissions()
     support_group = Group.objects.get(name=SUPPORT_GROUP)
     head_manager_group = Group.objects.get(name=HEAD_MANAGER_GROUP)

@@ -1,6 +1,3 @@
-"""Модуль doctors/views/ajax.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, JsonResponse
@@ -13,10 +10,10 @@ def head_manager_load_doctor_directions_view(request: HttpRequest) -> JsonRespon
     """Виконує логіку `head_manager_load_doctor_directions_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     doctor_id = request.GET.get('doctor_id')
     directions_data: list[dict[str, str | int]] = []
     if doctor_id:

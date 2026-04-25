@@ -1,6 +1,3 @@
-"""Модуль appointments/models.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from datetime import datetime, timedelta
@@ -10,17 +7,17 @@ from django.db import models
 from doctors.models import Direction, Doctor, DoctorWorkDay
 
 class AppointmentStatus(models.TextChoices):
-    """Клас AppointmentStatus.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Перелік статусів запису до лікаря.
+    """
     PLANNED = ('planned', 'Заплановано')
     COMPLETED = ('completed', 'Завершено')
     REJECTED = ('rejected', 'Відхилено')
 
 class Appointment(models.Model):
-    """Клас Appointment.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Модель запису пацієнта до лікаря.
+    """
     user: models.ForeignKey = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='appointments', verbose_name='Користувач', blank=True, null=True)
     last_name = models.CharField(max_length=150, verbose_name='Прізвище')
     first_name = models.CharField(max_length=150, verbose_name='Імʼя')
@@ -38,19 +35,21 @@ class Appointment(models.Model):
     created_at: models.DateTimeField = models.DateTimeField(auto_now_add=True, verbose_name='Дата створення')
 
     class Meta:
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """
+        Метадані моделі запису до лікаря.
+        """
         verbose_name = 'Запис до лікаря'
         verbose_name_plural = 'Записи до лікаря'
         ordering = ['-appointment_date', '-appointment_time']
         constraints = [models.UniqueConstraint(fields=['doctor', 'appointment_date', 'appointment_time'], name='unique_doctor_appointment_slot')]
 
     def clean(self) -> None:
-        """Виконує логіку `clean`.
+        """
+        Перевіряє коректність запису до лікаря.
 
-Returns:
-    None."""
+        Raises:
+            ValidationError: Якщо лікар не належить до вибраного напряму.
+        """
         super().clean()
         if self.doctor_id and self.direction_id:
             if not self.doctor.directions.filter(id=self.direction_id).exists():
@@ -60,10 +59,9 @@ Returns:
 
     @property
     def customer_name(self) -> str:
-        """Виконує логіку `customer_name`.
-
-Returns:
-    Результат виконання операції."""
+        """
+        Повертає ім'я пацієнта.
+        """
         if self.last_name or self.first_name:
             return self.full_name
         if self.user:
@@ -72,18 +70,16 @@ Returns:
 
     @property
     def full_name(self) -> str:
-        """Виконує логіку `full_name`.
-
-Returns:
-    Результат виконання операції."""
+        """
+        Повертає ПІБ пацієнта.
+        """
         return ' '.join(filter(None, [self.last_name, self.first_name, self.middle_name]))
 
     @property
     def appointment_end_time(self) -> Any:
-        """Виконує логіку `appointment_end_time`.
-
-Returns:
-    Результат виконання операції."""
+        """
+        Повертає час завершення слота.
+        """
         workday = DoctorWorkDay.objects.filter(doctor=self.doctor, direction=self.direction, work_date=self.appointment_date).first()
         if not workday:
             return None
@@ -93,10 +89,9 @@ Returns:
 
     @property
     def appointment_time_range(self) -> str:
-        """Виконує логіку `appointment_time_range`.
-
-Returns:
-    Результат виконання операції."""
+        """
+        Повертає часовий діапазон слота у форматі HH:MM - HH:MM.
+        """
         end_time = self.appointment_end_time
         start_str = self.appointment_time.strftime('%H:%M')
         if not end_time:
@@ -104,8 +99,7 @@ Returns:
         return f"{start_str} - {end_time.strftime('%H:%M')}"
 
     def __str__(self) -> str:
-        """Виконує логіку `__str__`.
-
-Returns:
-    Результат виконання операції."""
+        """
+        Повертає строкове представлення запису.
+        """
         return f'{self.customer_name} — {self.doctor.full_name} — {self.appointment_date} {self.appointment_time_range}'

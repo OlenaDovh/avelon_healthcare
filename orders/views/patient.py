@@ -1,6 +1,3 @@
-"""Модуль orders/views/patient.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
@@ -17,10 +14,10 @@ def order_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `order_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     orders: QuerySet[Order] = Order.objects.filter(user=request.user).order_by('-created_at')
     update_bank_transfer_orders_status(orders)
     return render(request, 'avelon_healthcare/orders/pages/order_list.html', {'orders': orders})
@@ -30,11 +27,11 @@ def order_detail_view(request: HttpRequest, order_id: int) -> HttpResponse:
     """Виконує логіку `order_detail_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    order_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    order_id: Вхідний параметр `order_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     order: Order = get_object_or_404(Order.objects.prefetch_related('items__analysis'), id=order_id, user=request.user)
     update_bank_transfer_order_status(order)
     return render(request, 'avelon_healthcare/orders/pages/order_detail.html', {'order': order, 'bank_transfer_auto_pay_after_minutes': get_bank_transfer_auto_pay_after_minutes()})
@@ -45,11 +42,11 @@ def order_pay_view(request: HttpRequest, order_id: int) -> HttpResponse:
     """Виконує логіку `order_pay_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    order_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    order_id: Вхідний параметр `order_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     order: Order = get_object_or_404(Order, id=order_id, user=request.user)
     if request.method != 'POST':
         return redirect('orders:order_detail', order_id=order.id)
@@ -67,11 +64,11 @@ def order_cancel_view(request: HttpRequest, order_id: int) -> HttpResponse:
     """Виконує логіку `order_cancel_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    order_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    order_id: Вхідний параметр `order_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     order: Order = get_object_or_404(Order.objects.select_related('user'), pk=order_id, user=request.user)
     if order.status != OrderStatus.NEW:
         return redirect('orders:order_list')
@@ -92,11 +89,11 @@ def order_invoice_view(request: HttpRequest, order_id: int) -> HttpResponse:
     """Виконує логіку `order_invoice_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    order_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    order_id: Вхідний параметр `order_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     order: Order = get_object_or_404(Order.objects.prefetch_related('items__analysis'), id=order_id, user=request.user)
     if order.payment_method != PaymentMethod.BANK_TRANSFER:
         return redirect('orders:order_detail', order_id=order.id)

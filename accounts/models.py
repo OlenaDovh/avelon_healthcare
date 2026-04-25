@@ -1,25 +1,19 @@
-"""Модуль accounts/models.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from django.contrib.auth.models import AbstractUser
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 phone_validator = RegexValidator(regex='^\\+380\\d{9}$', message='Номер телефону має бути у форматі +380XXXXXXXXX')
 
 class PreferredContactChannel(models.TextChoices):
-    """Клас PreferredContactChannel.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `PreferredContactChannel`."""
     PHONE = ('phone', 'Телефон')
     EMAIL = ('email', 'Email')
     TELEGRAM = ('telegram', 'Telegram')
     VIBER = ('viber', 'Viber')
 
 class User(AbstractUser):
-    """Клас User.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """
+    Кастомна модель користувача.
+    """
     first_name = models.CharField(max_length=150, verbose_name="Ім'я")
     last_name = models.CharField(max_length=150, verbose_name='Прізвище')
     middle_name = models.CharField(max_length=150, blank=True, verbose_name='По батькові')
@@ -35,7 +29,7 @@ class User(AbstractUser):
         """Виконує логіку `__str__`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         return self.full_name or self.username
 
     @property
@@ -43,5 +37,5 @@ Returns:
         """Виконує логіку `full_name`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         return ' '.join(filter(None, [self.last_name, self.first_name, self.middle_name]))

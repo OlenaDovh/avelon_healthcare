@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_decorators.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth.models import Group
@@ -16,10 +12,10 @@ def dummy_view(request: Any) -> Any:
     """Виконує логіку `dummy_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return HttpResponse('OK')
 
 @pytest.mark.django_db
@@ -27,10 +23,10 @@ def test_role_required_allows_user_with_role(user_factory: Any) -> None:
     """Виконує логіку `test_role_required_allows_user_with_role`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     group, _ = Group.objects.get_or_create(name=SUPPORT_GROUP)
     user = user_factory()
     user.groups.add(group)
@@ -45,10 +41,10 @@ def test_role_required_allows_superuser(user_factory: Any) -> None:
     """Виконує логіку `test_role_required_allows_superuser`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory(is_superuser=True)
     request = RequestFactory().get('/')
     request.user = user
@@ -61,10 +57,10 @@ def test_role_required_raises_permission_denied_for_user_without_role(user_facto
     """Виконує логіку `test_role_required_raises_permission_denied_for_user_without_role`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory()
     request = RequestFactory().get('/')
     request.user = user
@@ -77,10 +73,10 @@ def test_support_required_allows_support_user(user_factory: Any) -> None:
     """Виконує логіку `test_support_required_allows_support_user`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     group, _ = Group.objects.get_or_create(name=SUPPORT_GROUP)
     user = user_factory()
     user.groups.add(group)

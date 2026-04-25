@@ -1,6 +1,3 @@
-"""Модуль analysis/views/public.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from decimal import Decimal
 from django.db.models import QuerySet
@@ -15,10 +12,10 @@ def analysis_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `analysis_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     what_to_check = request.GET.get('what_to_check', '').strip()
     disease = request.GET.get('disease', '').strip()
     for_whom = request.GET.get('for_whom', '').strip()
@@ -32,11 +29,11 @@ def add_to_cart_view(request: HttpRequest, analysis_id: int) -> HttpResponse:
     """Виконує логіку `add_to_cart_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    analysis_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    analysis_id: Вхідний параметр `analysis_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     analysis = get_object_or_404(Analysis, id=analysis_id, is_active=True)
     add_analysis_to_cart(request, analysis.id)
     return redirect('analysis:analysis_list')
@@ -45,11 +42,11 @@ def remove_from_cart_view(request: HttpRequest, analysis_id: int) -> HttpRespons
     """Виконує логіку `remove_from_cart_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    analysis_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    analysis_id: Вхідний параметр `analysis_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     remove_analysis_from_cart(request, analysis_id)
     next_url = request.GET.get('next', 'analysis:analysis_list')
     return redirect(next_url)
@@ -58,10 +55,10 @@ def cart_detail_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `cart_detail_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     cart = get_cart(request)
     analysis_ids = [int(item_id) for item_id in cart.keys()]
     analyses: QuerySet[Analysis] = Analysis.objects.filter(id__in=analysis_ids)

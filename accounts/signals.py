@@ -1,6 +1,3 @@
-"""Модуль accounts/signals.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from django.contrib.auth import get_user_model
@@ -16,13 +13,13 @@ def add_user_to_patient_group(sender: Any, instance: User, created: bool, **kwar
     """Виконує логіку `add_user_to_patient_group`.
 
 Args:
-    sender: Вхідне значення для виконання операції.
-    instance: Вхідне значення для виконання операції.
-    created: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    sender: Вхідний параметр `sender`.
+    instance: Вхідний параметр `instance`.
+    created: Вхідний параметр `created`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     if not created:
         return
     group, _ = Group.objects.get_or_create(name=PATIENT_GROUP)
@@ -33,13 +30,13 @@ def sync_staff_status_by_groups(sender: Any, instance: User, action: str, **kwar
     """Виконує логіку `sync_staff_status_by_groups`.
 
 Args:
-    sender: Вхідне значення для виконання операції.
-    instance: Вхідне значення для виконання операції.
-    action: Вхідне значення для виконання операції.
-    kwargs: Вхідне значення для виконання операції.
+    sender: Вхідний параметр `sender`.
+    instance: Вхідний параметр `instance`.
+    action: Вхідний параметр `action`.
+    **kwargs: Вхідний параметр `kwargs`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     if action not in {'post_add', 'post_remove', 'post_clear'}:
         return
     if instance.is_superuser:

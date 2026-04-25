@@ -1,6 +1,3 @@
-"""Модуль appointments/services/availability.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from typing import Any
 from datetime import date
@@ -11,13 +8,13 @@ def get_available_slots_for_doctor_on_date(doctor: Any, direction: Any, target_d
     """Виконує логіку `get_available_slots_for_doctor_on_date`.
 
 Args:
-    doctor: Вхідне значення для виконання операції.
-    direction: Вхідне значення для виконання операції.
-    target_date: Вхідне значення для виконання операції.
-    exclude_appointment_id: Вхідне значення для виконання операції.
+    doctor: Вхідний параметр `doctor`.
+    direction: Вхідний параметр `direction`.
+    target_date: Вхідний параметр `target_date`.
+    exclude_appointment_id: Вхідний параметр `exclude_appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     today = timezone.localdate()
     now_time = timezone.localtime().time()
     if target_date < today:
@@ -43,12 +40,12 @@ def get_available_dates_for_doctor_direction(doctor: Any, direction: Any, exclud
     """Виконує логіку `get_available_dates_for_doctor_direction`.
 
 Args:
-    doctor: Вхідне значення для виконання операції.
-    direction: Вхідне значення для виконання операції.
-    exclude_appointment_id: Вхідне значення для виконання операції.
+    doctor: Вхідний параметр `doctor`.
+    direction: Вхідний параметр `direction`.
+    exclude_appointment_id: Вхідний параметр `exclude_appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     today = timezone.localdate()
     workdays = doctor.workdays.filter(direction=direction, work_date__gte=today).prefetch_related('periods').order_by('work_date')
     result: list[str] = []

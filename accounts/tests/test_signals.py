@@ -1,7 +1,3 @@
-"""Модуль accounts/tests/test_signals.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from typing import Any
 import pytest
 from django.contrib.auth.models import Group
@@ -11,10 +7,10 @@ def get_group(name: Any) -> Any:
     """Виконує логіку `get_group`.
 
 Args:
-    name: Вхідне значення для виконання операції.
+    name: Вхідний параметр `name`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     return Group.objects.get_or_create(name=name)[0]
 
 @pytest.mark.django_db
@@ -22,10 +18,10 @@ def test_new_user_added_to_patient_group(user_factory: Any) -> None:
     """Виконує логіку `test_new_user_added_to_patient_group`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     user = user_factory()
     assert user.groups.filter(name=PATIENT_GROUP).exists()
 
@@ -35,11 +31,11 @@ def test_user_becomes_staff_when_added_to_staff_groups(user_factory: Any, group_
     """Виконує логіку `test_user_becomes_staff_when_added_to_staff_groups`.
 
 Args:
-    user_factory: Вхідне значення для виконання операції.
-    group_name: Вхідне значення для виконання операції.
+    user_factory: Вхідний параметр `user_factory`.
+    group_name: Вхідний параметр `group_name`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     group = get_group(group_name)
     user = user_factory(is_staff=False)
     user.groups.add(group)

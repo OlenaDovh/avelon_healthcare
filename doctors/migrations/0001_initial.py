@@ -1,13 +1,7 @@
-"""Модуль doctors/migrations/0001_initial.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 from django.db import migrations, models
 
 class Migration(migrations.Migration):
-    """Клас Migration.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `Migration`."""
     initial = True
     dependencies = []
     operations = [migrations.CreateModel(name='Direction', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('name', models.CharField(max_length=255, unique=True, verbose_name='Назва напряму')), ('description', models.TextField(verbose_name='Опис напряму'))], options={'verbose_name': 'Напрям', 'verbose_name_plural': 'Напрями', 'ordering': ['name']}), migrations.CreateModel(name='Doctor', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('full_name', models.CharField(max_length=255, verbose_name='ПІБ лікаря')), ('position', models.CharField(max_length=255, verbose_name='Посада')), ('qualification_category', models.CharField(max_length=255, verbose_name='Кваліфікаційна категорія')), ('experience_years', models.PositiveIntegerField(verbose_name='Стаж (років)')), ('price_from', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Ціна від')), ('price_to', models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Ціна до')), ('photo', models.ImageField(blank=True, null=True, upload_to='doctors/photos/', verbose_name='Фото')), ('work_experience_description', models.TextField(blank=True, verbose_name='Досвід роботи')), ('when_to_contact', models.TextField(blank=True, verbose_name='У яких випадках звертатись')), ('education', models.TextField(blank=True, verbose_name='Освіта')), ('licenses', models.ImageField(blank=True, null=True, upload_to='doctors/licenses/', verbose_name='Ліцензії / фото ліцензій')), ('directions', models.ManyToManyField(related_name='doctors', to='doctors.direction', verbose_name='Напрями'))], options={'verbose_name': 'Лікар', 'verbose_name_plural': 'Лікарі', 'ordering': ['full_name']})]

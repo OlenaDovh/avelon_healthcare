@@ -1,6 +1,3 @@
-"""Модуль orders/services/invoice_pdf.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from io import BytesIO
 from pathlib import Path
@@ -16,7 +13,7 @@ def _register_fonts() -> None:
     """Виконує логіку `_register_fonts`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     fonts_dir = Path(settings.BASE_DIR) / 'static' / 'fonts'
     regular_font_path = fonts_dir / 'DejaVuSans.ttf'
     bold_font_path = fonts_dir / 'DejaVuSans-Bold.ttf'
@@ -27,10 +24,10 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
     """Виконує логіку `generate_order_invoice_pdf`.
 
 Args:
-    order: Вхідне значення для виконання операції.
+    order: Вхідний параметр `order`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     _register_fonts()
     buffer = BytesIO()
     pdf = canvas.Canvas(buffer, pagesize=A4)
@@ -103,10 +100,10 @@ def build_order_invoice_response(order: Order) -> HttpResponse:
     """Виконує логіку `build_order_invoice_response`.
 
 Args:
-    order: Вхідне значення для виконання операції.
+    order: Вхідний параметр `order`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     pdf_bytes = generate_order_invoice_pdf(order)
     response = HttpResponse(pdf_bytes, content_type='application/pdf')
     response['Content-Disposition'] = f'inline; filename="invoice_order_{order.id}.pdf"'

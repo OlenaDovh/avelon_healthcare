@@ -1,6 +1,3 @@
-"""Модуль appointments/forms/support.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django import forms
 from django.core.exceptions import ValidationError
@@ -8,9 +5,7 @@ from accounts.selectors import patient_users_queryset
 from appointments.forms.create import AppointmentCreateForm
 
 class SupportAppointmentCreateForm(AppointmentCreateForm):
-    """Клас SupportAppointmentCreateForm.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `SupportAppointmentCreateForm`."""
     user = forms.ModelChoiceField(queryset=patient_users_queryset().order_by('last_name', 'first_name'), required=False, label='Зареєстрований користувач', widget=forms.Select(attrs={'class': 'form-select'}))
     last_name = forms.CharField(required=False, label='Прізвище', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
     first_name = forms.CharField(required=False, label='Імʼя', max_length=150, widget=forms.TextInput(attrs={'class': 'form-control'}))
@@ -19,16 +14,14 @@ class SupportAppointmentCreateForm(AppointmentCreateForm):
     email = forms.EmailField(required=False, label='Email', widget=forms.EmailInput(attrs={'class': 'form-control'}))
 
     class Meta(AppointmentCreateForm.Meta):
-        """Клас Meta.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+        """Описує клас `Meta`."""
         fields = ('user', 'last_name', 'first_name', 'middle_name', 'phone', 'email', 'direction', 'doctor', 'appointment_date', 'appointment_time', 'description')
 
     def clean(self) -> dict:
         """Виконує логіку `clean`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
         cleaned_data = super().clean()
         user = cleaned_data.get('user')
         last_name = (cleaned_data.get('last_name') or '').strip()

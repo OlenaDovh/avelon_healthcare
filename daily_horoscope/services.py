@@ -1,6 +1,3 @@
-"""Модуль daily_horoscope/services.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import random
 from django.http import HttpRequest
@@ -13,10 +10,10 @@ def get_or_create_daily_horoscope_for_session(request: HttpRequest) -> dict[str,
     """Виконує логіку `get_or_create_daily_horoscope_for_session`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     today = timezone.localdate()
     today_str = today.strftime('%Y-%m-%d')
     if not request.session.session_key:

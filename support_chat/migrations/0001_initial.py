@@ -1,15 +1,9 @@
-"""Модуль support_chat/migrations/0001_initial.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
-from __future__ import annotations
 import django.db.models.deletion
 from django.conf import settings
 from django.db import migrations, models
 
 class Migration(migrations.Migration):
-    """Клас Migration.
-
-Відповідає за поведінку, описану в цьому компоненті застосунку."""
+    """Описує клас `Migration`."""
     initial = True
     dependencies = [migrations.swappable_dependency(settings.AUTH_USER_MODEL)]
     operations = [migrations.CreateModel(name='SupportChatSession', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('guest_name', models.CharField(blank=True, max_length=150, verbose_name="Ім'я гостя")), ('guest_email', models.EmailField(blank=True, max_length=254, verbose_name='Email гостя')), ('topic', models.CharField(choices=[('appointment', 'Запис на прийом'), ('analysis', 'Аналізи'), ('order', 'Замовлення'), ('account', 'Акаунт'), ('other', 'Інше')], max_length=50, verbose_name='Тема звернення')), ('initial_description', models.TextField(verbose_name='Опис звернення')), ('status', models.CharField(choices=[('waiting', 'Очікує оператора'), ('active', 'Активний'), ('closed', 'Завершений')], default='waiting', max_length=20, verbose_name='Статус')), ('created_at', models.DateTimeField(auto_now_add=True)), ('connected_at', models.DateTimeField(blank=True, null=True)), ('closed_at', models.DateTimeField(blank=True, null=True)), ('operator', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assigned_support_chat_sessions', to=settings.AUTH_USER_MODEL, verbose_name='Оператор')), ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='support_chat_sessions', to=settings.AUTH_USER_MODEL, verbose_name='Користувач'))], options={'verbose_name': 'Сесія чату підтримки', 'verbose_name_plural': 'Сесії чату підтримки', 'ordering': ['-created_at']}), migrations.CreateModel(name='SupportChatMessage', fields=[('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')), ('author_type', models.CharField(choices=[('user', 'Користувач'), ('operator', 'Оператор'), ('system', 'Система')], max_length=20)), ('author_name', models.CharField(blank=True, max_length=150)), ('text', models.TextField(verbose_name='Текст')), ('created_at', models.DateTimeField(auto_now_add=True)), ('session', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='messages', to='support_chat.supportchatsession', verbose_name='Сесія'))], options={'verbose_name': 'Повідомлення чату', 'verbose_name_plural': 'Повідомлення чату', 'ordering': ['created_at']})]

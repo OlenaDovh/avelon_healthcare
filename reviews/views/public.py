@@ -1,6 +1,3 @@
-"""Модуль reviews/views/public.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 import logging
 from django.contrib import messages
@@ -17,10 +14,10 @@ def review_list_view(request: HttpRequest) -> HttpResponse:
     """Виконує логіку `review_list_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     reviews_qs = Review.objects.select_related('user', 'appointment')
     paginator = Paginator(reviews_qs, 5)
     page_number = request.GET.get('page')
@@ -32,11 +29,11 @@ def review_create_view(request: HttpRequest, appointment_id: int) -> HttpRespons
     """Виконує логіку `review_create_view`.
 
 Args:
-    request: Вхідне значення для виконання операції.
-    appointment_id: Вхідне значення для виконання операції.
+    request: Вхідний параметр `request`.
+    appointment_id: Вхідний параметр `appointment_id`.
 
 Returns:
-    Результат виконання операції."""
+    Any: Результат виконання."""
     appointment = get_object_or_404(Appointment, id=appointment_id, user=request.user)
     if appointment.status != AppointmentStatus.COMPLETED:
         messages.warning(request, 'Відгук можна залишити лише для завершеного прийому.')

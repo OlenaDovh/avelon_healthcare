@@ -1,6 +1,3 @@
-"""Модуль core/utils/email.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
@@ -10,13 +7,13 @@ def send_html_email(*, subject: str, html_body: str, to: list[str], attachments:
     """Виконує логіку `send_html_email`.
 
 Args:
-    subject: Вхідне значення для виконання операції.
-    html_body: Вхідне значення для виконання операції.
-    to: Вхідне значення для виконання операції.
-    attachments: Вхідне значення для виконання операції.
+    subject: Вхідний параметр `subject`.
+    html_body: Вхідний параметр `html_body`.
+    to: Вхідний параметр `to`.
+    attachments: Вхідний параметр `attachments`.
 
 Returns:
-    None."""
+    Any: Результат виконання."""
     text_body: str = strip_tags(html_body)
     email = EmailMultiAlternatives(subject=subject, body=text_body, from_email=settings.DEFAULT_FROM_EMAIL, to=to)
     email.attach_alternative(html_body, 'text/html')

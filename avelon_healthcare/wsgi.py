@@ -1,8 +1,9 @@
-"""Модуль avelon_healthcare/wsgi.py.
-
-Містить функціональність застосунку Avelon Healthcare."""
 from __future__ import annotations
+
 import os
+
 from django.core.wsgi import get_wsgi_application
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'avelon_healthcare.settings.local')
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "avelon_healthcare.settings.local")
+
 application = get_wsgi_application()
