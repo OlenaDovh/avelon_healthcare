@@ -1,5 +1,54 @@
-
+{% extends "avelon_healthcare/base.html" %}
 {% load static %}
+
+{% block title %}Чат з користувачем{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Чат з користувачем</h1>
+
+    <div
+        id="operator-chat-messages"
+        class="border rounded p-3 mb-2 bg-white"
+        style="height: 450px; overflow-y: auto;"
+    >
+        {% for message in messages %}
+            <div class="mb-2 d-flex {% if message.author_type == 'operator' %}justify-content-end{% elif message.author_type == 'user' %}justify-content-start{% else %}justify-content-center{% endif %}"
+                 data-message-id="{{ message.id }}">
+                <div class="p-2 rounded {% if message.author_type == 'operator' %}bg-success-subtle{% elif message.author_type == 'user' %}bg-light{% else %}bg-warning-subtle{% endif %}"
+                     style="max-width: 75%;">
+                    {% if message.author_type != 'system' %}
+                        <div class="small text-muted mb-1">
+                            {{ message.author_name }}
+                        </div>
+                    {% endif %}
+                    <div>{{ message.text }}</div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="text-muted">Повідомлень ще немає.</div>
+        {% endfor %}
+    </div>
+
+    <div id="operator-chat-typing" class="small text-muted mb-2 d-none"></div>
+
+    <div class="input-group mb-3">
+        <textarea
+            id="operator-chat-input"
+            class="form-control"
+            rows="2"
+            placeholder="Напишіть повідомлення..."
+        ></textarea>
+
+        <button id="operator-chat-send-btn" class="btn btn-primary">
+            Надіслати
+        </button>
+    </div>
+
+    <button id="operator-chat-finish-btn" class="btn btn-outline-danger">
+        Завершити чат
+    </button>
+</div>
 
 <script>
     window.CHAT_SESSION_ID = "{{ chat_session.id }}";
@@ -7,3 +56,4 @@
 </script>
 
 <script src="{% static 'js/support_chat/operator_room.js' %}"></script>
+{% endblock %}
