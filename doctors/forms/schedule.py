@@ -1,12 +1,16 @@
 from __future__ import annotations
-
 from django import forms
 from django.forms import inlineformset_factory
-
 from doctors.models import Direction, Doctor, DoctorWorkDay, DoctorWorkPeriod
 
 
 class DoctorWorkDayForm(forms.ModelForm):
+    """
+    Форма для створення та редагування робочого дня лікаря.
+
+    Налаштовує вибір лікаря, напряму, дати та тривалості прийому.
+    """
+
     class Meta:
         model = DoctorWorkDay
         fields = (
@@ -22,7 +26,14 @@ class DoctorWorkDayForm(forms.ModelForm):
             "appointment_duration_minutes": forms.Select(attrs={"class": "form-select"}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
+        """
+        Ініціалізує форму та налаштовує queryset напрямів.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["doctor"].queryset = Doctor.objects.prefetch_related("directions").order_by(
@@ -42,6 +53,12 @@ class DoctorWorkDayForm(forms.ModelForm):
 
 
 class DoctorWorkPeriodForm(forms.ModelForm):
+    """
+    Форма для створення та редагування робочого періоду лікаря.
+
+    Налаштовує час початку та завершення робочого періоду.
+    """
+
     class Meta:
         model = DoctorWorkPeriod
         fields = ("start_time", "end_time")

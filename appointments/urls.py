@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from django.urls import path
-
 from appointments.views import (
     appointment_cancel_view,
     appointment_create_view,
@@ -14,7 +12,6 @@ from appointments.views import (
     support_appointment_list_view,
     support_appointment_update_view, doctor,
 )
-from appointments.views.doctor import doctor_appointment_list_view
 
 app_name = "appointments"
 
@@ -33,11 +30,21 @@ urlpatterns = [
         support_appointment_update_view,
         name="support_appointment_update",
     ),
-
     path("doctor/", doctor.doctor_appointment_list_view, name="doctor_appointment_list"),
-    path("doctor/update/<int:appointment_id>/", doctor.doctor_appointment_update_view,
-         name="doctor_appointment_update"),
+    path(
+        "doctor/update/<int:appointment_id>/",
+        doctor.doctor_appointment_update_view,
+        name="doctor_appointment_update",
+    ),
     path("doctor/schedule/", doctor.doctor_schedule_list_view, name="doctor_schedule_list"),
-    path("doctor/schedule/create/", doctor.doctor_schedule_create_view, name="doctor_schedule_create"),
-    path("doctor/schedule/update/<int:pk>/", doctor.doctor_schedule_update_view, name="doctor_schedule_update"),
+    path(
+        "doctor/schedule/create/",
+        doctor.doctor_schedule_create_view,
+        name="doctor_schedule_create",
+    ),
+    path(
+        "doctor/schedule/update/<int:pk>/",
+        doctor.doctor_schedule_update_view,
+        name="doctor_schedule_update",
+    ),
 ]

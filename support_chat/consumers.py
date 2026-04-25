@@ -1,14 +1,22 @@
 from __future__ import annotations
-
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
-
 from .models import SupportChatMessage, SupportChatSession, SupportChatStatus
 from .services import close_chat_session
 
 
 class SupportChatConsumer(AsyncJsonWebsocketConsumer):
-    async def connect(self):
+    """
+    WebSocket-консьюмер для обробки support-чату в реальному часі.
+    """
+
+    session_id: int
+    room_group_name: str
+
+    async def connect(self) -> None:
+        """
+        Встановлює WebSocket-з'єднання та підключає до групи чату.
+        """
         self.session_id = self.scope["url_route"]["kwargs"]["session_id"]
         self.room_group_name = f"support_chat_{self.session_id}"
 
@@ -20,16 +28,22 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.accept()
 
-    async def disconnect(self, close_code):
+    async def disconnect(self, close_code: int) -> None:
+        """
+        Відключає WebSocket-з'єднання від групи.
+        """
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    async def receive_json(self, content, **kwargs):
-        event_type = content.get("type")
+    async def receive_json(self, content: dict, **kwargs) -> None:
+        """
+        Обробляє вхідні JSON-повідомлення від клієнта.
+        """
+        event_type: str | None = content.get("type")
 
         if event_type == "message":
-            text = (content.get("text") or "").strip()
-            sender_role = content.get("sender_role")
-            sender_name = content.get("sender_name") or ""
+            text: str = (content.get("text") or "").strip()
+            sender_role: str | None = content.get("sender_role")
+            sender_name: str = content.get("sender_name") or ""
 
             if not text:
                 return
@@ -54,8 +68,8 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
             )
 
         elif event_type == "typing_start":
-            sender_role = content.get("sender_role")
-            sender_name = content.get("sender_name") or ""
+            sender_role: str | None = content.get("sender_role")
+            sender_name: str = content.get("sender_name") or ""
 
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -68,8 +82,8 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
             )
 
         elif event_type == "typing_stop":
-            sender_role = content.get("sender_role")
-            sender_name = content.get("sender_name") or ""
+            sender_role: str | None = content.get("sender_role")
+            sender_name: str = content.get("sender_name") or ""
 
             await self.channel_layer.group_send(
                 self.room_group_name,
@@ -96,11 +110,17 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
                 },
             )
 
-    async def chat_event(self, event):
+    async def chat_event(self, event: dict) -> None:
+        """
+        Відправляє подію чату клієнту.
+        """
         await self.send_json(event)
 
     @database_sync_to_async
     def is_allowed(self) -> bool:
+        """
+        Перевіряє, чи має користувач доступ до сесії чату.
+        """
         try:
             session = SupportChatSession.objects.get(pk=self.session_id)
         except SupportChatSession.DoesNotExist:
@@ -119,6 +139,9 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def is_closed(self) -> bool:
+        """
+        Перевіряє, чи закрита сесія чату.
+        """
         return SupportChatSession.objects.filter(
             pk=self.session_id,
             status=SupportChatStatus.CLOSED,
@@ -126,6 +149,9 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def save_message(self, sender_role: str, sender_name: str, text: str) -> dict:
+        """
+        Зберігає повідомлення в базі даних.
+        """
         session = SupportChatSession.objects.get(pk=self.session_id)
 
         author_type = SupportChatMessage.AuthorType.USER
@@ -148,5 +174,8 @@ class SupportChatConsumer(AsyncJsonWebsocketConsumer):
 
     @database_sync_to_async
     def close_chat(self) -> None:
+        """
+        Закриває сесію чату.
+        """
         session = SupportChatSession.objects.get(pk=self.session_id)
         close_chat_session(session=session)

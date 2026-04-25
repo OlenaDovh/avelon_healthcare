@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 from django.db import models
 
-
 phone_validator = RegexValidator(
     regex=r"^\+380\d{9}$",
     message="Номер телефону має бути у форматі +380XXXXXXXXX",
@@ -20,6 +19,8 @@ class PreferredContactChannel(models.TextChoices):
 class User(AbstractUser):
     """
     Кастомна модель користувача.
+
+    Розширює стандартну модель користувача додатковими полями та логікою валідації.
     """
 
     first_name = models.CharField(max_length=150, verbose_name="Ім'я")
@@ -70,13 +71,29 @@ class User(AbstractUser):
         verbose_name="Пріоритетний канал зв’язку",
     )
 
-    def clean(self):
+    def clean(self) -> None:
+        """
+        Виконує валідацію моделі користувача.
+
+        Raises:
+            ValidationError: Якщо телефон не вказаний для не-суперкористувача.
+        """
         super().clean()
 
         if not self.is_superuser and not self.phone:
             raise ValidationError({"phone": "Телефон обовʼязковий для користувача."})
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
+        """
+        Зберігає користувача з додатковою логікою обробки полів.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+
+        Returns:
+            None
+        """
         if not self.phone:
             self.phone = None
 
@@ -87,8 +104,20 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
     def __str__(self) -> str:
+        """
+        Повертає рядкове представлення користувача.
+
+        Returns:
+            str: Повне ім'я або username.
+        """
         return self.full_name or self.username
 
     @property
     def full_name(self) -> str:
+        """
+        Повертає повне ім'я користувача.
+
+        Returns:
+            str: Конкатенація прізвища, імені та по батькові.
+        """
         return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))

@@ -1,9 +1,14 @@
 from __future__ import annotations
-
 from django import forms
 
 
 class OrderCancelForm(forms.Form):
+    """
+    Форма для скасування замовлення.
+
+    Використовується для введення причини скасування.
+    """
+
     reason = forms.CharField(
         required=True,
         label="Причина скасування",

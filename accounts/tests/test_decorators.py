@@ -3,18 +3,32 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.test import RequestFactory
-
 from accounts.constants import SUPPORT_GROUP
 from accounts.permissions import support_required, is_support
 from accounts.permissions.decorators import role_required
 
 
-def dummy_view(request):
+def dummy_view(request: object) -> HttpResponse:
+    """
+    Повертає тестову HTTP-відповідь.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Тестова відповідь.
+    """
     return HttpResponse("OK")
 
 
 @pytest.mark.django_db
-def test_role_required_allows_user_with_role(user_factory):
+def test_role_required_allows_user_with_role(user_factory: object) -> None:
+    """
+    Перевіряє доступ користувача з потрібною роллю.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     group, _ = Group.objects.get_or_create(name=SUPPORT_GROUP)
     user = user_factory()
     user.groups.add(group)
@@ -29,7 +43,13 @@ def test_role_required_allows_user_with_role(user_factory):
 
 
 @pytest.mark.django_db
-def test_role_required_allows_superuser(user_factory):
+def test_role_required_allows_superuser(user_factory: object) -> None:
+    """
+    Перевіряє доступ суперкористувача.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     user = user_factory(is_superuser=True)
 
     request = RequestFactory().get("/")
@@ -42,7 +62,18 @@ def test_role_required_allows_superuser(user_factory):
 
 
 @pytest.mark.django_db
-def test_role_required_raises_permission_denied_for_user_without_role(user_factory):
+def test_role_required_raises_permission_denied_for_user_without_role(
+    user_factory: object,
+) -> None:
+    """
+    Перевіряє заборону доступу для користувача без потрібної ролі.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+
+    Raises:
+        PermissionDenied: Якщо користувач не має потрібної ролі.
+    """
     user = user_factory()
 
     request = RequestFactory().get("/")
@@ -55,7 +86,13 @@ def test_role_required_raises_permission_denied_for_user_without_role(user_facto
 
 
 @pytest.mark.django_db
-def test_support_required_allows_support_user(user_factory):
+def test_support_required_allows_support_user(user_factory: object) -> None:
+    """
+    Перевіряє доступ користувача з роллю support.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     group, _ = Group.objects.get_or_create(name=SUPPORT_GROUP)
     user = user_factory()
     user.groups.add(group)

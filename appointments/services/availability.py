@@ -1,18 +1,27 @@
 from __future__ import annotations
-
 from datetime import date
-
 from django.utils import timezone
-
 from appointments.models import Appointment, AppointmentStatus
 
 
 def get_available_slots_for_doctor_on_date(
-    doctor,
-    direction,
-    target_date: date,
-    exclude_appointment_id: int | None = None,
+        doctor,
+        direction,
+        target_date: date,
+        exclude_appointment_id: int | None = None,
 ) -> list[dict[str, str]]:
+    """
+    Повертає доступні часові слоти лікаря на конкретну дату.
+
+    Args:
+        doctor: Лікар, для якого перевіряються слоти.
+        direction: Напрям прийому.
+        target_date: Дата прийому.
+        exclude_appointment_id: Ідентифікатор запису, який потрібно виключити.
+
+    Returns:
+        list[dict[str, str]]: Список доступних часових слотів.
+    """
     today = timezone.localdate()
     now_time = timezone.localtime().time()
 
@@ -60,10 +69,21 @@ def get_available_slots_for_doctor_on_date(
 
 
 def get_available_dates_for_doctor_direction(
-    doctor,
-    direction,
-    exclude_appointment_id: int | None = None,
+        doctor,
+        direction,
+        exclude_appointment_id: int | None = None,
 ) -> list[str]:
+    """
+    Повертає дати з доступними слотами для лікаря та напряму.
+
+    Args:
+        doctor: Лікар, для якого перевіряються дати.
+        direction: Напрям прийому.
+        exclude_appointment_id: Ідентифікатор запису, який потрібно виключити.
+
+    Returns:
+        list[str]: Список дат у форматі YYYY-MM-DD.
+    """
     today = timezone.localdate()
 
     workdays = doctor.workdays.filter(

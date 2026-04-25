@@ -1,4 +1,3 @@
-# core/utils/email.py
 from __future__ import annotations
 
 from django.conf import settings
@@ -7,12 +6,24 @@ from django.utils.html import strip_tags
 
 
 def send_html_email(
-    *,
-    subject: str,
-    html_body: str,
-    to: list[str],
-    attachments: list[tuple[str, bytes, str]] | None = None,
+        *,
+        subject: str,
+        html_body: str,
+        to: list[str],
+        attachments: list[tuple[str, bytes, str]] | None = None,
 ) -> None:
+    """
+    Надсилає HTML email із текстовою версією та вкладеннями.
+
+    Args:
+        subject: Тема листа.
+        html_body: HTML-вміст листа.
+        to: Список отримувачів.
+        attachments: Список вкладень у форматі (ім'я файлу, вміст, MIME-тип).
+
+    Returns:
+        None
+    """
     text_body: str = strip_tags(html_body)
 
     email = EmailMultiAlternatives(

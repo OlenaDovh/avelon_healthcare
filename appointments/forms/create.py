@@ -1,22 +1,25 @@
 from __future__ import annotations
-
 from datetime import datetime
 from typing import Any
-
 from django import forms
 from django.core.exceptions import ValidationError
 from django.db.models import Count
 from django.utils import timezone
-
 from doctors.models import Direction, Doctor
-
 from appointments.models import Appointment
 from appointments.services import (
     get_available_dates_for_doctor_direction,
     get_available_slots_for_doctor_on_date,
 )
 
+
 class AppointmentCreateForm(forms.ModelForm):
+    """
+    Форма для створення запису на прийом.
+
+    Дозволяє обрати напрям, лікаря, дату та доступний часовий слот.
+    """
+
     appointment_date = forms.DateField(
         required=True,
         label="Дата прийому",
@@ -58,6 +61,13 @@ class AppointmentCreateForm(forms.ModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Ініціалізує форму та налаштовує доступні варіанти.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["direction"].queryset = (
@@ -100,6 +110,15 @@ class AppointmentCreateForm(forms.ModelForm):
                 pass
 
     def clean(self) -> dict[str, Any]:
+        """
+        Виконує валідацію даних форми.
+
+        Returns:
+            dict[str, Any]: Очищені дані форми.
+
+        Raises:
+            ValidationError: Якщо дані невалідні.
+        """
         cleaned_data = super().clean()
 
         direction = cleaned_data.get("direction")
@@ -144,6 +163,12 @@ class AppointmentCreateForm(forms.ModelForm):
 
 
 class GuestAppointmentCreateForm(AppointmentCreateForm):
+    """
+    Форма створення запису для неавторизованого користувача.
+
+    Додає поля персональних даних пацієнта.
+    """
+
     last_name = forms.CharField(
         label="Прізвище",
         max_length=150,

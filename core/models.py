@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 from django.db import models
 
 
@@ -57,6 +56,8 @@ class ClinicInfo(models.Model):
 class ContactInfo(models.Model):
     """
     Модель контактної інформації клініки.
+
+    Зберігає адресу, телефони, email та посилання на соціальні мережі.
     """
 
     address: models.CharField = models.CharField(
@@ -117,6 +118,8 @@ class ContactInfo(models.Model):
 class Promotion(models.Model):
     """
     Модель акції клініки.
+
+    Зберігає інформацію про маркетингові пропозиції та їх термін дії.
     """
 
     title: models.CharField = models.CharField(

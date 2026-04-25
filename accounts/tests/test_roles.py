@@ -1,6 +1,6 @@
+from __future__ import annotations
 import pytest
 from django.contrib.auth.models import Group
-
 from accounts.constants import (
     CONTENT_MANAGER_GROUP,
     DOCTOR_GROUP,
@@ -12,7 +12,10 @@ from accounts.services import assign_group_permissions, setup_roles
 
 
 @pytest.mark.django_db
-def test_setup_roles_creates_all_groups():
+def test_setup_roles_creates_all_groups() -> None:
+    """
+    Перевіряє, що setup_roles створює всі необхідні групи.
+    """
     setup_roles()
 
     assert Group.objects.filter(name=PATIENT_GROUP).exists()
@@ -23,7 +26,10 @@ def test_setup_roles_creates_all_groups():
 
 
 @pytest.mark.django_db
-def test_assign_group_permissions_assigns_some_permissions():
+def test_assign_group_permissions_assigns_some_permissions() -> None:
+    """
+    Перевіряє, що assign_group_permissions призначає права доступу групам.
+    """
     assign_group_permissions()
 
     support_group = Group.objects.get(name=SUPPORT_GROUP)

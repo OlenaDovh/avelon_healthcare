@@ -11,7 +11,16 @@ from accounts.forms import (
 )
 
 
-def get_profile_update_data(**overrides):
+def get_profile_update_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для оновлення профілю.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми оновлення профілю.
+    """
     data = {
         "email": "new@email.com",
         "phone": "+380991111111",
@@ -25,7 +34,16 @@ def get_profile_update_data(**overrides):
     return data
 
 
-def get_register_data(**overrides):
+def get_register_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для реєстрації користувача.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми реєстрації.
+    """
     data = {
         "username": "testuser",
         "email": "test@email.com",
@@ -40,7 +58,16 @@ def get_register_data(**overrides):
     return data
 
 
-def get_login_data(**overrides):
+def get_login_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для входу користувача.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми входу.
+    """
     data = {
         "login": "testuser",
         "password": "testpass123",
@@ -49,7 +76,16 @@ def get_login_data(**overrides):
     return data
 
 
-def get_support_patient_update_data(**overrides):
+def get_support_patient_update_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для оновлення пацієнта support-користувачем.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми оновлення пацієнта.
+    """
     data = {
         "first_name": "Іван",
         "last_name": "Петренко",
@@ -63,7 +99,16 @@ def get_support_patient_update_data(**overrides):
     return data
 
 
-def get_password_change_data(**overrides):
+def get_password_change_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для зміни пароля.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми зміни пароля.
+    """
     data = {
         "old_password": "OldPass123",
         "new_password1": "NewPass123",
@@ -73,7 +118,16 @@ def get_password_change_data(**overrides):
     return data
 
 
-def get_set_password_data(**overrides):
+def get_set_password_data(**overrides: object) -> dict[str, object]:
+    """
+    Формує тестові дані для встановлення нового пароля.
+
+    Args:
+        **overrides: Значення для перевизначення стандартних даних.
+
+    Returns:
+        dict[str, object]: Дані форми встановлення пароля.
+    """
     data = {
         "new_password1": "NewPass123",
         "new_password2": "NewPass123",
@@ -82,7 +136,24 @@ def get_set_password_data(**overrides):
     return data
 
 
-def prepare_user_for_login(user, password="testpass123", email_verified=True, pending_email=""):
+def prepare_user_for_login(
+    user: object,
+    password: str = "testpass123",
+    email_verified: bool = True,
+    pending_email: str = "",
+) -> object:
+    """
+    Готує користувача до тестування форми входу.
+
+    Args:
+        user: Об'єкт користувача.
+        password: Пароль користувача.
+        email_verified: Ознака підтвердження email.
+        pending_email: Email, що очікує підтвердження.
+
+    Returns:
+        object: Оновлений користувач.
+    """
     user.set_password(password)
     user.email_verified = email_verified
     user.pending_email = pending_email
@@ -90,20 +161,49 @@ def prepare_user_for_login(user, password="testpass123", email_verified=True, pe
     return user
 
 
-def prepare_user_for_password_change(user, password="OldPass123"):
+def prepare_user_for_password_change(
+    user: object,
+    password: str = "OldPass123",
+) -> object:
+    """
+    Готує користувача до тестування зміни пароля.
+
+    Args:
+        user: Об'єкт користувача.
+        password: Поточний пароль користувача.
+
+    Returns:
+        object: Оновлений користувач.
+    """
     user.set_password(password)
     user.save()
     return user
 
 
 @pytest.mark.django_db
-def test_profile_update_form_valid(user):
+def test_profile_update_form_valid(user: object) -> None:
+    """
+    Перевіряє валідність форми оновлення профілю.
+
+    Args:
+        user: Тестовий користувач.
+    """
     form = ProfileUpdateForm(instance=user, data=get_profile_update_data())
     assert form.is_valid()
 
 
 @pytest.mark.django_db
-def test_profile_update_email_already_exists(user, user_factory):
+def test_profile_update_email_already_exists(
+    user: object,
+    user_factory: object,
+) -> None:
+    """
+    Перевіряє помилку, якщо email вже використовується.
+
+    Args:
+        user: Тестовий користувач.
+        user_factory: Фабрика для створення користувачів.
+    """
     other = user_factory(email="test@email.com")
 
     form = ProfileUpdateForm(
@@ -120,7 +220,17 @@ def test_profile_update_email_already_exists(user, user_factory):
 
 
 @pytest.mark.django_db
-def test_profile_update_pending_email_conflict(user, user_factory):
+def test_profile_update_pending_email_conflict(
+    user: object,
+    user_factory: object,
+) -> None:
+    """
+    Перевіряє помилку, якщо email очікує підтвердження в іншого користувача.
+
+    Args:
+        user: Тестовий користувач.
+        user_factory: Фабрика для створення користувачів.
+    """
     other = user_factory(pending_email="test@email.com")
 
     form = ProfileUpdateForm(
@@ -137,7 +247,17 @@ def test_profile_update_pending_email_conflict(user, user_factory):
 
 
 @pytest.mark.django_db
-def test_profile_update_phone_already_exists(user, user_factory):
+def test_profile_update_phone_already_exists(
+    user: object,
+    user_factory: object,
+) -> None:
+    """
+    Перевіряє помилку, якщо телефон вже використовується.
+
+    Args:
+        user: Тестовий користувач.
+        user_factory: Фабрика для створення користувачів.
+    """
     other = user_factory(phone="+380991111114")
 
     form = ProfileUpdateForm(
@@ -153,13 +273,22 @@ def test_profile_update_phone_already_exists(user, user_factory):
 
 
 @pytest.mark.django_db
-def test_register_form_valid():
+def test_register_form_valid() -> None:
+    """
+    Перевіряє валідність форми реєстрації.
+    """
     form = RegisterForm(data=get_register_data())
     assert form.is_valid()
 
 
 @pytest.mark.django_db
-def test_register_form_email_already_exists(user_factory):
+def test_register_form_email_already_exists(user_factory: object) -> None:
+    """
+    Перевіряє помилку реєстрації, якщо email вже використовується.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     user_factory(email="test@email.com")
 
     form = RegisterForm(
@@ -177,7 +306,13 @@ def test_register_form_email_already_exists(user_factory):
 
 
 @pytest.mark.django_db
-def test_register_form_pending_email_conflict(user_factory):
+def test_register_form_pending_email_conflict(user_factory: object) -> None:
+    """
+    Перевіряє помилку реєстрації, якщо email очікує підтвердження.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     user_factory(pending_email="test@email.com")
 
     form = RegisterForm(
@@ -195,7 +330,13 @@ def test_register_form_pending_email_conflict(user_factory):
 
 
 @pytest.mark.django_db
-def test_register_form_phone_already_exists(user_factory):
+def test_register_form_phone_already_exists(user_factory: object) -> None:
+    """
+    Перевіряє помилку реєстрації, якщо телефон вже використовується.
+
+    Args:
+        user_factory: Фабрика для створення користувачів.
+    """
     user_factory(phone="+380991111118")
 
     form = RegisterForm(
@@ -213,7 +354,13 @@ def test_register_form_phone_already_exists(user_factory):
 
 
 @pytest.mark.django_db
-def test_login_form_valid_with_username(user):
+def test_login_form_valid_with_username(user: object) -> None:
+    """
+    Перевіряє валідність форми входу за username.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user)
 
     form = LoginForm(data=get_login_data(login=user.username))
@@ -221,7 +368,13 @@ def test_login_form_valid_with_username(user):
 
 
 @pytest.mark.django_db
-def test_login_form_valid_with_email(user):
+def test_login_form_valid_with_email(user: object) -> None:
+    """
+    Перевіряє валідність форми входу за email.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user)
 
     form = LoginForm(data=get_login_data(login=user.email))
@@ -229,7 +382,13 @@ def test_login_form_valid_with_email(user):
 
 
 @pytest.mark.django_db
-def test_login_form_requires_verified_email(user):
+def test_login_form_requires_verified_email(user: object) -> None:
+    """
+    Перевіряє заборону входу без підтвердженого email.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user, email_verified=False, pending_email="")
 
     form = LoginForm(data=get_login_data(login=user.username))
@@ -237,7 +396,13 @@ def test_login_form_requires_verified_email(user):
 
 
 @pytest.mark.django_db
-def test_login_form_allows_login_when_pending_email_exists(user):
+def test_login_form_allows_login_when_pending_email_exists(user: object) -> None:
+    """
+    Перевіряє дозвіл входу, якщо є pending_email.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user, email_verified=False, pending_email="new@email.com")
 
     form = LoginForm(data=get_login_data(login=user.username))
@@ -245,7 +410,13 @@ def test_login_form_allows_login_when_pending_email_exists(user):
 
 
 @pytest.mark.django_db
-def test_login_form_invalid_with_wrong_username(user):
+def test_login_form_invalid_with_wrong_username(user: object) -> None:
+    """
+    Перевіряє помилку входу з неправильним username.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user)
 
     form = LoginForm(data=get_login_data(login="wrong_username"))
@@ -253,7 +424,13 @@ def test_login_form_invalid_with_wrong_username(user):
 
 
 @pytest.mark.django_db
-def test_login_form_invalid_with_wrong_password(user):
+def test_login_form_invalid_with_wrong_password(user: object) -> None:
+    """
+    Перевіряє помилку входу з неправильним паролем.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_login(user)
 
     form = LoginForm(data=get_login_data(login=user.username, password="wrong_password"))
@@ -261,7 +438,13 @@ def test_login_form_invalid_with_wrong_password(user):
 
 
 @pytest.mark.django_db
-def test_support_patient_update_form_valid(user):
+def test_support_patient_update_form_valid(user: object) -> None:
+    """
+    Перевіряє валідність форми оновлення пацієнта support-користувачем.
+
+    Args:
+        user: Тестовий користувач.
+    """
     form = SupportPatientUpdateForm(
         instance=user,
         data=get_support_patient_update_data(),
@@ -271,7 +454,17 @@ def test_support_patient_update_form_valid(user):
 
 
 @pytest.mark.django_db
-def test_support_patient_update_form_phone_already_exists(user, user_factory):
+def test_support_patient_update_form_phone_already_exists(
+    user: object,
+    user_factory: object,
+) -> None:
+    """
+    Перевіряє помилку, якщо телефон пацієнта вже використовується.
+
+    Args:
+        user: Тестовий користувач.
+        user_factory: Фабрика для створення користувачів.
+    """
     other = user_factory(phone="+380991111121")
 
     form = SupportPatientUpdateForm(
@@ -284,7 +477,13 @@ def test_support_patient_update_form_phone_already_exists(user, user_factory):
 
 
 @pytest.mark.django_db
-def test_support_patient_update_form_discount_invalid(user):
+def test_support_patient_update_form_discount_invalid(user: object) -> None:
+    """
+    Перевіряє помилку, якщо знижка має некоректне значення.
+
+    Args:
+        user: Тестовий користувач.
+    """
     form = SupportPatientUpdateForm(
         instance=user,
         data=get_support_patient_update_data(
@@ -298,7 +497,13 @@ def test_support_patient_update_form_discount_invalid(user):
 
 
 @pytest.mark.django_db
-def test_user_password_change_form_valid(user):
+def test_user_password_change_form_valid(user: object) -> None:
+    """
+    Перевіряє валідність форми зміни пароля.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_password_change(user)
 
     form = UserPasswordChangeForm(
@@ -310,7 +515,13 @@ def test_user_password_change_form_valid(user):
 
 
 @pytest.mark.django_db
-def test_user_password_change_form_wrong_old_password(user):
+def test_user_password_change_form_wrong_old_password(user: object) -> None:
+    """
+    Перевіряє помилку при неправильному старому паролі.
+
+    Args:
+        user: Тестовий користувач.
+    """
     prepare_user_for_password_change(user)
 
     form = UserPasswordChangeForm(
@@ -322,7 +533,13 @@ def test_user_password_change_form_wrong_old_password(user):
 
 
 @pytest.mark.django_db
-def test_user_set_password_form_passwords_do_not_match(user):
+def test_user_set_password_form_passwords_do_not_match(user: object) -> None:
+    """
+    Перевіряє помилку, якщо нові паролі не збігаються.
+
+    Args:
+        user: Тестовий користувач.
+    """
     form = UserSetPasswordForm(
         user=user,
         data=get_set_password_data(new_password2="AnotherPass"),
@@ -331,7 +548,10 @@ def test_user_set_password_form_passwords_do_not_match(user):
     assert not form.is_valid()
 
 
-def test_user_password_reset_form_has_email_field_attrs():
+def test_user_password_reset_form_has_email_field_attrs() -> None:
+    """
+    Перевіряє налаштування поля email у формі скидання пароля.
+    """
     form = UserPasswordResetForm()
 
     assert form.fields["email"].label == "Електронна пошта"

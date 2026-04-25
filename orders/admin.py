@@ -1,8 +1,6 @@
 from __future__ import annotations
-
 from django.contrib import admin
 from django.utils import timezone
-
 from .models import Order, OrderItem, OrderStatus
 
 
@@ -68,16 +66,12 @@ class OrderAdmin(admin.ModelAdmin):
             change: bool,
     ) -> None:
         """
-        Зберігає замовлення та автоматично виставляє дату оплати.
+        Зберігає замовлення та керує полями оплати і відхилення.
 
-        Args:
-            request: HTTP-запит.
-            obj (Order): Екземпляр замовлення.
-            form: Форма адмінки.
-            change (bool): Ознака редагування.
-
-        Returns:
-            None
+        Логіка:
+        - Якщо статус PAID і paid_at пустий → встановлюємо дату оплати.
+        - Якщо статус НЕ PAID → очищаємо paid_at.
+        - Якщо статус НЕ REJECTED → очищаємо причину відхилення.
         """
         if obj.status == OrderStatus.PAID and obj.paid_at is None:
             obj.paid_at = timezone.now()

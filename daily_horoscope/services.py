@@ -1,10 +1,8 @@
 from __future__ import annotations
-
 import random
 from django.http import HttpRequest
 from django.utils import timezone
-
-from daily_horoscope.ai import FALLBACK_TEXT, generate_horoscope_text
+from daily_horoscope.ai import generate_horoscope_text
 
 SESSION_KEY = "daily_horoscope"
 
@@ -20,6 +18,15 @@ HOROSCOPE_THEMES = [
 
 
 def get_or_create_daily_horoscope_for_session(request: HttpRequest) -> dict[str, str]:
+    """
+    Повертає або створює щоденний гороскоп для сесії користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        dict[str, str]: Дані гороскопу (дата, текст, тема).
+    """
     today = timezone.localdate()
     today_str = today.strftime("%Y-%m-%d")
 

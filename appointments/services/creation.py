@@ -1,12 +1,19 @@
-from __future__ import annotations
-
 from django.db import transaction
-
 from appointments.models import Appointment
 from appointments.tasks import send_appointment_email_task
 
 
 def fill_appointment_from_user(*, appointment: Appointment, user) -> Appointment:
+    """
+    Заповнює дані запису на прийом даними користувача.
+
+    Args:
+        appointment: Запис на прийом.
+        user: Користувач, даними якого заповнюється запис.
+
+    Returns:
+        Appointment: Оновлений запис на прийом.
+    """
     appointment.user = user
     appointment.last_name = user.last_name
     appointment.first_name = user.first_name
@@ -17,6 +24,16 @@ def fill_appointment_from_user(*, appointment: Appointment, user) -> Appointment
 
 
 def fill_appointment_from_guest_data(*, appointment: Appointment, cleaned_data: dict) -> Appointment:
+    """
+    Заповнює дані запису на прийом даними незареєстрованого пацієнта.
+
+    Args:
+        appointment: Запис на прийом.
+        cleaned_data: Очищені дані форми.
+
+    Returns:
+        Appointment: Оновлений запис на прийом.
+    """
     appointment.user = None
     appointment.last_name = cleaned_data["last_name"]
     appointment.first_name = cleaned_data["first_name"]
@@ -27,6 +44,15 @@ def fill_appointment_from_guest_data(*, appointment: Appointment, cleaned_data: 
 
 
 def save_new_appointment(*, appointment: Appointment) -> Appointment:
+    """
+    Зберігає новий запис на прийом і планує надсилання email.
+
+    Args:
+        appointment: Запис на прийом для збереження.
+
+    Returns:
+        Appointment: Збережений запис на прийом.
+    """
     appointment.save()
 
     transaction.on_commit(

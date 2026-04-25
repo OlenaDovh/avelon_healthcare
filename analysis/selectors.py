@@ -1,24 +1,38 @@
-# analysis/selectors.py
 from __future__ import annotations
-
 from typing import Any
-
 from django.db.models import QuerySet
-
 from analysis.models import Analysis
 
 
 def active_analyses_queryset() -> QuerySet[Analysis]:
+    """
+    Повертає queryset активних аналізів.
+
+    Returns:
+        QuerySet[Analysis]: Набір активних аналізів.
+    """
     return Analysis.objects.filter(is_active=True)
 
 
 def filtered_analyses_queryset(
-    *,
-    what_to_check: str = "",
-    disease: str = "",
-    for_whom: str = "",
-    biomaterial: str = "",
+        *,
+        what_to_check: str = "",
+        disease: str = "",
+        for_whom: str = "",
+        biomaterial: str = "",
 ) -> QuerySet[Analysis]:
+    """
+    Повертає queryset аналізів із застосованими фільтрами.
+
+    Args:
+        what_to_check: Фільтр за полем "що перевірити".
+        disease: Фільтр за захворюванням.
+        for_whom: Фільтр за категорією "для кого".
+        biomaterial: Фільтр за біоматеріалом.
+
+    Returns:
+        QuerySet[Analysis]: Відфільтрований набір аналізів.
+    """
     analyses = active_analyses_queryset()
 
     if what_to_check:
@@ -37,6 +51,12 @@ def filtered_analyses_queryset(
 
 
 def analysis_filter_values() -> dict[str, QuerySet[Analysis, Any]]:
+    """
+    Повертає унікальні значення для фільтрів аналізів.
+
+    Returns:
+        dict[str, QuerySet[Analysis, Any]]: Словник значень для побудови фільтрів.
+    """
     return {
         "what_to_check_values": (
             Analysis.objects.exclude(what_to_check="")

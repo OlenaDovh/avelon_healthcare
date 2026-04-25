@@ -1,12 +1,10 @@
 from __future__ import annotations
-
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
-
 from accounts.permissions import support_required
 from support_chat.models import SupportChatSession, SupportChatStatus
 from support_chat.services import assign_operator_to_chat
@@ -15,6 +13,15 @@ from support_chat.services import assign_operator_to_chat
 @login_required
 @support_required
 def operator_dashboard_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає панель оператора support-чату.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою панелі оператора.
+    """
     waiting_sessions = SupportChatSession.objects.filter(
         status=SupportChatStatus.WAITING
     ).order_by("created_at")
@@ -37,6 +44,15 @@ def operator_dashboard_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @support_required
 def operator_dashboard_data_view(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає дані панелі оператора support-чату.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь зі списком очікуваних та активних чатів.
+    """
     waiting_sessions = SupportChatSession.objects.filter(
         status=SupportChatStatus.WAITING
     )
@@ -77,6 +93,16 @@ def operator_dashboard_data_view(request: HttpRequest) -> JsonResponse:
 @login_required
 @support_required
 def claim_chat_view(request: HttpRequest, session_id: int) -> JsonResponse:
+    """
+    Закріплює чат за оператором.
+
+    Args:
+        request: HTTP-запит.
+        session_id: Ідентифікатор сесії чату.
+
+    Returns:
+        JsonResponse: JSON-відповідь з результатом закріплення чату.
+    """
     session = get_object_or_404(
         SupportChatSession,
         pk=session_id,
@@ -103,6 +129,16 @@ def claim_chat_view(request: HttpRequest, session_id: int) -> JsonResponse:
 @login_required
 @support_required
 def operator_chat_room_view(request: HttpRequest, session_id: int) -> HttpResponse:
+    """
+    Відображає кімнату чату для оператора.
+
+    Args:
+        request: HTTP-запит.
+        session_id: Ідентифікатор сесії чату.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою кімнати чату.
+    """
     session = get_object_or_404(SupportChatSession, pk=session_id)
 
     return render(

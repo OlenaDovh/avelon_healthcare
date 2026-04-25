@@ -1,9 +1,13 @@
+from __future__ import annotations
 from django.contrib import admin
-
 from .models import SupportChatMessage, SupportChatSession
 
 
 class SupportChatMessageInline(admin.TabularInline):
+    """
+    Inline-відображення повідомлень у support-чаті.
+    """
+
     model = SupportChatMessage
     extra = 0
     readonly_fields = ("author_type", "author_name", "text", "created_at")
@@ -12,6 +16,10 @@ class SupportChatMessageInline(admin.TabularInline):
 
 @admin.register(SupportChatSession)
 class SupportChatSessionAdmin(admin.ModelAdmin):
+    """
+    Адмін-інтерфейс для сесій support-чату.
+    """
+
     list_display = (
         "id",
         "customer_display_name",

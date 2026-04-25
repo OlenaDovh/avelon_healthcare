@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 from django.http import HttpRequest
-
 from accounts.constants import (
     CONTENT_MANAGER_GROUP,
     DOCTOR_GROUP,
@@ -12,6 +9,15 @@ from accounts.constants import (
 
 
 def user_roles(request: HttpRequest) -> dict[str, bool]:
+    """
+    Повертає набір ролей користувача для шаблонів.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        dict[str, bool]: Словник з ознаками ролей користувача.
+    """
     user = request.user
 
     if not user.is_authenticated:

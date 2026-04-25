@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from datetime import datetime, timedelta
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -207,8 +205,8 @@ class DoctorWorkDay(models.Model):
         """
         Виконує валідацію робочого дня.
 
-        Returns:
-            None
+        Raises:
+            ValidationError: Якщо дата в минулому або напрям не відповідає лікарю.
         """
         if self.work_date and self.work_date < timezone.localdate():
             raise ValidationError("Не можна створити графік на минулу дату.")
@@ -219,14 +217,11 @@ class DoctorWorkDay(models.Model):
 
     def save(self, *args: object, **kwargs: object) -> None:
         """
-        Зберігає робочий день.
+        Зберігає робочий день з попередньою валідацією.
 
         Args:
-            *args (object): Позиційні аргументи.
-            **kwargs (object): Іменовані аргументи.
-
-        Returns:
-            None
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
         """
         self.full_clean()
         super().save(*args, **kwargs)
@@ -270,10 +265,10 @@ class DoctorWorkPeriod(models.Model):
 
     def get_slots(self) -> list[tuple[datetime, datetime]]:
         """
-        Повертає доступні слоти в межах періоду.
+        Генерує доступні часові слоти в межах періоду.
 
         Returns:
-            list[tuple[datetime, datetime]]: Список слотів.
+            list[tuple[datetime, datetime]]: Список слотів (початок, кінець).
         """
         result: list[tuple[datetime, datetime]] = []
         duration = timedelta(minutes=self.workday.appointment_duration_minutes)
@@ -289,10 +284,10 @@ class DoctorWorkPeriod(models.Model):
 
     def clean(self) -> None:
         """
-        Виконує валідацію робочого періоду.
+        Виконує повну валідацію періоду.
 
-        Returns:
-            None
+        Raises:
+            ValidationError: Якщо час некоректний або є перетин.
         """
         super().clean()
         self._validate_time_order()
@@ -300,10 +295,10 @@ class DoctorWorkPeriod(models.Model):
 
     def _validate_time_order(self) -> None:
         """
-        Перевіряє порядок часу початку і завершення.
+        Перевіряє, що час початку менший за час завершення.
 
-        Returns:
-            None
+        Raises:
+            ValidationError: Якщо порядок часу некоректний.
         """
         if not self.start_time or not self.end_time:
             return
@@ -313,10 +308,10 @@ class DoctorWorkPeriod(models.Model):
 
     def _validate_overlap(self) -> None:
         """
-        Перевіряє перетин з іншими періодами.
+        Перевіряє перетин з іншими періодами цього дня.
 
-        Returns:
-            None
+        Raises:
+            ValidationError: Якщо періоди перетинаються.
         """
         if not self.start_time or not self.end_time or not self.workday_id:
             return
@@ -333,14 +328,11 @@ class DoctorWorkPeriod(models.Model):
 
     def save(self, *args: object, **kwargs: object) -> None:
         """
-        Зберігає робочий період.
+        Зберігає робочий період з попередньою валідацією.
 
         Args:
-            *args (object): Позиційні аргументи.
-            **kwargs (object): Іменовані аргументи.
-
-        Returns:
-            None
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
         """
         self.full_clean()
         super().save(*args, **kwargs)

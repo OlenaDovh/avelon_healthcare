@@ -1,11 +1,11 @@
-from __future__ import annotations
-
 from django.apps import AppConfig
 
 
 class AccountsConfig(AppConfig):
     """
     Конфігурація застосунку accounts.
+
+    Визначає налаштування та ініціалізацію застосунку.
     """
 
     default_auto_field = "django.db.models.BigAutoField"
@@ -13,7 +13,7 @@ class AccountsConfig(AppConfig):
 
     def ready(self) -> None:
         """
-        Підключає сигнали застосунку.
+        Виконує ініціалізацію застосунку та підключає сигнали.
 
         Returns:
             None

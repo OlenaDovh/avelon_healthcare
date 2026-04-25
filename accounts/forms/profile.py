@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 from typing import Any
-
 from django import forms
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
@@ -11,7 +8,9 @@ User = get_user_model()
 
 class ProfileUpdateForm(forms.ModelForm):
     """
-    Форма редагування профілю користувача.
+    Форма для редагування профілю користувача.
+
+    Дозволяє оновлювати персональні дані з перевіркою унікальності email і телефону.
     """
 
     class Meta:
@@ -64,6 +63,13 @@ class ProfileUpdateForm(forms.ModelForm):
         }
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
+        """
+        Ініціалізує форму та налаштовує необов'язкові поля.
+
+        Args:
+            *args: Позиційні аргументи.
+            **kwargs: Іменовані аргументи.
+        """
         super().__init__(*args, **kwargs)
 
         self.fields["preferred_contact_channel"].required = False
@@ -71,7 +77,16 @@ class ProfileUpdateForm(forms.ModelForm):
         self.fields["middle_name"].required = False
 
     def clean_email(self) -> str:
-        email: str = self.cleaned_data["email"].lower().strip()
+        """
+        Перевіряє унікальність email та нормалізує його.
+
+        Returns:
+            str: Валідований email у нижньому регістрі.
+
+        Raises:
+            ValidationError: Якщо email вже використовується або очікує підтвердження.
+        """
+        email = self.cleaned_data["email"].lower().strip()
 
         if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
             raise ValidationError("Користувач із такою електронною поштою вже існує.")
@@ -84,7 +99,16 @@ class ProfileUpdateForm(forms.ModelForm):
         return email
 
     def clean_phone(self) -> str:
-        phone: str = self.cleaned_data["phone"].strip()
+        """
+        Перевіряє унікальність номера телефону.
+
+        Returns:
+            str: Валідований номер телефону.
+
+        Raises:
+            ValidationError: Якщо номер вже використовується.
+        """
+        phone = self.cleaned_data["phone"].strip()
 
         if User.objects.filter(phone=phone).exclude(pk=self.instance.pk).exists():
             raise ValidationError("Користувач із таким номером телефону вже існує.")

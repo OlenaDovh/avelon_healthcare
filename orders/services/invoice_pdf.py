@@ -1,19 +1,22 @@
 from __future__ import annotations
-
 from io import BytesIO
 from pathlib import Path
-
 from django.conf import settings
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-
 from orders.models import Order
 
 
 def _register_fonts() -> None:
+    """
+    Реєструє шрифти для генерації PDF.
+
+    Returns:
+        None
+    """
     fonts_dir = Path(settings.BASE_DIR) / "static" / "fonts"
 
     regular_font_path = fonts_dir / "DejaVuSans.ttf"
@@ -24,6 +27,15 @@ def _register_fonts() -> None:
 
 
 def generate_order_invoice_pdf(order: Order) -> bytes:
+    """
+    Генерує PDF-рахунок для замовлення.
+
+    Args:
+        order: Замовлення, для якого формується рахунок.
+
+    Returns:
+        bytes: Вміст PDF-файлу.
+    """
     _register_fonts()
 
     buffer = BytesIO()
@@ -111,6 +123,15 @@ def generate_order_invoice_pdf(order: Order) -> bytes:
 
 
 def build_order_invoice_response(order: Order) -> HttpResponse:
+    """
+    Формує HTTP-відповідь з PDF-рахунком замовлення.
+
+    Args:
+        order: Замовлення, для якого формується відповідь.
+
+    Returns:
+        HttpResponse: Відповідь з PDF-файлом.
+    """
     pdf_bytes = generate_order_invoice_pdf(order)
     response = HttpResponse(pdf_bytes, content_type="application/pdf")
     response["Content-Disposition"] = f'inline; filename="invoice_order_{order.id}.pdf"'

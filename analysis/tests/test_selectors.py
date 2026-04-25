@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from analysis.selectors import (
@@ -8,7 +10,10 @@ from analysis.selectors import (
 
 
 @pytest.mark.django_db
-def test_active_analyses_queryset_returns_only_active(analysis_factory):
+def test_active_analyses_queryset_returns_only_active(analysis_factory) -> None:
+    """
+    Перевіряє, що повертаються лише активні аналізи.
+    """
     active_analysis = analysis_factory(is_active=True)
     inactive_analysis = analysis_factory(is_active=False)
 
@@ -19,7 +24,10 @@ def test_active_analyses_queryset_returns_only_active(analysis_factory):
 
 
 @pytest.mark.django_db
-def test_filtered_analyses_queryset_filters_by_what_to_check(analysis_factory):
+def test_filtered_analyses_queryset_filters_by_what_to_check(analysis_factory) -> None:
+    """
+    Перевіряє фільтрацію за what_to_check.
+    """
     matched = analysis_factory(what_to_check="Гемоглобін", is_active=True)
     analysis_factory(what_to_check="Глюкоза", is_active=True)
 
@@ -30,7 +38,10 @@ def test_filtered_analyses_queryset_filters_by_what_to_check(analysis_factory):
 
 
 @pytest.mark.django_db
-def test_filtered_analyses_queryset_filters_by_disease(analysis_factory):
+def test_filtered_analyses_queryset_filters_by_disease(analysis_factory) -> None:
+    """
+    Перевіряє фільтрацію за disease.
+    """
     matched = analysis_factory(disease="Анемія", is_active=True)
     analysis_factory(disease="Діабет", is_active=True)
 
@@ -41,7 +52,10 @@ def test_filtered_analyses_queryset_filters_by_disease(analysis_factory):
 
 
 @pytest.mark.django_db
-def test_filtered_analyses_queryset_filters_by_for_whom(analysis_factory):
+def test_filtered_analyses_queryset_filters_by_for_whom(analysis_factory) -> None:
+    """
+    Перевіряє фільтрацію за for_whom.
+    """
     matched = analysis_factory(for_whom="Для дітей", is_active=True)
     analysis_factory(for_whom="Для дорослих", is_active=True)
 
@@ -52,7 +66,10 @@ def test_filtered_analyses_queryset_filters_by_for_whom(analysis_factory):
 
 
 @pytest.mark.django_db
-def test_filtered_analyses_queryset_filters_by_biomaterial(analysis_factory):
+def test_filtered_analyses_queryset_filters_by_biomaterial(analysis_factory) -> None:
+    """
+    Перевіряє фільтрацію за biomaterial.
+    """
     matched = analysis_factory(biomaterial="Кров", is_active=True)
     analysis_factory(biomaterial="Сеча", is_active=True)
 
@@ -63,10 +80,28 @@ def test_filtered_analyses_queryset_filters_by_biomaterial(analysis_factory):
 
 
 @pytest.mark.django_db
-def test_analysis_filter_values_returns_distinct_values(analysis_factory):
-    analysis_factory(what_to_check="Гемоглобін", disease="Анемія", for_whom="Для дорослих", biomaterial="Кров")
-    analysis_factory(what_to_check="Гемоглобін", disease="Анемія", for_whom="Для дорослих", biomaterial="Кров")
-    analysis_factory(what_to_check="Глюкоза", disease="Діабет", for_whom="Для дітей", biomaterial="Сеча")
+def test_analysis_filter_values_returns_distinct_values(analysis_factory) -> None:
+    """
+    Перевіряє отримання унікальних значень фільтрів.
+    """
+    analysis_factory(
+        what_to_check="Гемоглобін",
+        disease="Анемія",
+        for_whom="Для дорослих",
+        biomaterial="Кров",
+    )
+    analysis_factory(
+        what_to_check="Гемоглобін",
+        disease="Анемія",
+        for_whom="Для дорослих",
+        biomaterial="Кров",
+    )
+    analysis_factory(
+        what_to_check="Глюкоза",
+        disease="Діабет",
+        for_whom="Для дітей",
+        biomaterial="Сеча",
+    )
 
     result = analysis_filter_values()
 

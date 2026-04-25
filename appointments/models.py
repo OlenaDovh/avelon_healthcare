@@ -1,11 +1,8 @@
 from __future__ import annotations
-
 from datetime import datetime, timedelta
-
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-
 from doctors.models import Direction, Doctor, DoctorWorkDay
 
 
@@ -22,6 +19,8 @@ class AppointmentStatus(models.TextChoices):
 class Appointment(models.Model):
     """
     Модель запису пацієнта до лікаря.
+
+    Зберігає дані пацієнта, лікаря, напряму, часу прийому та статусу запису.
     """
 
     user: models.ForeignKey = models.ForeignKey(
@@ -98,6 +97,8 @@ class Appointment(models.Model):
     class Meta:
         """
         Метадані моделі запису до лікаря.
+
+        Визначає назви, сортування та унікальність слота прийому.
         """
 
         verbose_name = "Запис до лікаря"
@@ -115,7 +116,8 @@ class Appointment(models.Model):
         Перевіряє коректність запису до лікаря.
 
         Raises:
-            ValidationError: Якщо лікар не належить до вибраного напряму.
+            ValidationError: Якщо лікар не належить до вибраного напряму
+                або не вказана причина відхилення.
         """
         super().clean()
 
@@ -134,6 +136,9 @@ class Appointment(models.Model):
     def customer_name(self) -> str:
         """
         Повертає ім'я пацієнта.
+
+        Returns:
+            str: ПІБ пацієнта, ім'я користувача або порожній рядок.
         """
         if self.last_name or self.first_name:
             return self.full_name
@@ -147,6 +152,9 @@ class Appointment(models.Model):
     def full_name(self) -> str:
         """
         Повертає ПІБ пацієнта.
+
+        Returns:
+            str: Повне ім'я пацієнта.
         """
         return " ".join(filter(None, [self.last_name, self.first_name, self.middle_name]))
 
@@ -154,6 +162,9 @@ class Appointment(models.Model):
     def appointment_end_time(self):
         """
         Повертає час завершення слота.
+
+        Returns:
+            object: Час завершення прийому або None.
         """
         workday = DoctorWorkDay.objects.filter(
             doctor=self.doctor,
@@ -171,7 +182,10 @@ class Appointment(models.Model):
     @property
     def appointment_time_range(self) -> str:
         """
-        Повертає часовий діапазон слота у форматі HH:MM - HH:MM.
+        Повертає часовий діапазон слота.
+
+        Returns:
+            str: Діапазон часу у форматі HH:MM - HH:MM або тільки час початку.
         """
         end_time = self.appointment_end_time
         start_str = self.appointment_time.strftime("%H:%M")
@@ -184,6 +198,9 @@ class Appointment(models.Model):
     def __str__(self) -> str:
         """
         Повертає строкове представлення запису.
+
+        Returns:
+            str: Опис запису з пацієнтом, лікарем, датою та часом.
         """
         return (
             f"{self.customer_name} — {self.doctor.full_name} — "

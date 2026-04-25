@@ -1,7 +1,5 @@
 from __future__ import annotations
-
 from django.contrib import admin
-
 from .models import Review
 
 
@@ -16,13 +14,16 @@ class ReviewAdmin(admin.ModelAdmin):
         "appointment",
         "created_at",
     )
+
     search_fields = (
         "user__username",
         "user__email",
         "text",
         "clinic_reply",
     )
+
     readonly_fields = ("created_at",)
+
     fields = (
         "user",
         "appointment",
@@ -30,3 +31,5 @@ class ReviewAdmin(admin.ModelAdmin):
         "clinic_reply",
         "created_at",
     )
+
+    list_select_related = ("user", "appointment")

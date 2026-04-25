@@ -1,8 +1,12 @@
+from __future__ import annotations
 import pytest
 
 
 @pytest.mark.django_db
-def test_user_factory_creates_user(user):
+def test_user_factory_creates_user(user) -> None:
+    """
+    Перевіряє, що фабрика користувача створює коректний об'єкт.
+    """
     assert user.id is not None
     assert user.email
     assert user.phone
@@ -10,11 +14,19 @@ def test_user_factory_creates_user(user):
 
 
 @pytest.mark.django_db
-def test_user_full_name_property(user):
-    expected = " ".join(filter(None, [user.last_name, user.first_name, user.middle_name]))
+def test_user_full_name_property(user) -> None:
+    """
+    Перевіряє коректність властивості full_name.
+    """
+    expected: str = " ".join(
+        filter(None, [user.last_name, user.first_name, user.middle_name])
+    )
     assert user.full_name == expected
 
 
 @pytest.mark.django_db
-def test_user_str_returns_full_name(user):
+def test_user_str_returns_full_name(user) -> None:
+    """
+    Перевіряє, що __str__ повертає повне ім'я користувача.
+    """
     assert str(user) == user.full_name

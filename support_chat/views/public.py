@@ -1,15 +1,22 @@
 from __future__ import annotations
-
 from django.http import HttpRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
-
 from support_chat.forms import SupportChatGuestStartForm, SupportChatUserStartForm
 from support_chat.models import SupportChatSession, SupportChatStatus
 from support_chat.services import create_support_chat_session
 
 
 def get_current_chat_session_view(request: HttpRequest) -> JsonResponse:
+    """
+    Повертає поточну сесію support-чату з сесії користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь з даними поточної сесії або None.
+    """
     session_id = request.session.get("support_chat_session_id")
 
     if not session_id:
@@ -51,6 +58,15 @@ def get_current_chat_session_view(request: HttpRequest) -> JsonResponse:
 
 @require_POST
 def create_chat_session_view(request: HttpRequest) -> JsonResponse:
+    """
+    Створює нову сесію support-чату або повертає активну існуючу.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        JsonResponse: JSON-відповідь з даними сесії або помилками форми.
+    """
     existing_session_id = request.session.get("support_chat_session_id")
 
     if existing_session_id:
@@ -127,6 +143,16 @@ def create_chat_session_view(request: HttpRequest) -> JsonResponse:
 
 
 def get_chat_session_view(request: HttpRequest, session_id: int) -> JsonResponse:
+    """
+    Повертає дані конкретної сесії support-чату.
+
+    Args:
+        request: HTTP-запит.
+        session_id: Ідентифікатор сесії чату.
+
+    Returns:
+        JsonResponse: JSON-відповідь з даними сесії.
+    """
     session = get_object_or_404(SupportChatSession, pk=session_id)
 
     return JsonResponse(

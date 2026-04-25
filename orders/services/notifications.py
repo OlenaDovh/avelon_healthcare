@@ -1,13 +1,20 @@
 from __future__ import annotations
-
 from django.template.loader import render_to_string
-
 from core.utils.email import send_html_email
 from orders.models import Order, PaymentMethod
 from orders.services.invoice_pdf import generate_order_invoice_pdf
 
 
 def send_order_email(order: Order) -> None:
+    """
+    Надсилає email з інформацією про замовлення.
+
+    Args:
+        order: Замовлення, для якого надсилається лист.
+
+    Returns:
+        None
+    """
     context = {
         "order": order,
         "online_payment_links": {

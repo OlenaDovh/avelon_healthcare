@@ -1,5 +1,11 @@
 from __future__ import annotations
 
+"""
+Маршрути URL для застосунку accounts.
+
+Містять шляхи для аутентифікації, профілю, роботи персоналу та відновлення пароля.
+"""
+
 from django.contrib.auth.views import (
     PasswordResetCompleteView,
     PasswordResetConfirmView,

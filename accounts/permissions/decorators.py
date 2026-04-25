@@ -1,12 +1,8 @@
 from __future__ import annotations
-
-from collections.abc import Callable
 from functools import wraps
-from typing import Any
-
+from typing import Any, Callable
 from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
-
 from .predicates import (
     is_content_manager,
     is_doctor,
@@ -15,14 +11,44 @@ from .predicates import (
 )
 
 
-def role_required(predicate: Callable[[Any], bool]) -> Callable:
+def role_required(predicate: Callable[[Any], bool]) -> Callable[..., Callable[..., HttpResponse]]:
     """
     Універсальний декоратор для перевірки ролі користувача.
+
+    Args:
+        predicate: Функція-предикат для перевірки ролі користувача.
+
+    Returns:
+        Callable[..., HttpResponse]: Декоратор для обмеження доступу до view.
     """
 
     def decorator(view_func: Callable[..., HttpResponse]) -> Callable[..., HttpResponse]:
+        """
+        Обгортає view-функцію перевіркою ролі користувача.
+
+        Args:
+            view_func: Функція представлення.
+
+        Returns:
+            Callable[..., HttpResponse]: Обгорнута функція представлення.
+        """
+
         @wraps(view_func)
         def wrapped(request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+            """
+            Перевіряє доступ користувача перед виконанням view.
+
+            Args:
+                request: HTTP-запит.
+                *args: Позиційні аргументи.
+                **kwargs: Іменовані аргументи.
+
+            Returns:
+                HttpResponse: Відповідь view-функції.
+
+            Raises:
+                PermissionDenied: Якщо користувач не має доступу.
+            """
             user = request.user
 
             if user.is_superuser or predicate(user):

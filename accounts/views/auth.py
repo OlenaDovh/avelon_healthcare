@@ -19,6 +19,15 @@ User = get_user_model()
 
 
 def register_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє реєстрацію нового користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою реєстрації або перенаправленням.
+    """
     if request.user.is_authenticated:
         return redirect("accounts:profile")
 
@@ -57,9 +66,20 @@ def register_view(request: HttpRequest) -> HttpResponse:
 
 
 def verify_email_view(request: HttpRequest, uidb64: str, token: str) -> HttpResponse:
+    """
+    Підтверджує електронну пошту користувача за токеном.
+
+    Args:
+        request: HTTP-запит.
+        uidb64: Закодований ідентифікатор користувача.
+        token: Токен підтвердження email.
+
+    Returns:
+        HttpResponse: Перенаправлення на сторінку входу.
+    """
     try:
-        uid: str = force_str(urlsafe_base64_decode(uidb64))
-        user: User | None = User.objects.get(pk=uid)
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
 
@@ -78,6 +98,15 @@ def verify_email_view(request: HttpRequest, uidb64: str, token: str) -> HttpResp
 
 
 def login_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє вхід користувача в систему.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою входу або перенаправленням.
+    """
     if request.user.is_authenticated:
         if is_staff_role(request.user):
             return redirect("accounts:staff_dashboard")
@@ -110,7 +139,16 @@ def login_view(request: HttpRequest) -> HttpResponse:
 
 
 def logout_view(request: HttpRequest) -> HttpResponse:
-    username: str = request.user.username if request.user.is_authenticated else "anonymous"
+    """
+    Обробляє вихід користувача з акаунта.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Перенаправлення на головну сторінку.
+    """
+    username = request.user.username if request.user.is_authenticated else "anonymous"
     logger.info("Користувач вийшов із системи: %s", username)
 
     logout(request)
@@ -119,6 +157,15 @@ def logout_view(request: HttpRequest) -> HttpResponse:
 
 
 def resend_verification_email_view(request: HttpRequest) -> HttpResponse:
+    """
+    Повторно надсилає лист підтвердження електронної пошти.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Перенаправлення на сторінку профілю або входу.
+    """
     user = request.user
 
     if not user.is_authenticated:

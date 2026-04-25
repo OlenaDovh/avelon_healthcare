@@ -1,11 +1,14 @@
-from __future__ import annotations
-
 from django import forms
-
 from .models import Analysis
 
 
 class AnalysisForm(forms.ModelForm):
+    """
+    Форма для створення та редагування аналізу.
+
+    Використовується для керування даними аналізів у адміністративному інтерфейсі.
+    """
+
     class Meta:
         model = Analysis
         fields = (

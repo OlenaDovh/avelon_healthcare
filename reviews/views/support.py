@@ -1,10 +1,8 @@
 from __future__ import annotations
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
 from accounts.permissions import support_required
 from reviews.forms import ReviewReplyForm
 from reviews.models import Review
@@ -13,6 +11,15 @@ from reviews.models import Review
 @login_required
 @support_required
 def support_review_list_view(request: HttpRequest) -> HttpResponse:
+    """
+    Відображає список відгуків для support-користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою списку відгуків.
+    """
     reviews = Review.objects.select_related("user", "appointment").order_by("-created_at")
 
     return render(
@@ -25,6 +32,16 @@ def support_review_list_view(request: HttpRequest) -> HttpResponse:
 @login_required
 @support_required
 def support_review_reply_view(request: HttpRequest, review_id: int) -> HttpResponse:
+    """
+    Обробляє відповідь support-користувача на відгук.
+
+    Args:
+        request: HTTP-запит.
+        review_id: Ідентифікатор відгуку.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою форми або перенаправленням.
+    """
     review = get_object_or_404(Review, id=review_id)
 
     if request.method == "POST":

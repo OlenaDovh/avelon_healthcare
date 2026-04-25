@@ -1,13 +1,16 @@
-from __future__ import annotations
-
 from django import forms
 from django.core.exceptions import ValidationError
-
 from accounts.selectors import patient_users_queryset
 from appointments.forms.create import AppointmentCreateForm
 
 
 class SupportAppointmentCreateForm(AppointmentCreateForm):
+    """
+    Форма створення запису для support-користувача.
+
+    Дозволяє або вибрати зареєстрованого пацієнта, або ввести дані нового.
+    """
+
     user = forms.ModelChoiceField(
         queryset=patient_users_queryset().order_by("last_name", "first_name"),
         required=False,
@@ -61,6 +64,15 @@ class SupportAppointmentCreateForm(AppointmentCreateForm):
         )
 
     def clean(self) -> dict:
+        """
+        Виконує валідацію вибору користувача або введених даних пацієнта.
+
+        Returns:
+            dict: Очищені дані форми.
+
+        Raises:
+            ValidationError: Якщо дані введені некоректно.
+        """
         cleaned_data = super().clean()
 
         user = cleaned_data.get("user")

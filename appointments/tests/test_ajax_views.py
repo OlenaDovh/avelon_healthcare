@@ -1,14 +1,20 @@
+from __future__ import annotations
+
 import pytest
+from django.http import HttpResponse
 from django.urls import reverse
 from django.utils import timezone
 from datetime import timedelta
 
 
 @pytest.mark.django_db
-def test_available_doctors_returns_doctors_for_direction(client, direction, doctor):
+def test_available_doctors_returns_doctors_for_direction(client, direction, doctor) -> None:
+    """
+    Перевіряє, що API повертає лікарів для вказаного напряму.
+    """
     doctor.directions.add(direction)
 
-    response = client.get(
+    response: HttpResponse = client.get(
         reverse("appointments:available_doctors"),
         {"direction_id": direction.id},
     )
@@ -17,16 +23,20 @@ def test_available_doctors_returns_doctors_for_direction(client, direction, doct
     data = response.json()
     assert any(item["id"] == doctor.id for item in data["doctors"])
 
+
 @pytest.mark.django_db
-def test_available_dates_returns_dates(client, direction, doctor, monkeypatch):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+def test_available_dates_returns_dates(client, direction, doctor, monkeypatch) -> None:
+    """
+    Перевіряє повернення доступних дат для лікаря.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.views.ajax.get_available_dates_for_doctor_direction",
         lambda doctor, direction, exclude_appointment_id=None: [target_date],
     )
 
-    response = client.get(
+    response: HttpResponse = client.get(
         reverse("appointments:available_dates"),
         {"doctor_id": doctor.id, "direction_id": direction.id},
     )
@@ -36,8 +46,11 @@ def test_available_dates_returns_dates(client, direction, doctor, monkeypatch):
 
 
 @pytest.mark.django_db
-def test_available_slots_returns_slots(client, direction, doctor, monkeypatch):
-    target_date = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
+def test_available_slots_returns_slots(client, direction, doctor, monkeypatch) -> None:
+    """
+    Перевіряє повернення доступних слотів для запису.
+    """
+    target_date: str = (timezone.localdate() + timedelta(days=1)).strftime("%Y-%m-%d")
 
     monkeypatch.setattr(
         "appointments.views.ajax.get_available_slots_for_doctor_on_date",
@@ -46,7 +59,7 @@ def test_available_slots_returns_slots(client, direction, doctor, monkeypatch):
         ],
     )
 
-    response = client.get(
+    response: HttpResponse = client.get(
         reverse("appointments:available_slots"),
         {
             "doctor_id": doctor.id,

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from unittest.mock import patch
 from datetime import time
@@ -10,7 +12,10 @@ from appointments.services import (
 
 
 @pytest.mark.django_db
-def test_fill_appointment_from_user(appointment, user):
+def test_fill_appointment_from_user(appointment, user) -> None:
+    """
+    Перевіряє заповнення appointment користувачем.
+    """
     result = fill_appointment_from_user(appointment=appointment, user=user)
 
     assert result.user == user
@@ -21,8 +26,11 @@ def test_fill_appointment_from_user(appointment, user):
 
 
 @pytest.mark.django_db
-def test_fill_appointment_from_guest_data(appointment):
-    cleaned_data = {
+def test_fill_appointment_from_guest_data(appointment) -> None:
+    """
+    Перевіряє заповнення appointment гостем.
+    """
+    cleaned_data: dict = {
         "last_name": "Гість",
         "first_name": "Іван",
         "middle_name": "Іванович",
@@ -47,7 +55,10 @@ def test_fill_appointment_from_guest_data(appointment):
 def test_save_new_appointment_saves_and_sends_email(
     mock_send_appointment_email,
     appointment,
-):
+) -> None:
+    """
+    Перевіряє збереження appointment і відправку email.
+    """
     appointment.id = None
     appointment.appointment_time = time(11, 0)
 

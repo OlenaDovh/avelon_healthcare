@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from django.contrib.auth.models import Group
 from django.urls import reverse
@@ -5,14 +7,23 @@ from django.urls import reverse
 from accounts.constants import HEAD_MANAGER_GROUP
 
 
-def create_head_manager(user):
+def create_head_manager(user) -> object:
+    """
+    Додає користувача до групи head manager.
+
+    Returns:
+        User: оновлений користувач.
+    """
     group, _ = Group.objects.get_or_create(name=HEAD_MANAGER_GROUP)
     user.groups.add(group)
     return user
 
 
 @pytest.mark.django_db
-def test_analysis_list_view_opens(client, analysis_factory):
+def test_analysis_list_view_opens(client, analysis_factory) -> None:
+    """
+    Перевіряє відкриття списку аналізів.
+    """
     analysis_factory(is_active=True)
 
     response = client.get(reverse("analysis:analysis_list"))
@@ -21,7 +32,10 @@ def test_analysis_list_view_opens(client, analysis_factory):
 
 
 @pytest.mark.django_db
-def test_add_to_cart_view_redirects_and_adds_item(client, analysis):
+def test_add_to_cart_view_redirects_and_adds_item(client, analysis) -> None:
+    """
+    Перевіряє додавання в кошик через view.
+    """
     session = client.session
     session["cart"] = {}
     session.save()
@@ -35,7 +49,10 @@ def test_add_to_cart_view_redirects_and_adds_item(client, analysis):
 
 
 @pytest.mark.django_db
-def test_remove_from_cart_view_redirects_and_removes_item(client, analysis):
+def test_remove_from_cart_view_redirects_and_removes_item(client, analysis) -> None:
+    """
+    Перевіряє видалення з кошика через view.
+    """
     session = client.session
     session["cart"] = {str(analysis.id): 1}
     session.save()
@@ -49,7 +66,10 @@ def test_remove_from_cart_view_redirects_and_removes_item(client, analysis):
 
 
 @pytest.mark.django_db
-def test_cart_detail_view_opens(client, analysis):
+def test_cart_detail_view_opens(client, analysis) -> None:
+    """
+    Перевіряє відкриття сторінки кошика.
+    """
     session = client.session
     session["cart"] = {str(analysis.id): 1}
     session.save()
@@ -60,7 +80,12 @@ def test_cart_detail_view_opens(client, analysis):
 
 
 @pytest.mark.django_db
-def test_head_manager_analysis_list_view_opens_for_head_manager(client, user, analysis_factory):
+def test_head_manager_analysis_list_view_opens_for_head_manager(
+    client, user, analysis_factory
+) -> None:
+    """
+    Перевіряє доступ head manager до списку аналізів.
+    """
     create_head_manager(user)
     client.force_login(user)
     analysis_factory()
@@ -71,7 +96,10 @@ def test_head_manager_analysis_list_view_opens_for_head_manager(client, user, an
 
 
 @pytest.mark.django_db
-def test_head_manager_analysis_create_view_get_opens_for_head_manager(client, user):
+def test_head_manager_analysis_create_view_get_opens_for_head_manager(client, user) -> None:
+    """
+    Перевіряє GET створення аналізу.
+    """
     create_head_manager(user)
     client.force_login(user)
 
@@ -81,7 +109,10 @@ def test_head_manager_analysis_create_view_get_opens_for_head_manager(client, us
 
 
 @pytest.mark.django_db
-def test_head_manager_analysis_create_view_post_creates_analysis(client, user):
+def test_head_manager_analysis_create_view_post_creates_analysis(client, user) -> None:
+    """
+    Перевіряє створення аналізу через POST.
+    """
     create_head_manager(user)
     client.force_login(user)
 
@@ -104,7 +135,12 @@ def test_head_manager_analysis_create_view_post_creates_analysis(client, user):
 
 
 @pytest.mark.django_db
-def test_head_manager_analysis_update_view_get_opens_for_head_manager(client, user, analysis):
+def test_head_manager_analysis_update_view_get_opens_for_head_manager(
+    client, user, analysis
+) -> None:
+    """
+    Перевіряє GET оновлення аналізу.
+    """
     create_head_manager(user)
     client.force_login(user)
 
@@ -114,7 +150,12 @@ def test_head_manager_analysis_update_view_get_opens_for_head_manager(client, us
 
 
 @pytest.mark.django_db
-def test_head_manager_analysis_update_view_post_updates_analysis(client, user, analysis):
+def test_head_manager_analysis_update_view_post_updates_analysis(
+    client, user, analysis
+) -> None:
+    """
+    Перевіряє POST оновлення аналізу.
+    """
     create_head_manager(user)
     client.force_login(user)
 

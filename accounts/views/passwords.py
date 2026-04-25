@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 import logging
-
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -9,13 +6,18 @@ from django.contrib.auth.views import PasswordResetView
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
-
 from accounts.forms import UserPasswordChangeForm, UserPasswordResetForm
 
 logger = logging.getLogger(__name__)
 
 
 class UserPasswordResetView(PasswordResetView):
+    """
+    Представлення для відновлення пароля користувача.
+
+    Використовує кастомну форму та шаблони для скидання пароля.
+    """
+
     form_class = UserPasswordResetForm
     template_name = "avelon_healthcare/accounts/pages/password_reset_form.html"
     email_template_name = "avelon_healthcare/accounts/emails/password_reset_email.txt"
@@ -23,6 +25,15 @@ class UserPasswordResetView(PasswordResetView):
     success_url = reverse_lazy("accounts:password_reset_done")
 
     def form_valid(self, form: UserPasswordResetForm) -> HttpResponse:
+        """
+        Обробляє валідну форму відновлення пароля.
+
+        Args:
+            form: Валідна форма відновлення пароля.
+
+        Returns:
+            HttpResponse: Відповідь після успішної обробки форми.
+        """
         logger.info(
             "Запит на відновлення пароля для email=%s",
             form.cleaned_data.get("email"),
@@ -32,6 +43,15 @@ class UserPasswordResetView(PasswordResetView):
 
 @login_required
 def password_change_view(request: HttpRequest) -> HttpResponse:
+    """
+    Обробляє зміну пароля авторизованого користувача.
+
+    Args:
+        request: HTTP-запит.
+
+    Returns:
+        HttpResponse: Відповідь зі сторінкою зміни пароля або перенаправленням.
+    """
     if request.method == "POST":
         form = UserPasswordChangeForm(user=request.user, data=request.POST)
 

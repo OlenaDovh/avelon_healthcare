@@ -1,7 +1,4 @@
-from __future__ import annotations
-
 from django.contrib import admin
-
 from .models import Analysis
 
 
@@ -9,6 +6,8 @@ from .models import Analysis
 class AnalysisAdmin(admin.ModelAdmin):
     """
     Адмін-інтерфейс для моделі аналізу.
+
+    Налаштовує відображення, фільтри та пошук у адміністративній панелі.
     """
 
     list_display = (

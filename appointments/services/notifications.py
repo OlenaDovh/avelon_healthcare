@@ -1,12 +1,18 @@
-from __future__ import annotations
-
 from django.template.loader import render_to_string
-
 from core.utils.email import send_html_email
 from appointments.models import Appointment
 
 
 def send_appointment_email(appointment: Appointment) -> None:
+    """
+    Надсилає email з інформацією про запис на прийом.
+
+    Args:
+        appointment: Запис на прийом.
+
+    Returns:
+        None
+    """
     html_body = render_to_string(
         "avelon_healthcare/appointments/email/appointment_email.html",
         {
